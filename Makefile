@@ -18,7 +18,7 @@ gen:
 	@echo "#include <cups/sidechannel.h>" >>.gen/gen.c
 	@echo "#include <cups/transcode.h>" >>.gen/gen.c
 	@echo "#include <cups/versioning.h>" >>.gen/gen.c
-	cd .gen; gcc -c -fdump-ada-spec gen.c -fada-spec-parent=libCUPS
+	cd .gen; gcc -C -c -fdump-ada-spec gen.c -fada-spec-parent=libCUPS
 	rm .gen/gen.*
 	sed/patch.sh
 	cp .gen/libcups-cups_*.ads src/gen

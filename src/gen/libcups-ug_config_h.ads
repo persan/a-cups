@@ -7,6 +7,10 @@ with libCUPS.wchar_h;
 
 package libCUPS.uG_config_h is
 
+  -- This file is needed by libio to define various configuration parameters.
+  --   These are always the same in the GNU C library.   
+
+  -- Define types for libio in terms of the standard internal type names.   
    type u_G_fpos_t is record
       uu_pos : aliased libCUPS.bits_types_h.uu_off_t;  -- _G_config.h:23
       uu_state : aliased libCUPS.wchar_h.uu_mbstate_t;  -- _G_config.h:24
@@ -19,4 +23,6 @@ package libCUPS.uG_config_h is
    end record;
    pragma Convention (C_Pass_By_Copy, u_G_fpos64_t);  -- _G_config.h:30
 
+  -- These library features are always available in the GNU C library.   
+  -- This is defined by <bits/stat.h> if `st_blksize' exists.   
 end libCUPS.uG_config_h;

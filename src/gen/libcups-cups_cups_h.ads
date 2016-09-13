@@ -151,7 +151,73 @@ package libCUPS.cups_cups_h is
    CUPS_SIDES_TWO_SIDED_PORTRAIT : aliased constant String := "two-sided-long-edge" & ASCII.NUL;  --  cups/cups.h:204
    CUPS_SIDES_TWO_SIDED_LANDSCAPE : aliased constant String := "two-sided-short-edge" & ASCII.NUL;  --  cups/cups.h:205
 
+  -- * "$Id: cups.h 13087 2016-02-12 18:53:24Z msweet $"
+  -- *
+  -- * API definitions for CUPS.
+  -- *
+  -- * Copyright 2007-2016 by Apple Inc.
+  -- * Copyright 1997-2007 by Easy Software Products.
+  -- *
+  -- * These coded instructions, statements, and computer programs are the
+  -- * property of Apple Inc. and are protected by Federal copyright
+  -- * law.  Distribution and use rights are outlined in the file "LICENSE.txt"
+  -- * which should have been included with this file.  If this file is
+  -- * file is missing or damaged, see the license at "http://www.cups.org/".
+  -- *
+  -- * This file is subject to the Apple OS-Developed Software exception.
+  --  
+
+  -- * Include necessary headers...
+  --  
+
+  -- Windows does not support the ssize_t type, so map it to off_t...  
+  -- @private@  
+  -- * Define _PPD_DEPRECATED to silence the warnings about PPD functions being
+  -- * deprecated...
+  --  
+
+  -- * C++ magic...
+  --  
+
+  -- * Constants...
+  --  
+
+  -- Back-channel file descriptor for
+  --					 * select/poll  
+
+  -- Flags for cupsConnectDest and cupsEnumDests  
+  -- No flags are set  
+  -- There is not connection  
+  -- There are more destinations  
+  -- The destination has gone away  
+  -- An error occurred  
+  -- The destination address is being
+  --					 * resolved  
+
+  -- A connection is being established  
+  -- Operation was canceled  
+  -- Flags for cupsGetDestMediaByName/Size  
+  -- Find the closest size supported by
+  --					 * the printer  
+
+  -- Find a borderless size  
+  -- Find a size compatible with 2-sided
+  --					 * printing  
+
+  -- Find an exact match for the size  
+  -- If the printer supports media
+  --					 * sensing, find the size amongst the
+  --					 * "ready" media.  
+
+  -- Options and values  
+  -- * Types and structures...
+  --  
+
+  -- Printer type/capability bits  
    subtype cups_ptype_t is unsigned;  -- cups/cups.h:212
+
+  -- Printer type/capability bit
+  --					 * constants  
 
    subtype cups_ptype_e is unsigned;
    CUPS_PRINTER_LOCAL : constant cups_ptype_e := 0;
@@ -185,14 +251,71 @@ package libCUPS.cups_cups_h is
    CUPS_PRINTER_3D : constant cups_ptype_e := 134217728;
    CUPS_PRINTER_OPTIONS : constant cups_ptype_e := 458748;  -- cups/cups.h:213
 
+  -- Not a typedef'd enum so we can OR  
+  -- Local printer or class  
+  -- Printer class  
+  -- Remote printer or class  
+  -- Can do B&W printing  
+  -- Can do color printing  
+  -- Can do duplexing  
+  -- Can staple output  
+  -- Can do copies  
+  -- Can collage copies  
+  -- Can punch output  
+  -- Can cover output  
+  -- Can bind output  
+  -- Can sort output  
+  -- Can do Letter/Legal/A4  
+  -- Can do Tabloid/B/C/A3/A2  
+  -- Can do D/E/A1/A0  
+  -- Can do variable sizes  
+  -- Implicit class @private@
+  --					 * @since Deprecated@  
+
+  -- Default printer on network  
+  -- Fax queue  
+  -- Printer is rejecting jobs  
+  -- Delete printer
+  --					 * @since CUPS 1.2/OS X 10.5@  
+
+  -- Printer is not shared
+  --					 * @since CUPS 1.2/OS X 10.5@  
+
+  -- Printer requires authentication
+  --					 * @since CUPS 1.2/OS X 10.5@  
+
+  -- Printer supports maintenance commands
+  --					 * @since CUPS 1.2/OS X 10.5@  
+
+  -- Printer was automatically discovered
+  --					 * and added @private@
+  --					 * @since Deprecated@  
+
+  -- Scanner-only device
+  --					 * @since CUPS 1.4/OS X 10.6@  
+
+  -- Printer with scanning capabilities
+  --					 * @since CUPS 1.4/OS X 10.6@  
+
+  -- 3D Printing @since CUPS 2.1@  
+  -- ~(CLASS | REMOTE | IMPLICIT |
+  --					 * DEFAULT | FAX | REJECTING | DELETE |
+  --					 * NOT_SHARED | AUTHENTICATED |
+  --					 * COMMANDS | DISCOVERED) @private@  
+
+  --*** Printer Options *** 
+  -- Name of option  
    type cups_option_s is record
       name : Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:262
       value : Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:263
    end record;
    pragma Convention (C_Pass_By_Copy, cups_option_s);  -- cups/cups.h:260
 
+  -- Value of option  
    subtype cups_option_t is cups_option_s;
 
+  --*** Destination *** 
+  -- Printer or class name  
    type cups_dest_s is record
       name : Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:268
       instance : Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:269
@@ -202,12 +325,21 @@ package libCUPS.cups_cups_h is
    end record;
    pragma Convention (C_Pass_By_Copy, cups_dest_s);  -- cups/cups.h:266
 
+  -- Local instance name or NULL  
+  -- Is this printer the default?  
+  -- Number of options  
+  -- Options  
    subtype cups_dest_t is cups_dest_s;
 
    --  skipped empty struct u_cups_dinfo_s
 
    --  skipped empty struct cups_dinfo_t
 
+  -- Destination capability and status
+  --					 * information @since CUPS 1.6/OS X 10.8@  
+
+  --*** Job *** 
+  -- The job ID  
    type cups_job_s is record
       id : aliased int;  -- cups/cups.h:281
       dest : Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:282
@@ -223,8 +355,20 @@ package libCUPS.cups_cups_h is
    end record;
    pragma Convention (C_Pass_By_Copy, cups_job_s);  -- cups/cups.h:279
 
+  -- Printer or class name  
+  -- Title/job name  
+  -- User the submitted the job  
+  -- Document format  
+  -- Job state  
+  -- Size in kilobytes  
+  -- Priority (1-100)  
+  -- Time the job was completed  
+  -- Time the job was created  
+  -- Time the job was processed  
    subtype cups_job_t is cups_job_s;
 
+  --*** Media Size @since CUPS 1.6/OS X 10.8@ *** 
+  -- Media name to use  
    subtype anon3412_media_array is Interfaces.C.char_array (0 .. 127);
    type cups_size_s is record
       media : aliased anon3412_media_array;  -- cups/cups.h:296
@@ -237,6 +381,22 @@ package libCUPS.cups_cups_h is
    end record;
    pragma Convention (C_Pass_By_Copy, cups_size_s);  -- cups/cups.h:294
 
+  -- Width in hundredths of millimeters  
+  -- Length in hundredths of
+  --					 * millimeters  
+
+  -- Bottom margin in hundredths of
+  --					 * millimeters  
+
+  -- Left margin in hundredths of
+  --					 * millimeters  
+
+  -- Right margin in hundredths of
+  --					 * millimeters  
+
+  -- Top margin in hundredths of
+  --					 * millimeters  
+
    subtype cups_size_t is cups_size_s;
 
    type cups_client_cert_cb_t is access function
@@ -246,11 +406,20 @@ package libCUPS.cups_cups_h is
          arg4 : System.Address) return int;
    pragma Convention (C, cups_client_cert_cb_t);  -- cups/cups.h:310
 
+  -- Client credentials callback
+  --					 * @since CUPS 1.5/OS X 10.7@  
+
    type cups_dest_cb_t is access function
         (arg1 : System.Address;
          arg2 : unsigned;
          arg3 : access cups_dest_t) return int;
    pragma Convention (C, cups_dest_cb_t);  -- cups/cups.h:316
+
+  -- Destination enumeration callback
+  --					 * @since CUPS 1.6/OS X 10.8@  
+
+  -- Destination enumeration block
+  --					 * @since CUPS 1.6/OS X 10.8@  
 
    type cups_device_cb_t is access procedure
         (arg1 : Interfaces.C.Strings.chars_ptr;
@@ -262,9 +431,13 @@ package libCUPS.cups_cups_h is
          arg7 : System.Address);
    pragma Convention (C, cups_device_cb_t);  -- cups/cups.h:327
 
+  -- Device callback
+  --					 * @since CUPS 1.4/OS X 10.6@  
+
    type cups_password_cb_t is access function (arg1 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;
    pragma Convention (C, cups_password_cb_t);  -- cups/cups.h:335
 
+  -- Password callback  
    type cups_password_cb2_t is access function
         (arg1 : Interfaces.C.Strings.chars_ptr;
          arg2 : System.Address;
@@ -273,12 +446,21 @@ package libCUPS.cups_cups_h is
          arg5 : System.Address) return Interfaces.C.Strings.chars_ptr;
    pragma Convention (C, cups_password_cb2_t);  -- cups/cups.h:338
 
+  -- New password callback
+  --					 * @since CUPS 1.4/OS X 10.6@  
+
    type cups_server_cert_cb_t is access function
         (arg1 : System.Address;
          arg2 : System.Address;
          arg3 : System.Address;
          arg4 : System.Address) return int;
    pragma Convention (C, cups_server_cert_cb_t);  -- cups/cups.h:345
+
+  -- Server credentials callback
+  --					 * @since CUPS 1.5/OS X 10.7@  
+
+  -- * Functions...
+  --  
 
    function cupsCancelJob (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : int) return int;  -- cups/cups.h:355
    pragma Import (C, cupsCancelJob, "cupsCancelJob");
@@ -419,6 +601,7 @@ package libCUPS.cups_cups_h is
    function cupsUser return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:404
    pragma Import (C, cupsUser, "cupsUser");
 
+  --*** New in CUPS 1.1.20 *** 
    function cupsDoAuthentication
      (arg1 : System.Address;
       arg2 : Interfaces.C.Strings.chars_ptr;
@@ -449,6 +632,7 @@ package libCUPS.cups_cups_h is
       arg3 : int) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:415
    pragma Import (C, cupsPutFd, "cupsPutFd");
 
+  --*** New in CUPS 1.1.21 *** 
    function cupsGetDefault2 (arg1 : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:419
    pragma Import (C, cupsGetDefault2, "cupsGetDefault2");
 
@@ -491,6 +675,7 @@ package libCUPS.cups_cups_h is
       arg3 : access cups_dest_t) return int;  -- cups/cups.h:435
    pragma Import (C, cupsSetDests2, "cupsSetDests2");
 
+  --*** New in CUPS 1.2/OS X 10.5 *** 
    function cupsBackChannelRead
      (arg1 : Interfaces.C.Strings.chars_ptr;
       arg2 : size_t;
@@ -528,6 +713,7 @@ package libCUPS.cups_cups_h is
    function cupsTempFile2 (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : int) return System.Address;  -- cups/cups.h:453
    pragma Import (C, cupsTempFile2, "cupsTempFile2");
 
+  --*** New in CUPS 1.3/OS X 10.5 *** 
    function cupsDoIORequest
      (arg1 : System.Address;
       arg2 : System.Address;
@@ -553,6 +739,7 @@ package libCUPS.cups_cups_h is
       arg4 : access cups_dest_t);  -- cups/cups.h:465
    pragma Import (C, cupsSetDefaultDest, "cupsSetDefaultDest");
 
+  --*** New in CUPS 1.4/OS X 10.6 *** 
    function cupsCancelJob2
      (arg1 : System.Address;
       arg2 : Interfaces.C.Strings.chars_ptr;
@@ -635,6 +822,7 @@ package libCUPS.cups_cups_h is
       arg3 : size_t) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:504
    pragma Import (C, cupsWriteRequestData, "cupsWriteRequestData");
 
+  --*** New in CUPS 1.5/OS X 10.7 *** 
    procedure cupsSetClientCertCB (arg1 : cups_client_cert_cb_t; arg2 : System.Address);  -- cups/cups.h:508
    pragma Import (C, cupsSetClientCertCB, "cupsSetClientCertCB");
 
@@ -644,6 +832,7 @@ package libCUPS.cups_cups_h is
    procedure cupsSetServerCertCB (arg1 : cups_server_cert_cb_t; arg2 : System.Address);  -- cups/cups.h:511
    pragma Import (C, cupsSetServerCertCB, "cupsSetServerCertCB");
 
+  --*** New in CUPS 1.6/OS X 10.8 *** 
    function cupsCancelDestJob
      (arg1 : System.Address;
       arg2 : access cups_dest_t;
@@ -774,6 +963,7 @@ package libCUPS.cups_cups_h is
       arg9 : int) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:591
    pragma Import (C, cupsStartDestDocument, "cupsStartDestDocument");
 
+  -- New in CUPS 1.7  
    function cupsFindDestDefault
      (arg1 : System.Address;
       arg2 : access cups_dest_t;
@@ -825,6 +1015,23 @@ package libCUPS.cups_cups_h is
    function cupsUserAgent return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:624
    pragma Import (C, cupsUserAgent, "cupsUserAgent");
 
+  -- New in CUPS 2.0/OS X 10.10  
+  -- * "$Id: cups.h 13087 2016-02-12 18:53:24Z msweet $"
+  -- *
+  -- * API definitions for CUPS.
+  -- *
+  -- * Copyright 2007-2016 by Apple Inc.
+  -- * Copyright 1997-2007 by Easy Software Products.
+  -- *
+  -- * These coded instructions, statements, and computer programs are the
+  -- * property of Apple Inc. and are protected by Federal copyright
+  -- * law.  Distribution and use rights are outlined in the file "LICENSE.txt"
+  -- * which should have been included with this file.  If this file is
+  -- * file is missing or damaged, see the license at "http://www.cups.org/".
+  -- *
+  -- * This file is subject to the Apple OS-Developed Software exception.
+  --  
+
    function cupsGetDestWithURI (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : Interfaces.C.Strings.chars_ptr) return access cups_dest_t;  -- cups/cups.h:627
    pragma Import (C, cupsGetDestWithURI, "cupsGetDestWithURI");
 
@@ -849,5 +1056,8 @@ package libCUPS.cups_cups_h is
       arg2 : Interfaces.C.Strings.chars_ptr;
       arg3 : int) return int;  -- cups/cups.h:630
    pragma Import (C, cupsSetServerCredentials, "cupsSetServerCredentials");
+
+  -- * End of "$Id: cups.h 13087 2016-02-12 18:53:24Z msweet $".
+  --  
 
 end libCUPS.cups_cups_h;

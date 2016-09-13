@@ -145,6 +145,33 @@ package libCUPS.bits_socket_h is
    --    return CMSG_ALIGN (sizeof (struct cmsghdr)) + (len);
    --  unsupported macro: SCM_RIGHTS SCM_RIGHTS
 
+  -- System-specific socket constants and types.  Linux version.
+  --   Copyright (C) 1991-2016 Free Software Foundation, Inc.
+  --   This file is part of the GNU C Library.
+  --   The GNU C Library is free software; you can redistribute it and/or
+  --   modify it under the terms of the GNU Lesser General Public
+  --   License as published by the Free Software Foundation; either
+  --   version 2.1 of the License, or (at your option) any later version.
+  --   The GNU C Library is distributed in the hope that it will be useful,
+  --   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  --   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  --   Lesser General Public License for more details.
+  --   You should have received a copy of the GNU Lesser General Public
+  --   License along with the GNU C Library; if not, see
+  --   <http://www.gnu.org/licenses/>.
+
+  -- Type for length arguments in socket calls.
+  -- Get the architecture-dependent definition of enum __socket_type.
+  -- Protocol families.
+  -- Address families.
+  -- Socket level values.  Others are defined in the appropriate headers.
+  --   XXX These definitions also should go into the appropriate headers as
+  --   far as they are available.
+
+  -- Maximum queue length specifiable by listen.
+  -- Get the definition of the macro to define the common sockaddr members.
+  -- Structure describing a generic socket address.
+  -- Common data: address family and length.
    subtype anon2499_sa_data_array is Interfaces.C.char_array (0 .. 13);
    type sockaddr is record
       sa_family : aliased libCUPS.bits_sockaddr_h.sa_family_t;  -- bits/socket.h:155
@@ -152,14 +179,32 @@ package libCUPS.bits_socket_h is
    end record;
    pragma Convention (C_Pass_By_Copy, sockaddr);  -- bits/socket.h:153
 
-   subtype anon2502_uu_ss_padding_array is Interfaces.C.char_array (0 .. 117);
-   type sockaddr_storage is record
-      ss_family : aliased libCUPS.bits_sockaddr_h.sa_family_t;  -- bits/socket.h:168
-      uu_ss_padding : aliased anon2502_uu_ss_padding_array;  -- bits/socket.h:169
-      uu_ss_align : aliased unsigned_long;  -- bits/socket.h:170
-   end record;
-   pragma Convention (C_Pass_By_Copy, sockaddr_storage);  -- bits/socket.h:166
 
+  -- Force desired alignment.
+  -- Bits in the FLAGS argument to `send', `recv', et al.
+  -- Process out-of-band data.
+  -- Peek at incoming messages.
+  -- Don't use local routing.
+  -- DECnet uses a different name.
+  -- Control data lost before delivery.
+  -- Supply or ask second address.
+  -- Nonblocking IO.
+  -- End of record.
+  -- Wait for a full request.
+  -- Confirm path validity.
+  -- Fetch message from error queue.
+  -- Do not generate SIGPIPE.
+  -- Sender will send more.
+  -- Wait for at least one packet to return.
+  -- Send data in TCP SYN.
+  -- Set close_on_exit for file
+  --					   descriptor received through
+  --					   SCM_RIGHTS.
+
+  -- Structure describing messages sent by
+  --   `sendmsg' and received by `recvmsg'.
+
+  -- Address to send to/receive from.
    type msghdr is record
       msg_name : System.Address;  -- bits/socket.h:230
       msg_namelen : aliased libCUPS.unistd_h.socklen_t;  -- bits/socket.h:231
@@ -171,6 +216,23 @@ package libCUPS.bits_socket_h is
    end record;
    pragma Convention (C_Pass_By_Copy, msghdr);  -- bits/socket.h:228
 
+  -- Length of address data.
+  -- Vector of data to send/receive into.
+  -- Number of elements in the vector.
+  -- Ancillary data (eg BSD filedesc passing).
+  -- Ancillary data buffer length.
+  --				   !! The type should be socklen_t but the
+  --				   definition of the kernel is incompatible
+  --				   with this.
+
+  -- Flags on received message.
+  -- Structure used for storage of ancillary data object information.
+  -- Length of data in cmsg_data plus length
+  --				   of cmsghdr structure.
+  --				   !! The type should be socklen_t but the
+  --				   definition of the kernel is incompatible
+  --				   with this.
+
    type anon2508_uu_cmsg_data_array is array (0 .. 0) of aliased unsigned_char;
    type cmsghdr is record
       cmsg_len : aliased size_t;  -- bits/socket.h:248
@@ -180,12 +242,32 @@ package libCUPS.bits_socket_h is
    end record;
    pragma Convention (C_Pass_By_Copy, cmsghdr);  -- bits/socket.h:246
 
+  -- Originating protocol.
+  -- Protocol specific type.
+  -- Ancillary data.
+  -- Ancillary data object manipulation macros.
    --  skipped func __cmsg_nxthdr
 
+  -- The kernel header does this so there may be a reason.
+  -- No more entries.
+  -- Socket level message types.  This must match the definitions in
+  --   <linux/socket.h>.
+
+  -- Transfer file descriptors.
+  -- Credentials passing.
+  -- User visible structure for SCM_CREDENTIALS message
+  -- PID of sending process.
+  -- UID of sending process.
+  -- GID of sending process.
+  -- Ugly workaround for unclean kernel headers.
+  -- Get socket manipulation related informations from kernel headers.
+  -- Structure used to manipulate the SO_LINGER option.
+  -- Nonzero to linger on close.
    type linger is record
       l_onoff : aliased int;  -- bits/socket.h:385
       l_linger : aliased int;  -- bits/socket.h:386
    end record;
    pragma Convention (C_Pass_By_Copy, linger);  -- bits/socket.h:383
 
+  -- Time to linger.
 end libCUPS.bits_socket_h;

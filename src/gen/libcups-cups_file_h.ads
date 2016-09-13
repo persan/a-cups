@@ -13,9 +13,108 @@ package libCUPS.cups_file_h is
    CUPS_FILE_NONE : constant := 0;  --  cups/file.h:54
    CUPS_FILE_GZIP : constant := 1;  --  cups/file.h:55
 
+  -- * "$Id: file.h 11627 2014-02-20 16:15:09Z msweet $"
+  -- *
+  -- * Public file definitions for CUPS.
+  -- *
+  -- * Since stdio files max out at 256 files on many systems, we have to
+  -- * write similar functions without this limit.  At the same time, using
+  -- * our own file functions allows us to provide transparent support of
+  -- * gzip'd print files, PPD files, etc.
+  -- *
+  -- * Copyright 2007-2014 by Apple Inc.
+  -- * Copyright 1997-2007 by Easy Software Products, all rights reserved.
+  -- *
+  -- * These coded instructions, statements, and computer programs are the
+  -- * property of Apple Inc. and are protected by Federal copyright
+  -- * law.  Distribution and use rights are outlined in the file "LICENSE.txt"
+  -- * which should have been included with this file.  If this file is
+  -- * file is missing or damaged, see the license at "http://www.cups.org/".
+  -- *
+  -- * This file is subject to the Apple OS-Developed Software exception.
+  --  
+
+  -- * Include necessary headers...
+  --  
+
+  -- Windows does not support the ssize_t type, so map it to off_t...  
+  -- @private@  
+  -- * C++ magic...
+  --  
+
+  -- * CUPS file definitions...
+  --  
+
+  -- * Types and structures...
+  --  
+
+  --*** CUPS file type *** 
    --  skipped empty struct u_cups_file_s
 
    --  skipped empty struct cups_file_t
+
+  -- * Prototypes...
+  --  
+
+  -- * "$Id: file.h 11627 2014-02-20 16:15:09Z msweet $"
+  -- *
+  -- * Public file definitions for CUPS.
+  -- *
+  -- * Since stdio files max out at 256 files on many systems, we have to
+  -- * write similar functions without this limit.  At the same time, using
+  -- * our own file functions allows us to provide transparent support of
+  -- * gzip'd print files, PPD files, etc.
+  -- *
+  -- * Copyright 2007-2014 by Apple Inc.
+  -- * Copyright 1997-2007 by Easy Software Products, all rights reserved.
+  -- *
+  -- * These coded instructions, statements, and computer programs are the
+  -- * property of Apple Inc. and are protected by Federal copyright
+  -- * law.  Distribution and use rights are outlined in the file "LICENSE.txt"
+  -- * which should have been included with this file.  If this file is
+  -- * file is missing or damaged, see the license at "http://www.cups.org/".
+  -- *
+  -- * This file is subject to the Apple OS-Developed Software exception.
+  --  
+
+  -- * "$Id: file.h 11627 2014-02-20 16:15:09Z msweet $"
+  -- *
+  -- * Public file definitions for CUPS.
+  -- *
+  -- * Since stdio files max out at 256 files on many systems, we have to
+  -- * write similar functions without this limit.  At the same time, using
+  -- * our own file functions allows us to provide transparent support of
+  -- * gzip'd print files, PPD files, etc.
+  -- *
+  -- * Copyright 2007-2014 by Apple Inc.
+  -- * Copyright 1997-2007 by Easy Software Products, all rights reserved.
+  -- *
+  -- * These coded instructions, statements, and computer programs are the
+  -- * property of Apple Inc. and are protected by Federal copyright
+  -- * law.  Distribution and use rights are outlined in the file "LICENSE.txt"
+  -- * which should have been included with this file.  If this file is
+  -- * file is missing or damaged, see the license at "http://www.cups.org/".
+  -- *
+  -- * This file is subject to the Apple OS-Developed Software exception.
+  --  
+
+  -- * Include necessary headers...
+  --  
+
+  -- Windows does not support the ssize_t type, so map it to off_t...  
+  -- @private@  
+  -- * C++ magic...
+  --  
+
+  -- * CUPS file definitions...
+  --  
+
+  -- * Types and structures...
+  --  
+
+  --*** CUPS file type *** 
+  -- * Prototypes...
+  --  
 
    function cupsFileClose (arg1 : System.Address) return int;  -- cups/file.h:69
    pragma Import (C, cupsFileClose, "cupsFileClose");
@@ -123,5 +222,8 @@ package libCUPS.cups_file_h is
       arg2 : Interfaces.C.Strings.chars_ptr;
       arg3 : size_t) return size_t;  -- cups/file.h:107
    pragma Import (C, cupsFileWrite, "cupsFileWrite");
+
+  -- * End of "$Id: file.h 11627 2014-02-20 16:15:09Z msweet $".
+  --  
 
 end libCUPS.cups_file_h;

@@ -88,6 +88,27 @@ package libCUPS.stdint_h is
    --  unsupported macro: INTMAX_C(c) c ## L
    --  unsupported macro: UINTMAX_C(c) c ## UL
 
+  -- Copyright (C) 1997-2016 Free Software Foundation, Inc.
+  --   This file is part of the GNU C Library.
+  --   The GNU C Library is free software; you can redistribute it and/or
+  --   modify it under the terms of the GNU Lesser General Public
+  --   License as published by the Free Software Foundation; either
+  --   version 2.1 of the License, or (at your option) any later version.
+  --   The GNU C Library is distributed in the hope that it will be useful,
+  --   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  --   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  --   Lesser General Public License for more details.
+  --   You should have received a copy of the GNU Lesser General Public
+  --   License along with the GNU C Library; if not, see
+  --   <http://www.gnu.org/licenses/>.   
+
+  -- *	ISO C99: 7.18 Integer types <stdint.h>
+  --  
+
+  -- Exact integral types.   
+  -- Signed.   
+  -- There is some amount of overlap with <sys/types.h> as known by inet code  
+  -- Unsigned.   
    subtype uint8_t is unsigned_char;  -- stdint.h:48
 
    subtype uint16_t is unsigned_short;  -- stdint.h:49
@@ -96,6 +117,8 @@ package libCUPS.stdint_h is
 
    subtype uint64_t is unsigned_long;  -- stdint.h:55
 
+  -- Small types.   
+  -- Signed.   
    subtype int_least8_t is signed_char;  -- stdint.h:65
 
    subtype int_least16_t is short;  -- stdint.h:66
@@ -104,6 +127,7 @@ package libCUPS.stdint_h is
 
    subtype int_least64_t is long;  -- stdint.h:69
 
+  -- Unsigned.   
    subtype uint_least8_t is unsigned_char;  -- stdint.h:76
 
    subtype uint_least16_t is unsigned_short;  -- stdint.h:77
@@ -112,6 +136,8 @@ package libCUPS.stdint_h is
 
    subtype uint_least64_t is unsigned_long;  -- stdint.h:80
 
+  -- Fast types.   
+  -- Signed.   
    subtype int_fast8_t is signed_char;  -- stdint.h:90
 
    subtype int_fast16_t is long;  -- stdint.h:92
@@ -120,6 +146,7 @@ package libCUPS.stdint_h is
 
    subtype int_fast64_t is long;  -- stdint.h:94
 
+  -- Unsigned.   
    subtype uint_fast8_t is unsigned_char;  -- stdint.h:103
 
    subtype uint_fast16_t is unsigned_long;  -- stdint.h:105
@@ -128,10 +155,36 @@ package libCUPS.stdint_h is
 
    subtype uint_fast64_t is unsigned_long;  -- stdint.h:107
 
+  -- Types for `void *' pointers.   
    subtype uintptr_t is unsigned_long;  -- stdint.h:122
 
+  -- Largest integral types.   
    subtype intmax_t is long;  -- stdint.h:134
 
    subtype uintmax_t is unsigned_long;  -- stdint.h:135
 
+  -- Limits of integral types.   
+  -- Minimum of signed integral types.   
+  -- Maximum of signed integral types.   
+  -- Maximum of unsigned integral types.   
+  -- Minimum of signed integral types having a minimum size.   
+  -- Maximum of signed integral types having a minimum size.   
+  -- Maximum of unsigned integral types having a minimum size.   
+  -- Minimum of fast signed integral types having a minimum size.   
+  -- Maximum of fast signed integral types having a minimum size.   
+  -- Maximum of fast unsigned integral types having a minimum size.   
+  -- Values to test for integral types holding `void *' pointer.   
+  -- Minimum for largest signed integral type.   
+  -- Maximum for largest signed integral type.   
+  -- Maximum for largest unsigned integral type.   
+  -- Limits of other integer types.   
+  -- Limits of `ptrdiff_t' type.   
+  -- Limits of `sig_atomic_t'.   
+  -- Limit of `size_t' type.   
+  -- Limits of `wchar_t'.   
+  -- These constants might also be defined in <wchar.h>.   
+  -- Limits of `wint_t'.   
+  -- Signed.   
+  -- Unsigned.   
+  -- Maximal type.   
 end libCUPS.stdint_h;

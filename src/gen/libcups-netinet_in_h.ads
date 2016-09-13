@@ -118,6 +118,21 @@ package libCUPS.netinet_in_h is
    --  arg-macro: function IN6_IS_ADDR_MC_GLOBAL (IN6_IS_ADDR_MULTICAST(a)  and then  ((((const uint8_t *) (a))(1) and 16#f#) = 16#e#)
    --    return IN6_IS_ADDR_MULTICAST(a)  and then  ((((const uint8_t *) (a))(1) and 16#f#) = 16#e#);
 
+  -- Copyright (C) 1991-2016 Free Software Foundation, Inc.
+  --   This file is part of the GNU C Library.
+  --   The GNU C Library is free software; you can redistribute it and/or
+  --   modify it under the terms of the GNU Lesser General Public
+  --   License as published by the Free Software Foundation; either
+  --   version 2.1 of the License, or (at your option) any later version.
+  --   The GNU C Library is distributed in the hope that it will be useful,
+  --   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  --   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  --   Lesser General Public License for more details.
+  --   You should have received a copy of the GNU Lesser General Public
+  --   License along with the GNU C Library; if not, see
+  --   <http://www.gnu.org/licenses/>.
+
+  -- Internet address.
    subtype in_addr_t is libCUPS.stdint_h.uint32_t;  -- netinet/in.h:30
 
    type in_addr is record
@@ -125,8 +140,78 @@ package libCUPS.netinet_in_h is
    end record;
    pragma Convention (C_Pass_By_Copy, in_addr);  -- netinet/in.h:31
 
+  -- Get system-specific definitions.
+  -- Standard well-defined IP protocols.
+  -- Dummy protocol for TCP.
+  -- Internet Control Message Protocol.
+  -- Internet Group Management Protocol.
+  -- IPIP tunnels (older KA9Q tunnels use 94).
+  -- Transmission Control Protocol.
+  -- Exterior Gateway Protocol.
+  -- PUP protocol.
+  -- User Datagram Protocol.
+  -- XNS IDP protocol.
+  -- SO Transport Protocol Class 4.
+  -- Datagram Congestion Control Protocol.
+  -- IPv6 header.
+  -- Reservation Protocol.
+  -- General Routing Encapsulation.
+  -- encapsulating security payload.
+  -- authentication header.
+  -- Multicast Transport Protocol.
+  -- IP option pseudo header for BEET.
+  -- Encapsulation Header.
+  -- Protocol Independent Multicast.
+  -- Compression Header Protocol.
+  -- Stream Control Transmission Protocol.
+  -- UDP-Lite protocol.
+  -- MPLS in IP.
+  -- Raw IP packets.
+  -- If __USE_KERNEL_IPV6_DEFS is defined then the user has included the kernel
+  --   network headers first and we should use those ABI-identical definitions
+  --   instead of our own.
+
+  -- IPv6 Hop-by-Hop options.
+  -- IPv6 routing header.
+  -- IPv6 fragmentation header.
+  -- ICMPv6.
+  -- IPv6 no next header.
+  -- IPv6 destination options.
+  -- IPv6 mobility header.
+  -- Type to represent a port.
    subtype in_port_t is libCUPS.stdint_h.uint16_t;  -- netinet/in.h:119
 
+  -- Standard well-known ports.
+  -- Echo service.
+  -- Discard transmissions service.
+  -- System status service.
+  -- Time of day service.
+  -- Network status service.
+  -- File Transfer Protocol.
+  -- Telnet protocol.
+  -- Simple Mail Transfer Protocol.
+  -- Timeserver service.
+  -- Domain Name Service.
+  -- Internet Whois service.
+  -- Trivial File Transfer Protocol.
+  -- Finger service.
+  -- SUPDUP protocol.
+  -- execd service.
+  -- rlogind service.
+  -- UDP ports.
+  -- Ports less than this value are reserved for privileged processes.
+  -- Ports greater this value are reserved for (non-privileged) servers.
+  -- Definitions of the bits in an Internet address integer.
+  --   On subnets, host and network parts are found according to
+  --   the subnet mask, not these masks.
+
+  -- Address to accept any incoming messages.
+  -- Address to send to all hosts.
+  -- Address indicating an error return.
+  -- Network number for local host loopback.
+  -- Address to loopback in software to local host.
+  -- Defines for Multicast INADDR.
+  -- IPv6 address
    type in6_addr;
    type anon2597_uu_u6_addr8_array is array (0 .. 15) of aliased libCUPS.stdint_h.uint8_t;
    type anon2597_uu_u6_addr16_array is array (0 .. 7) of aliased libCUPS.stdint_h.uint16_t;
@@ -147,12 +232,15 @@ package libCUPS.netinet_in_h is
    end record;
    pragma Convention (C_Pass_By_Copy, in6_addr);  -- netinet/in.h:211
 
+  -- ::
    in6addr_any : aliased in6_addr;  -- netinet/in.h:229
    pragma Import (C, in6addr_any, "in6addr_any");
 
+  -- ::1
    in6addr_loopback : aliased in6_addr;  -- netinet/in.h:230
    pragma Import (C, in6addr_loopback, "in6addr_loopback");
 
+  -- Structure describing an Internet socket address.
    type anon2612_sin_zero_array is array (0 .. 7) of aliased unsigned_char;
    type sockaddr_in is record
       sin_family : aliased libCUPS.bits_sockaddr_h.sa_family_t;  -- netinet/in.h:241
@@ -162,6 +250,10 @@ package libCUPS.netinet_in_h is
    end record;
    pragma Convention (C_Pass_By_Copy, sockaddr_in);  -- netinet/in.h:239
 
+  -- Port number.
+  -- Internet address.
+  -- Pad to size of `struct sockaddr'.
+  -- Ditto, for IPv6.
    type sockaddr_in6 is record
       sin6_family : aliased libCUPS.bits_sockaddr_h.sa_family_t;  -- netinet/in.h:256
       sin6_port : aliased in_port_t;  -- netinet/in.h:257
@@ -171,12 +263,20 @@ package libCUPS.netinet_in_h is
    end record;
    pragma Convention (C_Pass_By_Copy, sockaddr_in6);  -- netinet/in.h:254
 
+  -- Transport layer port #
+  -- IPv6 flow information
+  -- IPv6 address
+  -- IPv6 scope-id
+  -- IPv4 multicast request.
+  -- IP multicast address of group.
    type ip_mreq is record
       imr_multiaddr : aliased in_addr;  -- netinet/in.h:269
       imr_interface : aliased in_addr;  -- netinet/in.h:272
    end record;
    pragma Convention (C_Pass_By_Copy, ip_mreq);  -- netinet/in.h:266
 
+  -- Local IP address of interface.
+  -- IP multicast address of group.
    type ip_mreq_source is record
       imr_multiaddr : aliased in_addr;  -- netinet/in.h:278
       imr_interface : aliased in_addr;  -- netinet/in.h:281
@@ -184,24 +284,40 @@ package libCUPS.netinet_in_h is
    end record;
    pragma Convention (C_Pass_By_Copy, ip_mreq_source);  -- netinet/in.h:275
 
+  -- IP address of source.
+  -- IP address of interface.
+  -- Likewise, for IPv6.
+  -- IPv6 multicast address of group
    type ipv6_mreq is record
       ipv6mr_multiaddr : aliased in6_addr;  -- netinet/in.h:293
       ipv6mr_interface : aliased unsigned;  -- netinet/in.h:296
    end record;
-   pragma Convention (C_Pass_By_Copy, ipv6_mreq);  -- netinet/in.h:290
-   subtype anon2625_uu_ss_padding_array is Interfaces.C.char_array (0 .. 117);
+   pragma Convention (C_Pass_By_Copy, Ipv6_Mreq);  -- netinet/in.h:290
+
+  -- Address data.
+  -- Structure large enough to hold any socket address (with the historical
+  --   exception of AF_UNIX).
+
+  -- Address family, etc.
+   subtype anon2502_uu_ss_padding_array is Interfaces.C.char_array (0 .. 117);
    type sockaddr_storage is record
       ss_family : aliased libCUPS.bits_sockaddr_h.sa_family_t;  -- bits/socket.h:168
-      uu_ss_padding : aliased anon2625_uu_ss_padding_array;  -- bits/socket.h:169
+      uu_ss_padding : aliased anon2502_uu_ss_padding_array;  -- bits/socket.h:169
       uu_ss_align : aliased unsigned_long;  -- bits/socket.h:170
    end record;
+   pragma Convention (C_Pass_By_Copy, sockaddr_storage);  -- bits/socket.h:166
 
+  -- local interface
+  -- Multicast group request.
+  -- Interface index.
    type group_req is record
       gr_interface : aliased libCUPS.stdint_h.uint32_t;  -- netinet/in.h:305
       gr_group : aliased sockaddr_storage;  -- netinet/in.h:308
    end record;
    pragma Convention (C_Pass_By_Copy, group_req);  -- netinet/in.h:302
 
+  -- Group address.
+  -- Interface index.
    type group_source_req is record
       gsr_interface : aliased libCUPS.stdint_h.uint32_t;  -- netinet/in.h:314
       gsr_group : aliased sockaddr_storage;  -- netinet/in.h:317
@@ -209,6 +325,10 @@ package libCUPS.netinet_in_h is
    end record;
    pragma Convention (C_Pass_By_Copy, group_source_req);  -- netinet/in.h:311
 
+  -- Group address.
+  -- Source address.
+  -- Full-state filter operations.
+  -- IP multicast address of group.
    type anon2621_imsf_slist_array is array (0 .. 0) of aliased in_addr;
    type ip_msfilter is record
       imsf_multiaddr : aliased in_addr;  -- netinet/in.h:328
@@ -219,8 +339,12 @@ package libCUPS.netinet_in_h is
    end record;
    pragma Convention (C_Pass_By_Copy, ip_msfilter);  -- netinet/in.h:325
 
+  -- Local IP address of interface.
+  -- Filter mode.
+  -- Number of source addresses.
+  -- Source addresses.
+  -- Interface index.
    type group_filter;
-   pragma Convention (C_Pass_By_Copy, sockaddr_storage);
    type anon2625_gf_slist_array is array (0 .. 0) of aliased sockaddr_storage;
    type group_filter is record
       gf_interface : aliased libCUPS.stdint_h.uint32_t;  -- netinet/in.h:349
@@ -230,6 +354,16 @@ package libCUPS.netinet_in_h is
       gf_slist : aliased anon2625_gf_slist_array;  -- netinet/in.h:360
    end record;
    pragma Convention (C_Pass_By_Copy, group_filter);  -- netinet/in.h:346
+
+  -- Group address.
+  -- Filter mode.
+  -- Number of source addresses.
+  -- Source addresses.
+  -- Functions to convert between host and network byte order.
+  --   Please note that these functions normally take `unsigned long int' or
+  --   `unsigned short int' values as arguments and also return them.  But
+  --   this was a short-sighted decision since on different systems the types
+  --   may have different representations but the values are always the same.
 
    function ntohl (arg1 : libCUPS.stdint_h.uint32_t) return libCUPS.stdint_h.uint32_t;  -- netinet/in.h:376
    pragma Import (C, ntohl, "ntohl");
@@ -243,10 +377,35 @@ package libCUPS.netinet_in_h is
    function htons (arg1 : libCUPS.stdint_h.uint16_t) return libCUPS.stdint_h.uint16_t;  -- netinet/in.h:381
    pragma Import (C, htons, "htons");
 
+  -- Get machine dependent optimized versions of byte swapping functions.
+  -- We can optimize calls to the conversion functions.  Either nothing has
+  --   to be done or we are using directly the byte-swapping functions which
+  --   often can be inlined.
+
+  -- The host byte order is the same as network byte order,
+  --   so these functions are all just identity.
+
+  -- Bind socket to a privileged IP port.
    function bindresvport (arg1 : int; arg2 : access sockaddr_in) return int;  -- netinet/in.h:503
    pragma Import (C, bindresvport, "bindresvport");
 
+  -- The IPv6 version of this function.
    function bindresvport6 (arg1 : int; arg2 : access sockaddr_in6) return int;  -- netinet/in.h:506
    pragma Import (C, bindresvport6, "bindresvport6");
 
+  -- Forward declaration.
+  -- IPv6 packet information.
+  -- src/dst IPv6 address
+  -- send/recv interface index
+  -- IPv6 MTU information.
+  -- dst address including zone ID
+  -- path MTU in host byte order
+  -- Obsolete hop-by-hop and Destination Options Processing (RFC 2292).
+  -- Hop-by-Hop and Destination Options Processing (RFC 3542).
+  -- Routing Header Option (RFC 3542).
+  -- Multicast source filter support.
+  -- Get IPv4 source filter.
+  -- Set IPv4 source filter.
+  -- Get source filter.
+  -- Set source filter.
 end libCUPS.netinet_in_h;

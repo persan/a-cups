@@ -7,6 +7,29 @@ with Interfaces.C.Strings;
 
 package libCUPS.cups_language_h is
 
+  -- * "$Id: language.h 10996 2013-05-29 11:51:34Z msweet $"
+  -- *
+  -- *   Multi-language support for CUPS.
+  -- *
+  -- *   Copyright 2007-2011 by Apple Inc.
+  -- *   Copyright 1997-2006 by Easy Software Products.
+  -- *
+  -- *   These coded instructions, statements, and computer programs are the
+  -- *   property of Apple Inc. and are protected by Federal copyright
+  -- *   law.  Distribution and use rights are outlined in the file "LICENSE.txt"
+  -- *   which should have been included with this file.  If this file is
+  -- *   file is missing or damaged, see the license at "http://www.cups.org/".
+  -- *
+  -- *   This file is subject to the Apple OS-Developed Software exception.
+  --  
+
+  -- * Include necessary headers...
+  --  
+
+  -- * Types...
+  --  
+
+  --*** Language Encodings *** 
    subtype cups_encoding_e is unsigned;
    CUPS_AUTO_ENCODING : constant cups_encoding_e := -1;
    CUPS_US_ASCII : constant cups_encoding_e := 0;
@@ -53,8 +76,54 @@ package libCUPS.cups_language_h is
    CUPS_JIS_X0213 : constant cups_encoding_e := 132;
    CUPS_ENCODING_VBCS_END : constant cups_encoding_e := 191;  -- cups/language.h:37
 
+  -- Auto-detect the encoding @private@  
+  -- US ASCII  
+  -- ISO-8859-1  
+  -- ISO-8859-2  
+  -- ISO-8859-3  
+  -- ISO-8859-4  
+  -- ISO-8859-5  
+  -- ISO-8859-6  
+  -- ISO-8859-7  
+  -- ISO-8859-8  
+  -- ISO-8859-9  
+  -- ISO-8859-10  
+  -- UTF-8  
+  -- ISO-8859-13  
+  -- ISO-8859-14  
+  -- ISO-8859-15  
+  -- CP-874  
+  -- CP-1250  
+  -- CP-1251  
+  -- CP-1252  
+  -- CP-1253  
+  -- CP-1254  
+  -- CP-1255  
+  -- CP-1256  
+  -- CP-1257  
+  -- CP-1258  
+  -- KOI-8-R  
+  -- KOI-8-U  
+  -- ISO-8859-11  
+  -- ISO-8859-16  
+  -- MacRoman  
+  -- End of single-byte encodings @private@  
+  -- Japanese JIS X0208-1990  
+  -- Simplified Chinese GB 2312-80  
+  -- Korean KS C5601-1992  
+  -- Traditional Chinese Big Five  
+  -- Korean Johab  
+  -- End of double-byte encodings @private@  
+  -- EUC Simplified Chinese  
+  -- EUC Japanese  
+  -- EUC Korean  
+  -- EUC Traditional Chinese  
+  -- JIS X0213 aka Shift JIS  
+  -- End of variable-length encodings @private@  
    subtype cups_encoding_t is cups_encoding_e;
 
+  --*** Language Cache Structure *** 
+  -- Next language in cache  
    subtype anon3363_language_array is Interfaces.C.char_array (0 .. 15);
    type cups_lang_s is record
       next : access cups_lang_s;  -- cups/language.h:89
@@ -65,8 +134,69 @@ package libCUPS.cups_language_h is
    end record;
    pragma Convention (C_Pass_By_Copy, cups_lang_s);  -- cups/language.h:87
 
+  -- Number of times this entry has been used.  
+  -- Text encoding  
+  -- Language/locale name  
+  -- Message strings @private@  
    subtype cups_lang_t is cups_lang_s;
 
+  -- * Prototypes...
+  --  
+
+  -- * "$Id: language.h 10996 2013-05-29 11:51:34Z msweet $"
+  -- *
+  -- *   Multi-language support for CUPS.
+  -- *
+  -- *   Copyright 2007-2011 by Apple Inc.
+  -- *   Copyright 1997-2006 by Easy Software Products.
+  -- *
+  -- *   These coded instructions, statements, and computer programs are the
+  -- *   property of Apple Inc. and are protected by Federal copyright
+  -- *   law.  Distribution and use rights are outlined in the file "LICENSE.txt"
+  -- *   which should have been included with this file.  If this file is
+  -- *   file is missing or damaged, see the license at "http://www.cups.org/".
+  -- *
+  -- *   This file is subject to the Apple OS-Developed Software exception.
+  --  
+
+  -- * "$Id: language.h 10996 2013-05-29 11:51:34Z msweet $"
+  -- *
+  -- *   Multi-language support for CUPS.
+  -- *
+  -- *   Copyright 2007-2011 by Apple Inc.
+  -- *   Copyright 1997-2006 by Easy Software Products.
+  -- *
+  -- *   These coded instructions, statements, and computer programs are the
+  -- *   property of Apple Inc. and are protected by Federal copyright
+  -- *   law.  Distribution and use rights are outlined in the file "LICENSE.txt"
+  -- *   which should have been included with this file.  If this file is
+  -- *   file is missing or damaged, see the license at "http://www.cups.org/".
+  -- *
+  -- *   This file is subject to the Apple OS-Developed Software exception.
+  --  
+
+  -- * Include necessary headers...
+  --  
+
+  -- * Types...
+  --  
+
+  --*** Language Encodings *** 
+  -- Auto-detect the encoding @private@  
+  -- US ASCII  
+  -- ISO-8859-1  
+  -- ISO-8859-2  
+  -- ISO-8859-3  
+  -- ISO-8859-4  
+  -- ISO-8859-5  
+  -- ISO-8859-6  
+  -- ISO-8859-7  
+  -- ISO-8859-8  
+  -- ISO-8859-9  
+  -- ISO-8859-10  
+  -- UTF-8  
+  -- ISO-8859-13  
+  -- ISO-8859-14  
    function cupsLangDefault return access cups_lang_t;  -- cups/language.h:101
    pragma Import (C, cupsLangDefault, "cupsLangDefault");
 
@@ -81,5 +211,8 @@ package libCUPS.cups_language_h is
 
    function cupsLangGet (arg1 : Interfaces.C.Strings.chars_ptr) return access cups_lang_t;  -- cups/language.h:105
    pragma Import (C, cupsLangGet, "cupsLangGet");
+
+  -- * End of "$Id: language.h 10996 2013-05-29 11:51:34Z msweet $".
+  --  
 
 end libCUPS.cups_language_h;

@@ -193,6 +193,49 @@ package libCUPS.cups_ipp_h is
    --  unsupported macro: IPP_TAG_MASK IPP_TAG_CUPS_MASK
    --  unsupported macro: IPP_TAG_COPY IPP_TAG_CUPS_CONST
 
+  -- * "$Id: ipp.h 12666 2015-05-25 19:38:09Z msweet $"
+  -- *
+  -- * Internet Printing Protocol definitions for CUPS.
+  -- *
+  -- * Copyright 2007-2014 by Apple Inc.
+  -- * Copyright 1997-2006 by Easy Software Products.
+  -- *
+  -- * These coded instructions, statements, and computer programs are the
+  -- * property of Apple Inc. and are protected by Federal copyright
+  -- * law.  Distribution and use rights are outlined in the file "LICENSE.txt"
+  -- * which should have been included with this file.  If this file is
+  -- * file is missing or damaged, see the license at "http://www.cups.org/".
+  -- *
+  -- * This file is subject to the Apple OS-Developed Software exception.
+  --  
+
+  -- * Include necessary headers...
+  --  
+
+  -- * C++ magic...
+  --  
+
+  -- * IPP version string...
+  --  
+
+  -- * IPP registered port number...
+  -- *
+  -- * Note: Applications should never use IPP_PORT, but instead use the
+  -- * ippPort() function to allow overrides via the IPP_PORT environment
+  -- * variable and services file if needed!
+  --  
+
+  -- * Common limits...
+  --  
+
+  -- * Macro to flag a text string attribute as "const" (static storage) vs.
+  -- * allocated.
+  --  
+
+  -- * Types and structures...
+  --  
+
+  --*** Document states *** 
    subtype ipp_dstate_e is unsigned;
    IPP_DOCUMENT_PENDING : constant ipp_dstate_e := 3;
    IPP_DOCUMENT_PROCESSING : constant ipp_dstate_e := 5;
@@ -200,8 +243,14 @@ package libCUPS.cups_ipp_h is
    IPP_DOCUMENT_ABORTED : constant ipp_dstate_e := 8;
    IPP_DOCUMENT_COMPLETED : constant ipp_dstate_e := 9;  -- cups/ipp.h:82
 
+  -- Document is pending  
+  -- Document is processing  
+  -- Document is canceled  
+  -- Document is aborted  
+  -- Document is completed  
    subtype ipp_dstate_t is ipp_dstate_e;
 
+  --*** Finishings *** 
    subtype ipp_finishings_e is unsigned;
    IPP_FINISHINGS_NONE : constant ipp_finishings_e := 3;
    IPP_FINISHINGS_STAPLE : constant ipp_finishings_e := 4;
@@ -296,10 +345,105 @@ package libCUPS.cups_ipp_h is
    IPP_FINISHINGS_CUPS_FOLD_RIGHT_GATE : constant ipp_finishings_e := 1073741923;
    IPP_FINISHINGS_CUPS_FOLD_Z : constant ipp_finishings_e := 1073741924;  -- cups/ipp.h:99
 
+  -- No finishing  
+  -- Staple (any location)  
+  -- Punch (any location/count)  
+  -- Add cover  
+  -- Bind  
+  -- Staple interior  
+  -- Stitch along any side  
+  -- Fold (any type)  
+  -- Trim (any type)  
+  -- Bale (any type)  
+  -- Fold to make booklet  
+  -- Offset for binding (any type)  
+  -- Apply protective liquid or powder coating  
+  -- Apply protective (solid) material  
+  -- Staple top left corner  
+  -- Staple bottom left corner  
+  -- Staple top right corner  
+  -- Staple bottom right corner  
+  -- Stitch along left side  
+  -- Stitch along top edge  
+  -- Stitch along right side  
+  -- Stitch along bottom edge  
+  -- Two staples on left  
+  -- Two staples on top  
+  -- Two staples on right  
+  -- Two staples on bottom  
+  -- Three staples on left  
+  -- Three staples on top  
+  -- Three staples on right  
+  -- Three staples on bottom  
+  -- Bind on left  
+  -- Bind on top  
+  -- Bind on right  
+  -- Bind on bottom  
+  -- Trim output after each page  
+  -- Trim output after each document  
+  -- Trim output after each copy  
+  -- Trim output after job  
+  -- Punch 1 hole top left  
+  -- Punch 1 hole bottom left  
+  -- Punch 1 hole top right  
+  -- Punch 1 hole bottom right  
+  -- Punch 2 holes left side  
+  -- Punch 2 holes top edge  
+  -- Punch 2 holes right side  
+  -- Punch 2 holes bottom edge  
+  -- Punch 3 holes left side  
+  -- Punch 3 holes top edge  
+  -- Punch 3 holes right side  
+  -- Punch 3 holes bottom edge  
+  -- Punch 4 holes left side  
+  -- Punch 4 holes top edge  
+  -- Punch 4 holes right side  
+  -- Punch 4 holes bottom edge  
+  -- Accordian-fold the paper vertically into four sections  
+  -- Fold the top and bottom quarters of the paper towards the midline, then fold in half vertically  
+  -- Fold the top and bottom quarters of the paper towards the midline  
+  -- Fold the paper in half vertically  
+  -- Fold the paper in half horizontally, then Z-fold the paper vertically  
+  -- Fold the top quarter of the paper towards the midline  
+  -- Fold the paper into three sections vertically; sometimes also known as a C fold 
+  -- Fold the paper in half vertically two times, yielding four sections  
+  -- Fold the paper in half horizontally and vertically; sometimes also called a cross fold  
+  -- Fold the bottom quarter of the paper towards the midline  
+  -- Fold the paper vertically into three sections, forming a Z  
+  -- CUPS extensions for finishings (pre-standard versions of values above)  
+  -- Punch 1 hole top left  
+  -- Punch 1 hole bottom left  
+  -- Punch 1 hole top right  
+  -- Punch 1 hole bottom right  
+  -- Punch 2 holes left side  
+  -- Punch 2 holes top edge  
+  -- Punch 2 holes right side  
+  -- Punch 2 holes bottom edge  
+  -- Punch 3 holes left side  
+  -- Punch 3 holes top edge  
+  -- Punch 3 holes right side  
+  -- Punch 3 holes bottom edge  
+  -- Punch 4 holes left side  
+  -- Punch 4 holes top edge  
+  -- Punch 4 holes right side  
+  -- Punch 4 holes bottom edge  
+  -- Accordian-fold the paper vertically into four sections  
+  -- Fold the top and bottom quarters of the paper towards the midline, then fold in half vertically  
+  -- Fold the top and bottom quarters of the paper towards the midline  
+  -- Fold the paper in half vertically  
+  -- Fold the paper in half horizontally, then Z-fold the paper vertically  
+  -- Fold the top quarter of the paper towards the midline  
+  -- Fold the paper into three sections vertically; sometimes also known as a C fold 
+  -- Fold the paper in half vertically two times, yielding four sections  
+  -- Fold the paper in half horizontally and vertically; sometimes also called a cross fold  
+  -- Fold the bottom quarter of the paper towards the midline  
+  -- Fold the paper vertically into three sections, forming a Z  
    subtype ipp_finishings_t is ipp_finishings_e;
 
+  -- Long-time misspelling...  
    subtype ipp_finish_t is ipp_finishings_e;
 
+  --*** Job collation types *** 
    subtype ipp_jcollate_e is unsigned;
    IPP_JCOLLATE_UNCOLLATED_SHEETS : constant ipp_jcollate_e := 3;
    IPP_JCOLLATE_COLLATED_DOCUMENTS : constant ipp_jcollate_e := 4;
@@ -307,6 +451,7 @@ package libCUPS.cups_ipp_h is
 
    subtype ipp_jcollate_t is ipp_jcollate_e;
 
+  --*** Job states *** 
    subtype ipp_jstate_e is unsigned;
    IPP_JSTATE_PENDING : constant ipp_jstate_e := 3;
    IPP_JSTATE_HELD : constant ipp_jstate_e := 4;
@@ -316,8 +461,17 @@ package libCUPS.cups_ipp_h is
    IPP_JSTATE_ABORTED : constant ipp_jstate_e := 8;
    IPP_JSTATE_COMPLETED : constant ipp_jstate_e := 9;  -- cups/ipp.h:221
 
+  -- Job is waiting to be printed  
+  -- Job is held for printing  
+  -- Job is currently printing  
+  -- Job has been stopped  
+  -- Job has been canceled  
+  -- Job has aborted due to error  
+  -- Job has completed successfully  
+  -- Legacy name for canceled state  
    subtype ipp_jstate_t is ipp_jstate_e;
 
+  --*** IPP operations *** 
    subtype ipp_op_e is unsigned;
    IPP_OP_CUPS_INVALID : constant ipp_op_e := -1;
    IPP_OP_CUPS_NONE : constant ipp_op_e := 0;
@@ -410,8 +564,100 @@ package libCUPS.cups_ipp_h is
    IPP_OP_CUPS_GET_PPD : constant ipp_op_e := 16399;
    IPP_OP_CUPS_GET_DOCUMENT : constant ipp_op_e := 16423;  -- cups/ipp.h:244
 
+  -- Invalid operation name for @link ippOpValue@  
+  -- No operation @private@  
+  -- Print a single file  
+  -- Print a single URL  
+  -- Validate job options  
+  -- Create an empty print job  
+  -- Add a file to a job  
+  -- Add a URL to a job  
+  -- Cancel a job  
+  -- Get job attributes  
+  -- Get a list of jobs  
+  -- Get printer attributes  
+  -- Hold a job for printing  
+  -- Release a job for printing  
+  -- Reprint a job  
+  -- Stop a printer  
+  -- Start a printer  
+  -- Cancel all jobs  
+  -- Set printer attributes  
+  -- Set job attributes  
+  -- Get supported attribute values  
+  -- Create one or more printer subscriptions @since CUPS 1.2/OS X 10.5@  
+  -- Create one of more job subscriptions @since CUPS 1.2/OS X 10.5@  
+  -- Get subscription attributes @since CUPS 1.2/OS X 10.5@  
+  -- Get list of subscriptions @since CUPS 1.2/OS X 10.5@  
+  -- Renew a printer subscription @since CUPS 1.2/OS X 10.5@  
+  -- Cancel a subscription @since CUPS 1.2/OS X 10.5@  
+  -- Get notification events @since CUPS 1.2/OS X 10.5@  
+  -- Send notification events @private@  
+  -- Get resource attributes @private@  
+  -- Get resource data @private@  
+  -- Get list of resources @private@  
+  -- Get printer support files @private@  
+  -- Start a printer  
+  -- Stop a printer  
+  -- Stop printer after the current job  
+  -- Hold new jobs  
+  -- Release new jobs  
+  -- Stop a printer  
+  -- Start a printer  
+  -- Restart a printer  
+  -- Turn a printer off  
+  -- Turn a printer on  
+  -- Reprint a job  
+  -- Cancel the current job  
+  -- Suspend the current job  
+  -- Resume the current job  
+  -- Promote a job to print sooner  
+  -- Schedule a job to print after another  
+  -- Cancel-Document  
+  -- Get-Document-Attributes  
+  -- Get-Documents  
+  -- Delete-Document  
+  -- Set-Document-Attributes  
+  -- Cancel-Jobs  
+  -- Cancel-My-Jobs  
+  -- Resubmit-Job  
+  -- Close-Job  
+  -- Identify-Printer  
+  -- Validate-Document  
+  -- Send-Hardcopy-Document  
+  -- Acknowledge-Document  
+  -- Acknowledge-Identify-Printer  
+  -- Acknowledge-Job  
+  -- Fetch-Document  
+  -- Fetch-Job  
+  -- Get-Output-Device-Attributes  
+  -- Update-Active-Jobs  
+  -- Deregister-Output-Device  
+  -- Update-Document-Status  
+  -- Update-Job-Status  
+  -- Update-Output-Device-Attributes  
+  -- Get-Next-Document-Data  
+  -- Reserved @private@  
+  -- Get the default printer  
+  -- Get a list of printers and/or classes  
+  -- Add or modify a printer  
+  -- Delete a printer  
+  -- Get a list of classes @deprecated@  
+  -- Add or modify a class  
+  -- Delete a class  
+  -- Accept new jobs on a printer  
+  -- Reject new jobs on a printer  
+  -- Set the default printer  
+  -- Get a list of supported devices  
+  -- Get a list of supported drivers  
+  -- Move a job to a different printer  
+  -- Authenticate a job @since CUPS 1.2/OS X 10.5@  
+  -- Get a PPD file @since CUPS 1.3/OS X 10.5@  
+  -- Get a document file @since CUPS 1.4/OS X 10.6@  
+  -- Legacy names  
    subtype ipp_op_t is ipp_op_e;
 
+  --*** Orientation values *** 
    subtype ipp_orient_e is unsigned;
    IPP_ORIENT_PORTRAIT : constant ipp_orient_e := 3;
    IPP_ORIENT_LANDSCAPE : constant ipp_orient_e := 4;
@@ -419,28 +665,45 @@ package libCUPS.cups_ipp_h is
    IPP_ORIENT_REVERSE_PORTRAIT : constant ipp_orient_e := 6;
    IPP_ORIENT_NONE : constant ipp_orient_e := 7;  -- cups/ipp.h:424
 
+  -- No rotation  
+  -- 90 degrees counter-clockwise  
+  -- 90 degrees clockwise  
+  -- 180 degrees  
+  -- No rotation  
    subtype ipp_orient_t is ipp_orient_e;
 
+  --*** Printer states *** 
    subtype ipp_pstate_e is unsigned;
    IPP_PSTATE_IDLE : constant ipp_pstate_e := 3;
    IPP_PSTATE_PROCESSING : constant ipp_pstate_e := 4;
    IPP_PSTATE_STOPPED : constant ipp_pstate_e := 5;  -- cups/ipp.h:440
 
+  -- Printer is idle  
+  -- Printer is working  
+  -- Printer is stopped  
    subtype ipp_pstate_t is ipp_pstate_e;
 
+  --*** Qualities *** 
    subtype ipp_quality_e is unsigned;
    IPP_QUALITY_DRAFT : constant ipp_quality_e := 3;
    IPP_QUALITY_NORMAL : constant ipp_quality_e := 4;
    IPP_QUALITY_HIGH : constant ipp_quality_e := 5;  -- cups/ipp.h:453
 
+  -- Draft quality  
+  -- Normal quality  
+  -- High quality  
    subtype ipp_quality_t is ipp_quality_e;
 
+  --*** Resolution units *** 
    subtype ipp_res_e is unsigned;
    IPP_RES_PER_INCH : constant ipp_res_e := 3;
    IPP_RES_PER_CM : constant ipp_res_e := 4;  -- cups/ipp.h:460
 
+  -- Pixels per inch  
+  -- Pixels per centimeter  
    subtype ipp_res_t is ipp_res_e;
 
+  --*** IPP states *** 
    subtype ipp_state_e is unsigned;
    IPP_STATE_ERROR : constant ipp_state_e := -1;
    IPP_STATE_IDLE : constant ipp_state_e := 0;
@@ -448,8 +711,14 @@ package libCUPS.cups_ipp_h is
    IPP_STATE_ATTRIBUTE : constant ipp_state_e := 2;
    IPP_STATE_DATA : constant ipp_state_e := 3;  -- cups/ipp.h:466
 
+  -- An error occurred  
+  -- Nothing is happening/request completed  
+  -- The request header needs to be sent/received  
+  -- One or more attributes need to be sent/received  
+  -- IPP request data needs to be sent/received  
    subtype ipp_state_t is ipp_state_e;
 
+  --*** IPP status codes *** 
    subtype ipp_status_e is unsigned;
    IPP_STATUS_CUPS_INVALID : constant ipp_status_e := -1;
    IPP_STATUS_OK : constant ipp_status_e := 0;
@@ -515,8 +784,75 @@ package libCUPS.cups_ipp_h is
    IPP_STATUS_ERROR_CUPS_PKI : constant ipp_status_e := 4097;
    IPP_STATUS_ERROR_CUPS_UPGRADE_REQUIRED : constant ipp_status_e := 4098;  -- cups/ipp.h:483
 
+  -- Invalid status name for @link ippErrorValue@  
+  -- successful-ok  
+  -- successful-ok-ignored-or-substituted-attributes  
+  -- successful-ok-conflicting-attributes  
+  -- successful-ok-ignored-subscriptions  
+  -- successful-ok-ignored-notifications @private@  
+  -- successful-ok-too-many-events  
+  -- successful-ok-but-cancel-subscription @private@  
+  -- successful-ok-events-complete  
+  -- redirection-other-site @private@  
+  -- cups-see-other  
+  -- client-error-bad-request  
+  -- client-error-forbidden  
+  -- client-error-not-authenticated  
+  -- client-error-not-authorized  
+  -- client-error-not-possible  
+  -- client-error-timeout  
+  -- client-error-not-found  
+  -- client-error-gone  
+  -- client-error-request-entity-too-large  
+  -- client-error-request-value-too-long  
+  -- client-error-document-format-not-supported  
+  -- client-error-attributes-or-values-not-supported  
+  -- client-error-uri-scheme-not-supported  
+  -- client-error-charset-not-supported  
+  -- client-error-conflicting-attributes  
+  -- client-error-compression-not-supported  
+  -- client-error-compression-error  
+  -- client-error-document-format-error  
+  -- client-error-document-access-error  
+  -- client-error-attributes-not-settable  
+  -- client-error-ignored-all-subscriptions  
+  -- client-error-too-many-subscriptions  
+  -- client-error-ignored-all-notifications @private@  
+  -- client-error-print-support-file-not-found @private@  
+  -- client-error-document-password-error  
+  -- client-error-document-permission-error  
+  -- client-error-document-security-error  
+  -- client-error-document-unprintable-error  
+  -- client-error-account-info-needed  
+  -- client-error-account-closed  
+  -- client-error-account-limit-reached  
+  -- client-error-account-authorization-failed  
+  -- Legacy status codes for paid printing  
+  -- cups-error-account-info-needed @deprecated@  
+  -- cups-error-account-closed @deprecate@  
+  -- cups-error-account-limit-reached @deprecated@  
+  -- cups-error-account-authorization-failed @deprecated@  
+  -- server-error-internal-error  
+  -- server-error-operation-not-supported  
+  -- server-error-service-unavailable  
+  -- server-error-version-not-supported  
+  -- server-error-device-error  
+  -- server-error-temporary-error  
+  -- server-error-not-accepting-jobs  
+  -- server-error-busy  
+  -- server-error-job-canceled  
+  -- server-error-multiple-document-jobs-not-supported  
+  -- server-error-printer-is-deactivated  
+  -- server-error-too-many-jobs  
+  -- server-error-too-many-documents  
+  -- These are internal and never sent over the wire...  
+  -- cups-authentication-canceled - Authentication canceled by user @since CUPS 1.5/OS X 10.7@  
+  -- cups-pki-error - Error negotiating a secure connection @since CUPS 1.5/OS X 10.7@  
+  -- cups-upgrade-required - TLS upgrade required  
+  -- Legacy name for canceled status  
    subtype ipp_status_t is ipp_status_e;
 
+  --*** Format tags for attributes *** 
    subtype ipp_tag_e is unsigned;
    IPP_TAG_CUPS_INVALID : constant ipp_tag_e := -1;
    IPP_TAG_ZERO : constant ipp_tag_e := 0;
@@ -561,10 +897,55 @@ package libCUPS.cups_ipp_h is
    IPP_TAG_CUPS_MASK : constant ipp_tag_e := 2147483647;
    IPP_TAG_CUPS_CONST : constant ipp_tag_e := -2147483648;  -- cups/ipp.h:633
 
+  -- Invalid tag name for @link ippTagValue@  
+  -- Zero tag - used for separators  
+  -- Operation group  
+  -- Job group  
+  -- End-of-attributes  
+  -- Printer group  
+  -- Unsupported attributes group  
+  -- Subscription group  
+  -- Event group  
+  -- Resource group @private@  
+  -- Document group  
+  -- Unsupported value  
+  -- Default value  
+  -- Unknown value  
+  -- No-value value  
+  -- Not-settable value  
+  -- Delete-attribute value  
+  -- Admin-defined value  
+  -- Integer value  
+  -- Boolean value  
+  -- Enumeration value  
+  -- Octet string value  
+  -- Date/time value  
+  -- Resolution value  
+  -- Range value  
+  -- Beginning of collection value  
+  -- Text-with-language value  
+  -- Name-with-language value  
+  -- End of collection value  
+  -- Text value  
+  -- Name value  
+  -- Reserved for future string value @private@  
+  -- Keyword value  
+  -- URI value  
+  -- URI scheme value  
+  -- Character set value  
+  -- Language value  
+  -- MIME media type value  
+  -- Collection member name value  
+  -- Extension point for 32-bit tags  
+  -- Mask for copied attribute values @private@  
+  -- The following expression is used to avoid compiler warnings with +/-0x80000000  
+  -- Bitflag for copied/const attribute values @private@  
    subtype ipp_tag_t is ipp_tag_e;
 
+  --*** Unsigned 8-bit integer/character *** 
    subtype ipp_uchar_t is unsigned_char;  -- cups/ipp.h:685
 
+  --*** IPP request/response data *** 
    --  skipped empty struct u_ipp_s
 
    --  skipped empty struct ipp_t
@@ -573,17 +954,101 @@ package libCUPS.cups_ipp_h is
 
    --  skipped empty struct ipp_attribute_t
 
+  --*** IPP attribute *** 
+  --*** New in CUPS 1.2/OS X 10.5 *** 
    type ipp_iocb_t is access function
         (arg1 : System.Address;
          arg2 : access ipp_uchar_t;
          arg3 : size_t) return size_t;
    pragma Convention (C, ipp_iocb_t);  -- cups/ipp.h:691
 
+  --*** IPP IO Callback Function @since CUPS 1.2/OS X 10.5@ *** 
+  --*** New in CUPS 1.6/OS X 10.8 *** 
    type ipp_copycb_t is access function
         (arg1 : System.Address;
          arg2 : System.Address;
          arg3 : System.Address) return int;
    pragma Convention (C, ipp_copycb_t);  -- cups/ipp.h:695
+
+  -- * The following structures are PRIVATE starting with CUPS 1.6/OS X 10.8.
+  -- * Please use the new accessor functions available in CUPS 1.6 and later, as
+  -- * these definitions will be moved to a private header file in a future release.
+  -- *
+  -- * Define _IPP_PRIVATE_STRUCTURES to 1 to cause the private IPP structures to be
+  -- * exposed in CUPS 1.6.  This happens automatically on OS X when compiling for
+  -- * a deployment target of 10.7 or earlier.
+  -- *
+  -- * Define _IPP_PRIVATE_STRUCTURES to 0 to prevent the private IPP structures
+  -- * from being exposed.  This is useful when migrating existing code to the new
+  -- * accessors.
+  --  
+
+  -- Somebody has overridden the value  
+  -- Building CUPS  
+  -- Building for 10.7 and earlier  
+  -- Building for 10.7 and earlier  
+  --*** Request Header *** 
+  -- Any Header  
+  -- Protocol version number  
+  -- Operation ID or status code 
+  -- Request ID  
+  -- Operation Header  
+  -- Protocol version number  
+  -- Operation ID  
+  -- Request ID  
+  -- Status Header  
+  -- Protocol version number  
+  -- Status code  
+  -- Request ID  
+  --*** New in CUPS 1.1.19 *** 
+  -- Event Header @since CUPS 1.1.19/OS X 10.3@  
+  -- Protocol version number  
+  -- Status code  
+  -- Request ID  
+  --*** New in CUPS 1.1.19 *** 
+  --*** Attribute Value *** 
+  -- Integer/enumerated value  
+  -- Boolean value  
+  -- Date/time value  
+  -- Horizontal resolution  
+  -- Vertical resolution  
+  -- Resolution units  
+  -- Resolution value  
+  -- Lower value  
+  -- Upper value  
+  -- Range of integers value  
+  -- Language code  
+  -- String  
+  -- String with language value  
+  -- Length of attribute  
+  -- Data in attribute  
+  -- Unknown attribute type  
+  --*** New in CUPS 1.1.19 *** 
+  -- Collection value @since CUPS 1.1.19/OS X 10.3@  
+  --*** Convenience typedef that will be removed @private@ *** 
+  --*** Attribute *** 
+  -- Next attribute in list  
+  -- Job/Printer/Operation group tag  
+  -- What type of value is it?  
+  -- Name of attribute  
+  -- Number of values  
+  -- Values  
+  --*** IPP Request/Response/Notification *** 
+  -- State of request  
+  -- Request header  
+  -- Attributes  
+  -- Last attribute in list  
+  -- Current attribute (for read/write)  
+  -- Current attribute group tag  
+  --*** New in CUPS 1.2 *** 
+  -- Previous attribute (for read) @since CUPS 1.2/OS X 10.5@  
+  --*** New in CUPS 1.4.4 *** 
+  -- Use count @since CUPS 1.4.4/OS X 10.6.?@  
+  --*** New in CUPS 2.0 *** 
+  -- At end of list?  
+  -- Current attribute index for hierarchical search  
+  -- * Prototypes...
+  --  
 
    function ippAddBoolean
      (arg1 : System.Address;
@@ -724,6 +1189,7 @@ package libCUPS.cups_ipp_h is
    procedure ippSetPort (arg1 : int);  -- cups/ipp.h:883
    pragma Import (C, ippSetPort, "ippSetPort");
 
+  --*** New in CUPS 1.1.19 *** 
    function ippAddCollection
      (arg1 : System.Address;
       arg2 : ipp_tag_t;
@@ -748,6 +1214,7 @@ package libCUPS.cups_ipp_h is
    function ippWriteFile (arg1 : int; arg2 : System.Address) return ipp_state_t;  -- cups/ipp.h:893
    pragma Import (C, ippWriteFile, "ippWriteFile");
 
+  --*** New in CUPS 1.2/OS X 10.5 *** 
    function ippAddOctetString
      (arg1 : System.Address;
       arg2 : ipp_tag_t;
@@ -784,12 +1251,14 @@ package libCUPS.cups_ipp_h is
       arg5 : System.Address) return ipp_state_t;  -- cups/ipp.h:905
    pragma Import (C, ippWriteIO, "ippWriteIO");
 
+  --*** New in CUPS 1.4/OS X 10.6 *** 
    function ippTagString (arg1 : ipp_tag_t) return Interfaces.C.Strings.chars_ptr;  -- cups/ipp.h:909
    pragma Import (C, ippTagString, "ippTagString");
 
    function ippTagValue (arg1 : Interfaces.C.Strings.chars_ptr) return ipp_tag_t;  -- cups/ipp.h:910
    pragma Import (C, ippTagValue, "ippTagValue");
 
+  --*** New in CUPS 1.6/OS X 10.8 *** 
    function ippAddOutOfBand
      (arg1 : System.Address;
       arg2 : ipp_tag_t;
@@ -982,6 +1451,7 @@ package libCUPS.cups_ipp_h is
       arg3 : int) return int;  -- cups/ipp.h:988
    pragma Import (C, ippSetVersion, "ippSetVersion");
 
+  --*** New in CUPS 1.7 *** 
    function ippAddStringf
      (arg1 : System.Address;
       arg2 : ipp_tag_t;
@@ -1050,7 +1520,27 @@ package libCUPS.cups_ipp_h is
    function ippValidateAttributes (arg1 : System.Address) return int;  -- cups/ipp.h:1020
    pragma Import (C, ippValidateAttributes, "ippValidateAttributes");
 
+  --*** New in CUPS 2.0 *** 
    function ippStateString (arg1 : ipp_state_t) return Interfaces.C.Strings.chars_ptr;  -- cups/ipp.h:1024
    pragma Import (C, ippStateString, "ippStateString");
+
+  -- * C++ magic...
+  --  
+
+  -- * "$Id: ipp.h 12666 2015-05-25 19:38:09Z msweet $"
+  -- *
+  -- * Internet Printing Protocol definitions for CUPS.
+  -- *
+  -- * Copyright 2007-2014 by Apple Inc.
+  -- * Copyright 1997-2006 by Easy Software Products.
+  -- *
+  -- * These coded instructions, statements, and computer programs are the
+  -- * property of Apple Inc. and are protected by Federal copyright
+  -- * law.  Distribution and use rights are outlined in the file "LICENSE.txt"
+  -- * which should have been included with this file.  If this file is
+  -- * file is missing or damaged, see the license at "http://www.cups.org/".
+  -- *
+  -- * This file is subject to the Apple OS-Developed Software exception.
+  --  
 
 end libCUPS.cups_ipp_h;

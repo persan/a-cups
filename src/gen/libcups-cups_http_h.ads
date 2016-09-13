@@ -100,6 +100,54 @@ package libCUPS.cups_http_h is
    --  unsupported macro: HTTP_1_0 HTTP_VERSION_1_0
    --  unsupported macro: HTTP_1_1 HTTP_VERSION_1_1
 
+  -- * "$Id: http.h 12848 2015-08-26 18:51:57Z msweet $"
+  -- *
+  -- * Hyper-Text Transport Protocol definitions for CUPS.
+  -- *
+  -- * Copyright 2007-2014 by Apple Inc.
+  -- * Copyright 1997-2007 by Easy Software Products, all rights reserved.
+  -- *
+  -- * These coded instructions, statements, and computer programs are the
+  -- * property of Apple Inc. and are protected by Federal copyright
+  -- * law.  Distribution and use rights are outlined in the file "LICENSE.txt"
+  -- * which should have been included with this file.  If this file is
+  -- * file is missing or damaged, see the license at "http://www.cups.org/".
+  -- *
+  -- * This file is subject to the Apple OS-Developed Software exception.
+  --  
+
+  -- * Include necessary headers...
+  --  
+
+  -- Windows does not support the ssize_t type, so map it to off_t...  
+  -- @private@  
+  -- * C++ magic...
+  --  
+
+  -- * Oh, the wonderful world of IPv6 compatibility.  Apparently some
+  -- * implementations expose the (more logical) 32-bit address parts
+  -- * to everyone, while others only expose it to kernel code...  To
+  -- * make supporting IPv6 even easier, each vendor chose different
+  -- * core structure and union names, so the same defines or code
+  -- * can't be used on all platforms.
+  -- *
+  -- * The following will likely need tweaking on new platforms that
+  -- * support IPv6 - the "s6_addr32" define maps to the 32-bit integer
+  -- * array in the in6_addr union, which is named differently on various
+  -- * platforms.
+  --  
+
+  -- * Windows only defines byte and 16-bit word members of the union and
+  -- * requires special casing of all raw address code...
+  --  
+
+  -- * Limits...
+  --  
+
+  -- * Types and structures...
+  --  
+
+  --*** HTTP authentication types *** 
    type http_auth_e is 
      (HTTP_AUTH_NONE,
       HTTP_AUTH_BASIC,
@@ -110,16 +158,28 @@ package libCUPS.cups_http_h is
       HTTP_AUTH_NEGOTIATE);
    pragma Convention (C, http_auth_e);  -- cups/http.h:114
 
+  -- No authentication in use  
+  -- Basic authentication in use  
+  -- Digest authentication in use  
+  -- MD5-session authentication in use  
+  -- Digest authentication in use for body  
+  -- MD5-session authentication in use for body  
+  -- GSSAPI authentication in use @since CUPS 1.3/OS X 10.5@  
    subtype http_auth_t is http_auth_e;
 
+  --*** HTTP transfer encoding values *** 
    type http_encoding_e is 
      (HTTP_ENCODING_LENGTH,
       HTTP_ENCODING_CHUNKED,
       HTTP_ENCODING_FIELDS);
    pragma Convention (C, http_encoding_e);  -- cups/http.h:125
 
+  -- Data is sent with Content-Length  
+  -- Data is chunked  
+  -- Sending HTTP fields  
    subtype http_encoding_t is http_encoding_e;
 
+  --*** HTTP encryption values *** 
    type http_encryption_e is 
      (HTTP_ENCRYPTION_IF_REQUESTED,
       HTTP_ENCRYPTION_NEVER,
@@ -127,8 +187,13 @@ package libCUPS.cups_http_h is
       HTTP_ENCRYPTION_ALWAYS);
    pragma Convention (C, http_encryption_e);  -- cups/http.h:138
 
+  -- Encrypt if requested (TLS upgrade)  
+  -- Never encrypt  
+  -- Encryption is required (TLS upgrade)  
+  -- Always encrypt (SSL)  
    subtype http_encryption_t is http_encryption_e;
 
+  --*** HTTP field names *** 
    subtype http_field_e is unsigned;
    HTTP_FIELD_UNKNOWN : constant http_field_e := -1;
    HTTP_FIELD_ACCEPT_LANGUAGE : constant http_field_e := 0;
@@ -163,14 +228,53 @@ package libCUPS.cups_http_h is
    HTTP_FIELD_SERVER : constant http_field_e := 29;
    HTTP_FIELD_MAX : constant http_field_e := 30;  -- cups/http.h:153
 
+  -- Unknown field  
+  -- Accept-Language field  
+  -- Accept-Ranges field  
+  -- Authorization field  
+  -- Connection field  
+  -- Content-Encoding field  
+  -- Content-Language field  
+  -- Content-Length field  
+  -- Content-Location field  
+  -- Content-MD5 field  
+  -- Content-Range field  
+  -- Content-Type field  
+  -- Content-Version field  
+  -- Date field  
+  -- Host field  
+  -- If-Modified-Since field  
+  -- If-Unmodified-Since field  
+  -- Keep-Alive field  
+  -- Last-Modified field  
+  -- Link field  
+  -- Location field  
+  -- Range field  
+  -- Referer field  
+  -- Retry-After field  
+  -- Transfer-Encoding field  
+  -- Upgrade field  
+  -- User-Agent field  
+  -- WWW-Authenticate field  
+  -- Accepting-Encoding field @since CUPS 1.7/OS X 10.9@  
+  -- Allow field @since CUPS 1.7/OS X 10.9@  
+  -- Server field @since CUPS 1.7/OS X 10.9@  
+  -- Maximum field index  
    subtype http_field_t is http_field_e;
 
+  --*** HTTP keep-alive values *** 
    type http_keepalive_e is 
      (HTTP_KEEPALIVE_OFF,
       HTTP_KEEPALIVE_ON);
    pragma Convention (C, http_keepalive_e);  -- cups/http.h:189
 
+  -- No keep alive support  
+  -- Use keep alive  
    subtype http_keepalive_t is http_keepalive_e;
+
+  --*** HTTP state values; states
+  --					 **** are server-oriented...
+  --					 *** 
 
    subtype http_state_e is unsigned;
    HTTP_STATE_ERROR : constant http_state_e := -1;
@@ -191,8 +295,26 @@ package libCUPS.cups_http_h is
    HTTP_STATE_UNKNOWN_METHOD : constant http_state_e := 14;
    HTTP_STATE_UNKNOWN_VERSION : constant http_state_e := 15;  -- cups/http.h:195
 
+  -- Error on socket  
+  -- Waiting for command  
+  -- OPTIONS command, waiting for blank line  
+  -- GET command, waiting for blank line  
+  -- GET command, sending data  
+  -- HEAD command, waiting for blank line  
+  -- POST command, waiting for blank line  
+  -- POST command, receiving data  
+  -- POST command, sending data  
+  -- PUT command, waiting for blank line  
+  -- PUT command, receiving data  
+  -- DELETE command, waiting for blank line  
+  -- TRACE command, waiting for blank line  
+  -- CONNECT command, waiting for blank line  
+  -- Command complete, sending status  
+  -- Unknown request method, waiting for blank line @since CUPS 1.7/OS X 10.9@  
+  -- Unknown request method, waiting for blank line @since CUPS 1.7/OS X 10.9@  
    subtype http_state_t is http_state_e;
 
+  --*** HTTP status codes *** 
    subtype http_status_e is unsigned;
    HTTP_STATUS_ERROR : constant http_status_e := -1;
    HTTP_STATUS_NONE : constant http_status_e := 0;
@@ -240,8 +362,55 @@ package libCUPS.cups_http_h is
    HTTP_STATUS_CUPS_PKI_ERROR : constant http_status_e := 1001;
    HTTP_STATUS_CUPS_WEBIF_DISABLED : constant http_status_e := 1002;  -- cups/http.h:235
 
+  -- An error response from httpXxxx()  
+  -- No Expect value @since CUPS 1.7/OS X 10.9@  
+  -- Everything OK, keep going...  
+  -- HTTP upgrade to TLS/SSL  
+  -- OPTIONS/GET/HEAD/POST/TRACE command was successful  
+  -- PUT command was successful  
+  -- DELETE command was successful  
+  -- Information isn't authoritative  
+  -- Successful command, no new data  
+  -- Content was reset/recreated  
+  -- Only a partial file was received/sent  
+  -- Multiple files match request  
+  -- Document has moved permanently  
+  -- Document has moved temporarily  
+  -- See this other link...  
+  -- File not modified  
+  -- Must use a proxy to access this URI  
+  -- Bad request  
+  -- Unauthorized to access host  
+  -- Payment required  
+  -- Forbidden to access this URI  
+  -- URI was not found  
+  -- Method is not allowed  
+  -- Not Acceptable  
+  -- Proxy Authentication is Required  
+  -- Request timed out  
+  -- Request is self-conflicting  
+  -- Server has gone away  
+  -- A content length or encoding is required  
+  -- Precondition failed  
+  -- Request entity too large  
+  -- URI too long  
+  -- The requested media type is unsupported  
+  -- The requested range is not satisfiable  
+  -- The expectation given in an Expect header field was not met  
+  -- Upgrade to SSL/TLS required  
+  -- Internal server error  
+  -- Feature not implemented  
+  -- Bad gateway  
+  -- Service is unavailable  
+  -- Gateway connection timed out  
+  -- HTTP version not supported  
+  -- User canceled authorization @since CUPS 1.4@  
+  -- Error negotiating a secure connection @since CUPS 1.5/OS X 10.7@  
+  -- Web interface is disabled @private@  
+  -- Old names for this enumeration  
    subtype http_status_t is http_status_e;
 
+  --*** Level of trust for credentials @since CUPS 2.0/OS 10.10@  
    type http_trust_e is 
      (HTTP_TRUST_OK,
       HTTP_TRUST_INVALID,
@@ -251,8 +420,15 @@ package libCUPS.cups_http_h is
       HTTP_TRUST_UNKNOWN);
    pragma Convention (C, http_trust_e);  -- cups/http.h:345
 
+  -- Credentials are OK/trusted  
+  -- Credentials are invalid  
+  -- Credentials have changed  
+  -- Credentials are expired  
+  -- Credentials have been renewed  
+  -- Credentials are unknown/new  
    subtype http_trust_t is http_trust_e;
 
+  --*** URI separation status @since CUPS 1.2@ *** 
    subtype http_uri_status_e is unsigned;
    HTTP_URI_STATUS_OVERFLOW : constant http_uri_status_e := -8;
    HTTP_URI_STATUS_BAD_ARGUMENTS : constant http_uri_status_e := -7;
@@ -267,8 +443,21 @@ package libCUPS.cups_http_h is
    HTTP_URI_STATUS_UNKNOWN_SCHEME : constant http_uri_status_e := 2;
    HTTP_URI_STATUS_MISSING_RESOURCE : constant http_uri_status_e := 3;  -- cups/http.h:355
 
+  -- URI buffer for httpAssembleURI is too small  
+  -- Bad arguments to function (error)  
+  -- Bad resource in URI (error)  
+  -- Bad port number in URI (error)  
+  -- Bad hostname in URI (error)  
+  -- Bad username in URI (error)  
+  -- Bad scheme in URI (error)  
+  -- Bad/empty URI (error)  
+  -- URI decoded OK  
+  -- Missing scheme in URI (warning)  
+  -- Unknown scheme in URI (warning)  
+  -- Missing resource in URI (warning)  
    subtype http_uri_status_t is http_uri_status_e;
 
+  --*** URI en/decode flags *** 
    subtype http_uri_coding_e is unsigned;
    HTTP_URI_CODING_NONE : constant http_uri_coding_e := 0;
    HTTP_URI_CODING_USERNAME : constant http_uri_coding_e := 1;
@@ -279,15 +468,34 @@ package libCUPS.cups_http_h is
    HTTP_URI_CODING_ALL : constant http_uri_coding_e := 15;
    HTTP_URI_CODING_RFC6874 : constant http_uri_coding_e := 16;  -- cups/http.h:386
 
+  -- Don't en/decode anything  
+  -- En/decode the username portion  
+  -- En/decode the hostname portion  
+  -- En/decode the resource portion  
+  -- En/decode all but the query  
+  -- En/decode the query portion  
+  -- En/decode everything  
+  -- Use RFC 6874 address format  
    subtype http_uri_coding_t is http_uri_coding_e;
 
+  --*** HTTP version numbers *** 
    subtype http_version_e is unsigned;
    HTTP_VERSION_0_9 : constant http_version_e := 9;
    HTTP_VERSION_1_0 : constant http_version_e := 100;
    HTTP_VERSION_1_1 : constant http_version_e := 101;  -- cups/http.h:398
 
+  -- HTTP/0.9  
+  -- HTTP/1.0  
+  -- HTTP/1.1  
    subtype http_version_t is http_version_e;
 
+  --*** Socket address union, which
+  --					 **** makes using IPv6 and other
+  --					 **** address types easier and
+  --					 **** more portable. @since CUPS 1.2/OS X 10.5@
+  --					 *** 
+
+  -- Base structure for family value  
    subtype anon2846_pad_array is Interfaces.C.char_array (0 .. 255);
    type u_http_addr_u (discr : unsigned := 0) is record
       case discr is
@@ -306,30 +514,50 @@ package libCUPS.cups_http_h is
    pragma Convention (C_Pass_By_Copy, u_http_addr_u);
    pragma Unchecked_Union (u_http_addr_u);  -- cups/http.h:411
 
+  -- IPv4 address  
+  -- IPv6 address  
+  -- Domain socket file  
+  -- Padding to ensure binary compatibility  
    subtype http_addr_t is u_http_addr_u;
 
+  --*** Socket address list, which is
+  --					 **** used to enumerate all of the
+  --					 **** addresses that are associated
+  --					 **** with a hostname. @since CUPS 1.2/OS X 10.5@
+  --					 *** 
+
+  -- Pointer to next address in list  
    type http_addrlist_s is record
       next : access http_addrlist_s;  -- cups/http.h:434
       addr : aliased http_addr_t;  -- cups/http.h:435
    end record;
    pragma Convention (C_Pass_By_Copy, http_addrlist_s);  -- cups/http.h:428
 
+  -- Address  
    subtype http_addrlist_t is http_addrlist_s;
 
+  --*** HTTP connection type *** 
    --  skipped empty struct u_http_s
 
    --  skipped empty struct http_t
 
+  --*** HTTP credential data @since CUPS 1.5/OS X 10.7@ *** 
+  -- Pointer to credential data  
    type http_credential_s is record
       data : System.Address;  -- cups/http.h:442
       datalen : aliased size_t;  -- cups/http.h:443
    end record;
    pragma Convention (C_Pass_By_Copy, http_credential_s);  -- cups/http.h:440
 
+  -- Credential length  
    subtype http_credential_t is http_credential_s;
 
    type http_timeout_cb_t is access function (arg1 : System.Address; arg2 : System.Address) return int;
    pragma Convention (C, http_timeout_cb_t);  -- cups/http.h:446
+
+  --*** HTTP timeout callback @since CUPS 1.5/OS X 10.7@ *** 
+  -- * Prototypes...
+  --  
 
    procedure httpBlocking (arg1 : System.Address; arg2 : int);  -- cups/http.h:455
    pragma Import (C, httpBlocking, "httpBlocking");
@@ -476,6 +704,7 @@ package libCUPS.cups_http_h is
    function httpMD5String (arg1 : access unsigned_char; arg2 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:501
    pragma Import (C, httpMD5String, "httpMD5String");
 
+  --*** New in CUPS 1.1.19 *** 
    procedure httpClearCookie (arg1 : System.Address);  -- cups/http.h:504
    pragma Import (C, httpClearCookie, "httpClearCookie");
 
@@ -488,6 +717,7 @@ package libCUPS.cups_http_h is
    function httpWait (arg1 : System.Address; arg2 : int) return int;  -- cups/http.h:507
    pragma Import (C, httpWait, "httpWait");
 
+  --*** New in CUPS 1.1.21 *** 
    function httpDecode64_2
      (arg1 : Interfaces.C.Strings.chars_ptr;
       arg2 : access int;
@@ -514,6 +744,7 @@ package libCUPS.cups_http_h is
       arg10 : int);  -- cups/http.h:513
    pragma Import (C, httpSeparate2, "httpSeparate2");
 
+  --*** New in CUPS 1.2/OS X 10.5 *** 
    function httpAddrAny (arg1 : access constant http_addr_t) return int;  -- cups/http.h:520
    pragma Import (C, httpAddrAny, "httpAddrAny");
 
@@ -640,6 +871,7 @@ package libCUPS.cups_http_h is
       arg3 : size_t) return size_t;  -- cups/http.h:564
    pragma Import (C, httpWrite2, "httpWrite2");
 
+  --*** New in CUPS 1.3/OS X 10.5 *** 
    function httpGetAuthString (arg1 : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:568
    pragma Import (C, httpGetAuthString, "httpGetAuthString");
 
@@ -649,6 +881,7 @@ package libCUPS.cups_http_h is
       arg3 : Interfaces.C.Strings.chars_ptr);  -- cups/http.h:569
    pragma Import (C, httpSetAuthString, "httpSetAuthString");
 
+  --*** New in CUPS 1.5/OS X 10.7 *** 
    function httpAddCredential
      (arg1 : System.Address;
       arg2 : System.Address;
@@ -671,6 +904,7 @@ package libCUPS.cups_http_h is
       arg4 : System.Address);  -- cups/http.h:582
    pragma Import (C, httpSetTimeout, "httpSetTimeout");
 
+  --*** New in CUPS 1.6/OS X 10.8 *** 
    function httpAddrConnect2
      (arg1 : access http_addrlist_t;
       arg2 : access int;
@@ -690,6 +924,7 @@ package libCUPS.cups_http_h is
       arg3 : access int) return int;  -- cups/http.h:592
    pragma Import (C, httpReconnect2, "httpReconnect2");
 
+  --*** New in CUPS 1.7/OS X 10.9 *** 
    function httpAcceptConnection (arg1 : int; arg2 : int) return System.Address;  -- cups/http.h:597
    pragma Import (C, httpAcceptConnection, "httpAcceptConnection");
 
@@ -749,6 +984,7 @@ package libCUPS.cups_http_h is
    function httpWriteResponse (arg1 : System.Address; arg2 : http_status_t) return http_state_t;  -- cups/http.h:620
    pragma Import (C, httpWriteResponse, "httpWriteResponse");
 
+  -- New in CUPS 2.0/OS X 10.10  
    function httpAddrClose (arg1 : access http_addr_t; arg2 : int) return int;  -- cups/http.h:624
    pragma Import (C, httpAddrClose, "httpAddrClose");
 
@@ -832,5 +1068,24 @@ package libCUPS.cups_http_h is
 
    function httpURIStatusString (arg1 : http_uri_status_t) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:647
    pragma Import (C, httpURIStatusString, "httpURIStatusString");
+
+  -- * C++ magic...
+  --  
+
+  -- * "$Id: http.h 12848 2015-08-26 18:51:57Z msweet $"
+  -- *
+  -- * Hyper-Text Transport Protocol definitions for CUPS.
+  -- *
+  -- * Copyright 2007-2014 by Apple Inc.
+  -- * Copyright 1997-2007 by Easy Software Products, all rights reserved.
+  -- *
+  -- * These coded instructions, statements, and computer programs are the
+  -- * property of Apple Inc. and are protected by Federal copyright
+  -- * law.  Distribution and use rights are outlined in the file "LICENSE.txt"
+  -- * which should have been included with this file.  If this file is
+  -- * file is missing or damaged, see the license at "http://www.cups.org/".
+  -- *
+  -- * This file is subject to the Apple OS-Developed Software exception.
+  --  
 
 end libCUPS.cups_http_h;

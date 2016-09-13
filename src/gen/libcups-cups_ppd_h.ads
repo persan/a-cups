@@ -17,14 +17,67 @@ package libCUPS.cups_ppd_h is
    PPD_MAX_TEXT : constant := 81;  --  cups/ppd.h:75
    PPD_MAX_LINE : constant := 256;  --  cups/ppd.h:76
 
+  -- * "$Id: ppd.h 11056 2013-06-25 14:27:30Z msweet $"
+  -- *
+  -- *   PostScript Printer Description definitions for CUPS.
+  -- *
+  -- *   THESE APIS ARE DEPRECATED. TO COMPILE WITHOUT WARNINGS ADD
+  -- *   -D_PPD_DEPRECATED="" TO YOUR COMPILE OPTIONS.  THIS HEADER AND THESE
+  -- *   FUNCTIONS WILL BE REMOVED IN A FUTURE RELEASE OF CUPS.
+  -- *
+  -- *   Copyright 2007-2013 by Apple Inc.
+  -- *   Copyright 1997-2007 by Easy Software Products, all rights reserved.
+  -- *
+  -- *   These coded instructions, statements, and computer programs are the
+  -- *   property of Apple Inc. and are protected by Federal copyright
+  -- *   law.  Distribution and use rights are outlined in the file "LICENSE.txt"
+  -- *   which should have been included with this file.  If this file is
+  -- *   file is missing or damaged, see the license at "http://www.cups.org/".
+  -- *
+  -- *   PostScript is a trademark of Adobe Systems, Inc.
+  -- *
+  -- *   This code and any derivative of it may be used and distributed
+  -- *   freely under the terms of the GNU General Public License when
+  -- *   used with GNU Ghostscript or its derivatives.  Use of the code
+  -- *   (or any derivative of it) with software other than GNU
+  -- *   GhostScript (or its derivatives) is governed by the CUPS license
+  -- *   agreement.
+  -- *
+  -- *   This file is subject to the Apple OS-Developed Software exception.
+  --  
+
+  -- * Include necessary headers...
+  --  
+
+  -- * C++ magic...
+  --  
+
+  -- * Define _PPD_DEPRECATED to silence the warnings about PPD functions being
+  -- * deprecated...
+  --  
+
+  -- * PPD version...
+  --  
+
+  -- * PPD size limits (defined in Adobe spec)
+  --  
+
+  -- * Types and structures...
+  --  
+
+  --*** UI Types *** 
    type ppd_ui_e is 
      (PPD_UI_BOOLEAN,
       PPD_UI_PICKONE,
       PPD_UI_PICKMANY);
    pragma Convention (C, ppd_ui_e);  -- cups/ppd.h:83
 
+  -- True or False option  
+  -- Pick one from a list  
+  -- Pick zero or more from a list  
    subtype ppd_ui_t is ppd_ui_e;
 
+  --*** Order dependency sections *** 
    type ppd_section_e is 
      (PPD_ORDER_ANY,
       PPD_ORDER_DOCUMENT,
@@ -34,8 +87,15 @@ package libCUPS.cups_ppd_h is
       PPD_ORDER_PROLOG);
    pragma Convention (C, ppd_section_e);  -- cups/ppd.h:90
 
+  -- Option code can be anywhere in the file  
+  -- ... must be in the DocumentSetup section  
+  -- ... must be sent prior to the document  
+  -- ... must be sent as a JCL command  
+  -- ... must be in the PageSetup section  
+  -- ... must be in the Prolog section  
    subtype ppd_section_t is ppd_section_e;
 
+  --*** Colorspaces *** 
    subtype ppd_cs_e is unsigned;
    PPD_CS_CMYK : constant ppd_cs_e := -4;
    PPD_CS_CMY : constant ppd_cs_e := -3;
@@ -44,8 +104,15 @@ package libCUPS.cups_ppd_h is
    PPD_CS_RGBK : constant ppd_cs_e := 4;
    PPD_CS_N : constant ppd_cs_e := 5;  -- cups/ppd.h:100
 
+  -- CMYK colorspace  
+  -- CMY colorspace  
+  -- Grayscale colorspace  
+  -- RGB colorspace  
+  -- RGBK (K = gray) colorspace  
+  -- DeviceN colorspace  
    subtype ppd_cs_t is ppd_cs_e;
 
+  --*** Status Codes @since CUPS 1.1.19/OS X 10.3@ *** 
    type ppd_status_e is 
      (PPD_OK,
       PPD_FILE_OPEN_ERROR,
@@ -74,15 +141,46 @@ package libCUPS.cups_ppd_h is
       PPD_MAX_STATUS);
    pragma Convention (C, ppd_status_e);  -- cups/ppd.h:110
 
+  -- OK  
+  -- Unable to open PPD file  
+  -- NULL PPD file pointer  
+  -- Memory allocation error  
+  -- Missing PPD-Adobe-4.x header  
+  -- Missing value string  
+  -- Internal error  
+  -- Bad OpenGroup  
+  -- OpenGroup without a CloseGroup first  
+  -- Bad OpenUI/JCLOpenUI  
+  -- OpenUI/JCLOpenUI without a CloseUI/JCLCloseUI first  
+  -- Bad OrderDependency  
+  -- Bad UIConstraints  
+  -- Missing asterisk in column 0  
+  -- Line longer than 255 chars  
+  -- Illegal control character  
+  -- Illegal main keyword string  
+  -- Illegal option keyword string  
+  -- Illegal translation string  
+  -- Illegal whitespace character  
+  -- Bad custom parameter  
+  -- Missing option keyword  
+  -- Bad value string  
+  -- Missing CloseGroup  
+  -- @private@  
    subtype ppd_status_t is ppd_status_e;
 
+  --*** Conformance Levels @since CUPS 1.1.19/OS X 10.3@ *** 
    type ppd_conform_e is 
      (PPD_CONFORM_RELAXED,
       PPD_CONFORM_STRICT);
    pragma Convention (C, ppd_conform_e);  -- cups/ppd.h:139
 
+  -- Relax whitespace and control char  
+  -- Require strict conformance  
    subtype ppd_conform_t is ppd_conform_e;
 
+  --*** Conformance Levels @since CUPS 1.1.19/OS X 10.3@ *** 
+  --*** PPD Attribute Structure @since CUPS 1.1.19/OS X 10.3@ *** 
+  -- Name of attribute (cupsXYZ)  
    subtype anon3753_name_array is Interfaces.C.char_array (0 .. 40);
    subtype anon3753_spec_array is Interfaces.C.char_array (0 .. 40);
    subtype anon3753_text_array is Interfaces.C.char_array (0 .. 80);
@@ -94,6 +192,9 @@ package libCUPS.cups_ppd_h is
    end record;
    pragma Convention (C_Pass_By_Copy, ppd_attr_s);  -- cups/ppd.h:148
 
+  -- Specifier string, if any  
+  -- Human-readable text, if any  
+  -- Value string  
    subtype ppd_attr_t is ppd_attr_s;
 
    type ppd_option_s;
@@ -102,6 +203,9 @@ package libCUPS.cups_ppd_h is
    subtype anon3761_text_array is Interfaces.C.char_array (0 .. 80);
    subtype ppd_option_t is ppd_option_s;
 
+  --*** Options *** 
+  --*** Option choices *** 
+  -- 0 if not selected, 1 otherwise  
    subtype anon3763_choice_array is Interfaces.C.char_array (0 .. 40);
    subtype anon3763_text_array is Interfaces.C.char_array (0 .. 80);
    type ppd_choice_s is record
@@ -113,8 +217,14 @@ package libCUPS.cups_ppd_h is
    end record;
    pragma Convention (C_Pass_By_Copy, ppd_choice_s);  -- cups/ppd.h:159
 
+  -- Computer-readable option name  
+  -- Human-readable option name  
+  -- Code to send for this option  
+  -- Pointer to parent option structure  
    subtype ppd_choice_t is ppd_choice_s;
 
+  --*** Options *** 
+  -- 0 if no conflicts exist, 1 otherwise  
    type ppd_option_s is record
       conflicted : aliased char;  -- cups/ppd.h:170
       keyword : aliased anon3761_keyword_array;  -- cups/ppd.h:171
@@ -128,6 +238,20 @@ package libCUPS.cups_ppd_h is
    end record;
    pragma Convention (C_Pass_By_Copy, ppd_option_s);  -- cups/ppd.h:168
 
+  -- Option keyword name ("PageSize", etc.)  
+  -- Default option choice  
+  -- Human-readable text  
+  -- Type of UI option  
+  -- Section for command  
+  -- Order number  
+  -- Number of option choices  
+  -- Option choices  
+  --*** Groups *** 
+  --*** Group text strings are limited to 39 chars + nul in order to
+  --   **** preserve binary compatibility and allow applications to get
+  --   **** the group's keyword name.
+  --   *** 
+
    subtype anon3779_text_array is Interfaces.C.char_array (0 .. 39);
    subtype anon3779_name_array is Interfaces.C.char_array (0 .. 40);
    type ppd_group_s is record
@@ -140,8 +264,16 @@ package libCUPS.cups_ppd_h is
    end record;
    pragma Convention (C_Pass_By_Copy, ppd_group_s);  -- cups/ppd.h:181
 
+  -- Human-readable group name  
+  -- Group name @since CUPS 1.1.18/OS X 10.3@  
+  -- Number of options  
+  -- Options  
+  -- Number of sub-groups  
+  -- Sub-groups (max depth = 1)  
    subtype ppd_group_t is ppd_group_s;
 
+  --*** Constraints *** 
+  -- First keyword  
    subtype anon3786_option1_array is Interfaces.C.char_array (0 .. 40);
    subtype anon3786_choice1_array is Interfaces.C.char_array (0 .. 40);
    subtype anon3786_option2_array is Interfaces.C.char_array (0 .. 40);
@@ -154,8 +286,13 @@ package libCUPS.cups_ppd_h is
    end record;
    pragma Convention (C_Pass_By_Copy, ppd_const_s);  -- cups/ppd.h:196
 
+  -- First option/choice (blank for all)  
+  -- Second keyword  
+  -- Second option/choice (blank for all)  
    subtype ppd_const_t is ppd_const_s;
 
+  --*** Page Sizes *** 
+  -- Page size selected?  
    subtype anon3796_name_array is Interfaces.C.char_array (0 .. 40);
    type ppd_size_s is record
       marked : aliased int;  -- cups/ppd.h:206
@@ -169,8 +306,17 @@ package libCUPS.cups_ppd_h is
    end record;
    pragma Convention (C_Pass_By_Copy, ppd_size_s);  -- cups/ppd.h:204
 
+  -- Media size option  
+  -- Width of media in points  
+  -- Length of media in points  
+  -- Left printable margin in points  
+  -- Bottom printable margin in points  
+  -- Right printable margin in points  
+  -- Top printable margin in points  
    subtype ppd_size_t is ppd_size_s;
 
+  --*** Emulators *** 
+  -- Emulator name  
    subtype anon3800_name_array is Interfaces.C.char_array (0 .. 40);
    type ppd_emul_s is record
       name : aliased anon3800_name_array;  -- cups/ppd.h:218
@@ -179,8 +325,11 @@ package libCUPS.cups_ppd_h is
    end record;
    pragma Convention (C_Pass_By_Copy, ppd_emul_s);  -- cups/ppd.h:216
 
+  -- Code to switch to this emulation  
+  -- Code to stop this emulation  
    subtype ppd_emul_t is ppd_emul_s;
 
+  --*** sRGB Color Profiles *** 
    subtype anon3804_resolution_array is Interfaces.C.char_array (0 .. 40);
    subtype anon3804_media_type_array is Interfaces.C.char_array (0 .. 40);
    type anon3804_matrix_array is array (0 .. 2, 0 .. 2) of aliased float;
@@ -193,8 +342,15 @@ package libCUPS.cups_ppd_h is
    end record;
    pragma Convention (C_Pass_By_Copy, ppd_profile_s);  -- cups/ppd.h:223
 
+  -- Resolution or "-"  
+  -- Media type or "-"  
+  -- Ink density to use  
+  -- Gamma correction to use  
+  -- Transform matrix  
    subtype ppd_profile_t is ppd_profile_s;
 
+  --*** New in CUPS 1.2/OS X 10.5 *** 
+  --*** Custom Parameter Type @since CUPS 1.2/OS X 10.5@ *** 
    type ppd_cptype_e is 
      (PPD_CUSTOM_CURVE,
       PPD_CUSTOM_INT,
@@ -206,8 +362,18 @@ package libCUPS.cups_ppd_h is
       PPD_CUSTOM_STRING);
    pragma Convention (C, ppd_cptype_e);  -- cups/ppd.h:235
 
+  -- Curve value for f(x) = x^value  
+  -- Integer number value  
+  -- Curve value for f(x) = x^(1/value)  
+  -- String of (hidden) numbers  
+  -- String of (hidden) characters  
+  -- Measurement value in points  
+  -- Real number value  
+  -- String of characters  
    subtype ppd_cptype_t is ppd_cptype_e;
 
+  --*** Custom Parameter Limit @since CUPS 1.2/OS X 10.5@ *** 
+  -- Gamma value  
    type ppd_cplimit_u (discr : unsigned := 0) is record
       case discr is
          when 0 =>
@@ -231,8 +397,17 @@ package libCUPS.cups_ppd_h is
    pragma Convention (C_Pass_By_Copy, ppd_cplimit_u);
    pragma Unchecked_Union (ppd_cplimit_u);  -- cups/ppd.h:247
 
+  -- Integer value  
+  -- Gamma value  
+  -- Passcode length  
+  -- Password length  
+  -- Measurement value  
+  -- Real value  
+  -- String length  
    subtype ppd_cplimit_t is ppd_cplimit_u;
 
+  --*** Custom Parameter Value @since CUPS 1.2/OS X 10.5@ *** 
+  -- Gamma value  
    type ppd_cpvalue_u (discr : unsigned := 0) is record
       case discr is
          when 0 =>
@@ -256,8 +431,17 @@ package libCUPS.cups_ppd_h is
    pragma Convention (C_Pass_By_Copy, ppd_cpvalue_u);
    pragma Unchecked_Union (ppd_cpvalue_u);  -- cups/ppd.h:259
 
+  -- Integer value  
+  -- Gamma value  
+  -- Passcode value  
+  -- Password value  
+  -- Measurement value  
+  -- Real value  
+  -- String value  
    subtype ppd_cpvalue_t is ppd_cpvalue_u;
 
+  --*** Custom Parameter @since CUPS 1.2/OS X 10.5@ *** 
+  -- Parameter name  
    subtype anon3821_name_array is Interfaces.C.char_array (0 .. 40);
    subtype anon3821_text_array is Interfaces.C.char_array (0 .. 80);
    type ppd_cparam_s is record
@@ -271,8 +455,16 @@ package libCUPS.cups_ppd_h is
    end record;
    pragma Convention (C_Pass_By_Copy, ppd_cparam_s);  -- cups/ppd.h:271
 
+  -- Human-readable text  
+  -- Order (0 to N)  
+  -- Parameter type  
+  -- Minimum value  
+  -- Maximum value  
+  -- Current value  
    subtype ppd_cparam_t is ppd_cparam_s;
 
+  --*** Custom Option @since CUPS 1.2/OS X 10.5@ *** 
+  -- Name of option that is being extended...  
    subtype anon3827_keyword_array is Interfaces.C.char_array (0 .. 40);
    type ppd_coption_s is record
       keyword : aliased anon3827_keyword_array;  -- cups/ppd.h:284
@@ -282,12 +474,18 @@ package libCUPS.cups_ppd_h is
    end record;
    pragma Convention (C_Pass_By_Copy, ppd_coption_s);  -- cups/ppd.h:282
 
+  -- Option that is being extended...  
+  -- Extended option is marked  
+  -- Parameters  
    subtype ppd_coption_t is ppd_coption_s;
 
    --  skipped empty struct u_ppd_cache_s
 
    --  skipped empty struct u_ppd_cache_t
 
+  --*** PPD cache and mapping data @since CUPS 1.5/OS X 10.7@ @private@ *** 
+  --*** PPD File *** 
+  -- Language level of device  
    type anon3833_custom_min_array is array (0 .. 1) of aliased float;
    type anon3833_custom_max_array is array (0 .. 1) of aliased float;
    type anon3833_custom_margins_array is array (0 .. 3) of aliased float;
@@ -346,7 +544,66 @@ package libCUPS.cups_ppd_h is
    end record;
    pragma Convention (C_Pass_By_Copy, ppd_file_s);  -- cups/ppd.h:293
 
+  -- 1 = color device, 0 = grayscale  
+  -- 1 = supports variable sizes, 0 = doesn't  
+  -- 1 = supports accurate screens, 0 = not  
+  -- 1 = continuous tone only, 0 = not  
+  -- -90 or 90  
+  -- Device-specific model number  
+  -- 1 = Copies done manually, 0 = hardware  
+  -- Pages per minute  
+  -- Default colorspace  
+  -- Patch commands to be sent to printer  
+  -- Number of emulations supported  
+  -- Emulations and the code to invoke them  
+  -- Start JCL commands  
+  -- Enter PostScript interpreter  
+  -- End JCL commands  
+  -- Language encoding  
+  -- Language version (English, Spanish, etc.)  
+  -- Model name (general)  
+  -- Truetype rasterizer  
+  -- Manufacturer name  
+  -- Product name (from PS RIP/interpreter)  
+  -- Nickname (specific)  
+  -- Short version of nickname  
+  -- Number of UI groups  
+  -- UI groups  
+  -- Number of page sizes  
+  -- Page sizes  
+  -- Minimum variable page size  
+  -- Maximum variable page size  
+  -- Margins around page  
+  -- Number of UI/Non-UI constraints  
+  -- UI/Non-UI constraints  
+  -- Number of pre-loaded fonts  
+  -- Pre-loaded fonts  
+  -- Number of sRGB color profiles @deprecated@  
+  -- sRGB color profiles @deprecated@  
+  -- Number of filters  
+  -- Filter strings...  
+  --*** New in CUPS 1.1 *** 
+  -- 1 = Flip page for back sides @deprecated@  
+  --*** New in CUPS 1.1.19 *** 
+  -- Protocols (BCP, TBCP) string @since CUPS 1.1.19/OS X 10.3@  
+  -- PCFileName string @since CUPS 1.1.19/OS X 10.3@  
+  -- Number of attributes @since CUPS 1.1.19/OS X 10.3@ @private@  
+  -- Current attribute @since CUPS 1.1.19/OS X 10.3@ @private@  
+  -- Attributes @since CUPS 1.1.19/OS X 10.3@ @private@  
+  --*** New in CUPS 1.2/OS X 10.5 *** 
+  -- Attribute lookup array @since CUPS 1.2/OS X 10.5@ @private@  
+  -- Option lookup array @since CUPS 1.2/OS X 10.5@ @private@  
+  -- Custom options array @since CUPS 1.2/OS X 10.5@ @private@  
+  --*** New in CUPS 1.3/OS X 10.5 *** 
+  -- Marked choices @since CUPS 1.3/OS X 10.5@ @private@  
+  --*** New in CUPS 1.4/OS X 10.6 *** 
+  -- cupsUIConstraints @since CUPS 1.4/OS X 10.6@ @private@  
+  --*** New in CUPS 1.5 *** 
+  -- PPD cache and mapping data @since CUPS 1.5/OS X 10.7@ @private@  
    subtype ppd_file_t is ppd_file_s;
+
+  -- * Prototypes...
+  --  
 
    function cupsMarkOptions
      (arg1 : access ppd_file_t;
@@ -428,6 +685,7 @@ package libCUPS.cups_ppd_h is
    function ppdPageWidth (arg1 : access ppd_file_t; arg2 : Interfaces.C.Strings.chars_ptr) return float;  -- cups/ppd.h:397
    pragma Import (C, ppdPageWidth, "ppdPageWidth");
 
+  --*** New in CUPS 1.1.19 *** 
    function ppdErrorString (arg1 : ppd_status_t) return Interfaces.C.Strings.chars_ptr;  -- cups/ppd.h:401
    pragma Import (C, ppdErrorString, "ppdErrorString");
 
@@ -446,9 +704,11 @@ package libCUPS.cups_ppd_h is
    function ppdLastError (arg1 : access int) return ppd_status_t;  -- cups/ppd.h:406
    pragma Import (C, ppdLastError, "ppdLastError");
 
+  --*** New in CUPS 1.1.20 *** 
    procedure ppdSetConformance (arg1 : ppd_conform_t);  -- cups/ppd.h:409
    pragma Import (C, ppdSetConformance, "ppdSetConformance");
 
+  --*** New in CUPS 1.2 *** 
    function ppdCollect2
      (arg1 : access ppd_file_t;
       arg2 : ppd_section_t;
@@ -497,6 +757,7 @@ package libCUPS.cups_ppd_h is
    function ppdOpen2 (arg1 : System.Address) return access ppd_file_t;  -- cups/ppd.h:433
    pragma Import (C, ppdOpen2, "ppdOpen2");
 
+  --*** New in CUPS 1.3/OS X 10.5 *** 
    function ppdLocalizeIPPReason
      (arg1 : access ppd_file_t;
       arg2 : Interfaces.C.Strings.chars_ptr;
@@ -505,6 +766,7 @@ package libCUPS.cups_ppd_h is
       arg5 : size_t) return Interfaces.C.Strings.chars_ptr;  -- cups/ppd.h:436
    pragma Import (C, ppdLocalizeIPPReason, "ppdLocalizeIPPReason");
 
+  --*** New in CUPS 1.4/OS X 10.6 *** 
    function cupsGetConflicts
      (arg1 : access ppd_file_t;
       arg2 : Interfaces.C.Strings.chars_ptr;
@@ -540,5 +802,37 @@ package libCUPS.cups_ppd_h is
       arg2 : access ppd_size_t;
       arg3 : access ppd_size_t) return int;  -- cups/ppd.h:462
    pragma Import (C, ppdPageSizeLimits, "ppdPageSizeLimits");
+
+  -- * C++ magic...
+  --  
+
+  -- * "$Id: ppd.h 11056 2013-06-25 14:27:30Z msweet $"
+  -- *
+  -- *   PostScript Printer Description definitions for CUPS.
+  -- *
+  -- *   THESE APIS ARE DEPRECATED. TO COMPILE WITHOUT WARNINGS ADD
+  -- *   -D_PPD_DEPRECATED="" TO YOUR COMPILE OPTIONS.  THIS HEADER AND THESE
+  -- *   FUNCTIONS WILL BE REMOVED IN A FUTURE RELEASE OF CUPS.
+  -- *
+  -- *   Copyright 2007-2013 by Apple Inc.
+  -- *   Copyright 1997-2007 by Easy Software Products, all rights reserved.
+  -- *
+  -- *   These coded instructions, statements, and computer programs are the
+  -- *   property of Apple Inc. and are protected by Federal copyright
+  -- *   law.  Distribution and use rights are outlined in the file "LICENSE.txt"
+  -- *   which should have been included with this file.  If this file is
+  -- *   file is missing or damaged, see the license at "http://www.cups.org/".
+  -- *
+  -- *   PostScript is a trademark of Adobe Systems, Inc.
+  -- *
+  -- *   This code and any derivative of it may be used and distributed
+  -- *   freely under the terms of the GNU General Public License when
+  -- *   used with GNU Ghostscript or its derivatives.  Use of the code
+  -- *   (or any derivative of it) with software other than GNU
+  -- *   GhostScript (or its derivatives) is governed by the CUPS license
+  -- *   agreement.
+  -- *
+  -- *   This file is subject to the Apple OS-Developed Software exception.
+  --  
 
 end libCUPS.cups_ppd_h;

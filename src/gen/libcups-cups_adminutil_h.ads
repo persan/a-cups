@@ -17,6 +17,35 @@ package libCUPS.cups_adminutil_h is
    CUPS_SERVER_SHARE_PRINTERS : aliased constant String := "_share_printers" & ASCII.NUL;  --  cups/adminutil.h:46
    CUPS_SERVER_USER_CANCEL_ANY : aliased constant String := "_user_cancel_any" & ASCII.NUL;  --  cups/adminutil.h:47
 
+  -- * "$Id: adminutil.h 10996 2013-05-29 11:51:34Z msweet $"
+  -- *
+  -- *   Administration utility API definitions for CUPS.
+  -- *
+  -- *   Copyright 2007-2012 by Apple Inc.
+  -- *   Copyright 2001-2007 by Easy Software Products.
+  -- *
+  -- *   These coded instructions, statements, and computer programs are the
+  -- *   property of Apple Inc. and are protected by Federal copyright
+  -- *   law.  Distribution and use rights are outlined in the file "LICENSE.txt"
+  -- *   which should have been included with this file.  If this file is
+  -- *   file is missing or damaged, see the license at "http://www.cups.org/".
+  -- *
+  -- *   This file is subject to the Apple OS-Developed Software exception.
+  --  
+
+  -- * Include necessary headers...
+  --  
+
+  -- * C++ magic...
+  --  
+
+  -- * Constants...
+  --  
+
+  --#  define CUPS_SERVER_REMOTE_PRINTERS	"_remote_printers" 
+  -- * Functions...
+  --  
+
    function cupsAdminExportSamba
      (arg1 : Interfaces.C.Strings.chars_ptr;
       arg2 : Interfaces.C.Strings.chars_ptr;
@@ -44,5 +73,8 @@ package libCUPS.cups_adminutil_h is
       arg2 : int;
       arg3 : access libCUPS.cups_cups_h.cups_option_t) return int;  -- cups/adminutil.h:67
    pragma Import (C, cupsAdminSetServerSettings, "cupsAdminSetServerSettings");
+
+  -- * End of "$Id: adminutil.h 10996 2013-05-29 11:51:34Z msweet $".
+  --  
 
 end libCUPS.cups_adminutil_h;

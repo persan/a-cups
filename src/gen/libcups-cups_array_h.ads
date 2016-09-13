@@ -6,24 +6,73 @@ with System;
 
 package libCUPS.cups_array_h is
 
+  -- * "$Id: array.h 10996 2013-05-29 11:51:34Z msweet $"
+  -- *
+  -- *   Sorted array definitions for CUPS.
+  -- *
+  -- *   Copyright 2007-2010 by Apple Inc.
+  -- *   Copyright 1997-2007 by Easy Software Products.
+  -- *
+  -- *   These coded instructions, statements, and computer programs are the
+  -- *   property of Apple Inc. and are protected by Federal copyright
+  -- *   law.  Distribution and use rights are outlined in the file "LICENSE.txt"
+  -- *   which should have been included with this file.  If this file is
+  -- *   file is missing or damaged, see the license at "http://www.cups.org/".
+  -- *
+  -- *   This file is subject to the Apple OS-Developed Software exception.
+  --  
+
+  -- * Include necessary headers...
+  --  
+
+  -- * C++ magic...
+  --  
+
+  -- * Types and structures...
+  --  
+
    --  skipped empty struct u_cups_array_s
 
    --  skipped empty struct cups_array_t
 
+  --*** CUPS array type *** 
    type cups_array_func_t is access function
         (arg1 : System.Address;
          arg2 : System.Address;
          arg3 : System.Address) return int;
    pragma Convention (C, cups_array_func_t);  -- cups/array.h:44
 
+  --*** Array comparison function *** 
    type cups_ahash_func_t is access function (arg1 : System.Address; arg2 : System.Address) return int;
    pragma Convention (C, cups_ahash_func_t);  -- cups/array.h:46
 
+  --*** Array hash function *** 
    type cups_acopy_func_t is access function (arg1 : System.Address; arg2 : System.Address) return System.Address;
    pragma Convention (C, cups_acopy_func_t);  -- cups/array.h:48
 
+  --*** Array element copy function *** 
    type cups_afree_func_t is access procedure (arg1 : System.Address; arg2 : System.Address);
    pragma Convention (C, cups_afree_func_t);  -- cups/array.h:50
+
+  --*** Array element free function *** 
+  -- * Functions...
+  --  
+
+  -- * "$Id: array.h 10996 2013-05-29 11:51:34Z msweet $"
+  -- *
+  -- *   Sorted array definitions for CUPS.
+  -- *
+  -- *   Copyright 2007-2010 by Apple Inc.
+  -- *   Copyright 1997-2007 by Easy Software Products.
+  -- *
+  -- *   These coded instructions, statements, and computer programs are the
+  -- *   property of Apple Inc. and are protected by Federal copyright
+  -- *   law.  Distribution and use rights are outlined in the file "LICENSE.txt"
+  -- *   which should have been included with this file.  If this file is
+  -- *   file is missing or damaged, see the license at "http://www.cups.org/".
+  -- *
+  -- *   This file is subject to the Apple OS-Developed Software exception.
+  --  
 
    function cupsArrayAdd (arg1 : System.Address; arg2 : System.Address) return int;  -- cups/array.h:58
    pragma Import (C, cupsArrayAdd, "cupsArrayAdd");
@@ -100,5 +149,8 @@ package libCUPS.cups_array_h is
 
    function cupsArrayUserData (arg1 : System.Address) return System.Address;  -- cups/array.h:83
    pragma Import (C, cupsArrayUserData, "cupsArrayUserData");
+
+  -- * End of "$Id: array.h 10996 2013-05-29 11:51:34Z msweet $".
+  --  
 
 end libCUPS.cups_array_h;
