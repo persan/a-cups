@@ -1,3 +1,5 @@
+PREFIX?=${CURDIR}/_
+all:compile
 
 gen:
 	rm -rf .gen/* src/gen
@@ -44,4 +46,14 @@ gen:
 	cp .gen/libcups-stdarg_h.ads src/gen
 	cp .gen/libcups-ug_config_h.ads src/gen
 	cp .gen/libcups-wchar_h.ads src/gen
+	${MAKE} compile
+compile:
 	gprbuild -j0 -p -P cups.gpr
+
+test:
+	gprbuild -j0 -p -P cups-tests.gpr
+
+install:
+	gprinstall -p -P cups.gpr --mode=dev --prefix=${PREFIX}
+clean:
+	git clean -fdx
