@@ -1,3 +1,3 @@
-package Cups.Tests is
+private package Cups.Tests is
 
 end Cups.Tests;
