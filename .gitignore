@@ -1,8 +1,9 @@
-# Object file
-*.o
+**/*.ali
+**/*.o
+**/~*
+**/*.class
 
-# Ada Library Information
-*.ali
 .gen
 .obj
 lib
+bin/*

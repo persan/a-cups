@@ -1,4 +1,5 @@
 with "cups";
+with "gtkada"; -- To get CAIRO
 project Cups.Tests  is
 
    for SOurce_Dirs use ("src.tests");
