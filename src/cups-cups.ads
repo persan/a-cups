@@ -14,7 +14,6 @@ package CUPS.CUPS is
    --  as this function does not support the lpoptions-defined default printer.
 
 
-   type Job_Id is new Natural;
 
    function PrintFile
      (Name        : String;
@@ -25,6 +24,4 @@ package CUPS.CUPS is
    -- Print a file to a printer or class on the default server.
 
 
-
-   Cups_Error : exception;
 end CUPS.CUPS;
