@@ -292,22 +292,17 @@ package libCUPS.netinet_in_h is
       ipv6mr_multiaddr : aliased in6_addr;  -- netinet/in.h:293
       ipv6mr_interface : aliased unsigned;  -- netinet/in.h:296
    end record;
-   pragma Convention (C_Pass_By_Copy, Ipv6_Mreq);  -- netinet/in.h:290
+   pragma Convention (C_Pass_By_Copy, ipv6_mreq);  -- netinet/in.h:290
 
-  -- Address data.
-  -- Structure large enough to hold any socket address (with the historical
-  --   exception of AF_UNIX).
-
-  -- Address family, etc.
-   subtype anon2502_uu_ss_padding_array is Interfaces.C.char_array (0 .. 117);
+   subtype anon2625_uu_ss_padding_array is Interfaces.C.char_array (0 .. 117);
    type sockaddr_storage is record
       ss_family : aliased libCUPS.bits_sockaddr_h.sa_family_t;  -- bits/socket.h:168
-      uu_ss_padding : aliased anon2502_uu_ss_padding_array;  -- bits/socket.h:169
+      uu_ss_padding : aliased anon2625_uu_ss_padding_array;  -- bits/socket.h:169
       uu_ss_align : aliased unsigned_long;  -- bits/socket.h:170
    end record;
-   pragma Convention (C_Pass_By_Copy, sockaddr_storage);  -- bits/socket.h:166
+   pragma Convention (C_Pass_By_Copy, sockaddr_storage);
 
-  -- local interface
+   -- local interface
   -- Multicast group request.
   -- Interface index.
    type group_req is record

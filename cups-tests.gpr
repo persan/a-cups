@@ -1,0 +1,13 @@
+with "cups";
+project Cups.Tests  is
+
+   for SOurce_Dirs use ("src.tests");
+   for Object_Dir use ".obj/" & project'Name;
+   for Exec_Dir use "bin";
+
+   for Main use ("cups-tests-main.adb");
+   package Compiler is
+      for Default_Switches("Ada") use cups.Compiler'Default_Switches("Ada");
+   end Compiler;
+
+end  Cups.Tests;

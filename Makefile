@@ -44,4 +44,4 @@ gen:
 	cp .gen/libcups-stdarg_h.ads src/gen
 	cp .gen/libcups-ug_config_h.ads src/gen
 	cp .gen/libcups-wchar_h.ads src/gen
-	gprbuild -j0 -p -P libcups.gpr
+	gprbuild -j0 -p -P cups.gpr

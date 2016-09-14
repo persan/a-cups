@@ -6,8 +6,8 @@ with System;
 
 with libCUPS.stdio_h;
 with Interfaces.C_Streams;
-limited with libCUPS.cups_ppd_h;
-limited with libCUPS.cups_cups_h;
+with libCUPS.cups_ppd_h;
+with libCUPS.cups_cups_h;
 with Interfaces.C.Strings;
 
 package libCUPS.cups_raster_h is
