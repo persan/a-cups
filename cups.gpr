@@ -1,6 +1,6 @@
 library project Cups is
 
-   for Languages use ("Ada", "Makefile");
+   for Languages use ("Ada", "Makefile","sed","md");
    for Source_Dirs use ("src/**", "sed", ".");
    for Library_Name use "aCups";
    for Library_Dir use "lib";

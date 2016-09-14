@@ -1,12 +1,13 @@
 with Cairo.PDF;
-with cairo.Surface;
+with Cairo.Surface;
 with Ada.Command_Line;
 with Ada.Text_IO;
 with GNAT.OS_Lib;
+with CUPS.CUPS;
 procedure Cups.Tests.Main is
    Tmpfilename : constant String := "MUPP.ps";
-   WIDTH    : constant := 595.0;
-   HEIGHT   : constant := 842.0;
+   WIDTH       : constant := 595.0;
+   HEIGHT      : constant := 842.0;
    Surface     : Cairo.Cairo_Surface := Cairo.PDF.Create
      (Filename         => Tmpfilename,
       Width_In_Points  => WIDTH,
@@ -29,6 +30,6 @@ begin
    Cairo.Destroy (Context);
    Cairo.Surface.Flush (Surface);
    Cairo.Surface_Destroy (Surface);
-   Ada.Text_IO.Put_Line (GetDefault);
-   CUPS.PrintFile (GetDefault, Tmpfilename, "cairo PS", 0);
+   Ada.Text_IO.Put_Line (CUPS.GetDefault);
+   Ada.Text_IO.Put_Line (CUPS.PrintFile (CUPS.GetDefault, Tmpfilename, "cairo PS")'Img);
 end Cups.Tests.Main;

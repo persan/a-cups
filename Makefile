@@ -20,34 +20,34 @@ gen:
 	@echo "#include <cups/sidechannel.h>" >>.gen/gen.c
 	@echo "#include <cups/transcode.h>" >>.gen/gen.c
 	@echo "#include <cups/versioning.h>" >>.gen/gen.c
-	cd .gen; g++ -C -c -fdump-ada-spec gen.c -fada-spec-parent=libCUPS
+	cd .gen; g++ -C -c -fdump-ada-spec gen.c -fada-spec-parent=CUPS
 	rm .gen/gen.*
 	sed/patch.sh
-	cp .gen/libcups-cups_*.ads src/gen
-	cp .gen/libcups-netdb_h.ads src/gen
-	cp .gen/libcups-netdb_h.ads src/gen
-	cp .gen/libcups-bits_socket_h.ads src/gen
-	cp .gen/libcups-netinet_in_h.ads src/gen
-	cp .gen/libcups-sys_un_h.ads src/gen
-	cp .gen/libcups-netdb_h.ads src/gen
-	cp .gen/libcups-bits_stat_h.ads src/gen
-	cp .gen/libcups-bits_sockaddr_h.ads src/gen
-	cp .gen/libcups-bits_types_h.ads src/gen
-	cp .gen/libcups-bits_netdb_h.ads src/gen
-	cp .gen/libcups-stdint_h.ads src/gen
-	cp .gen/libcups-unistd_h.ads src/gen
-	cp .gen/libcups-bits_socket_h.ads src/gen
-	cp .gen/libcups-time_h.ads src/gen
-	cp .gen/libcups-xlocale_h.ads src/gen
-	cp .gen/libcups-bits_uio_h.ads src/gen
-	cp .gen/libcups-sys_types_h.ads src/gen
-	cp .gen/libcups-stdio_h.ads src/gen
-	cp .gen/libcups-libio_h.ads src/gen
-	cp .gen/libcups-stdarg_h.ads src/gen
-	cp .gen/libcups-ug_config_h.ads src/gen
-	cp .gen/libcups-wchar_h.ads src/gen
-	cp .gen/libcups-bits_siginfo_h.ads src/gen
-	cp .gen/libcups-bits_pthreadtypes_h.ads src/gen
+	cp .gen/cups-cups_*.ads src/gen
+	cp .gen/cups-netdb_h.ads src/gen
+	cp .gen/cups-netdb_h.ads src/gen
+	cp .gen/cups-bits_socket_h.ads src/gen
+	cp .gen/cups-netinet_in_h.ads src/gen
+	cp .gen/cups-sys_un_h.ads src/gen
+	cp .gen/cups-netdb_h.ads src/gen
+	cp .gen/cups-bits_stat_h.ads src/gen
+	cp .gen/cups-bits_sockaddr_h.ads src/gen
+	cp .gen/cups-bits_types_h.ads src/gen
+	cp .gen/cups-bits_netdb_h.ads src/gen
+	cp .gen/cups-stdint_h.ads src/gen
+	cp .gen/cups-unistd_h.ads src/gen
+	cp .gen/cups-bits_socket_h.ads src/gen
+	cp .gen/cups-time_h.ads src/gen
+	cp .gen/cups-xlocale_h.ads src/gen
+	cp .gen/cups-bits_uio_h.ads src/gen
+	cp .gen/cups-sys_types_h.ads src/gen
+	cp .gen/cups-stdio_h.ads src/gen
+	cp .gen/cups-libio_h.ads src/gen
+	cp .gen/cups-stdarg_h.ads src/gen
+	cp .gen/cups-ug_config_h.ads src/gen
+	cp .gen/cups-wchar_h.ads src/gen
+	cp .gen/cups-bits_siginfo_h.ads src/gen
+	cp .gen/cups-bits_pthreadtypes_h.ads src/gen
 	${MAKE} compile
 compile:
 	gprbuild -j0 -p -P cups.gpr
