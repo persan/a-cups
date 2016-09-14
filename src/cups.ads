@@ -5,7 +5,9 @@ package CUPS is
       Name : GNAT.Strings.String_Access;
       Value : GNAT.Strings.String_Access;
    end record;
+
    function GetDefault return String;
+
    procedure PrintFile
      (Arg1 : String;
       Arg2 : String;

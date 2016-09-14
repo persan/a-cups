@@ -2,8 +2,9 @@ with Cairo.PDF;
 with cairo.Surface;
 with Ada.Command_Line;
 with Ada.Text_IO;
+with GNAT.OS_Lib;
 procedure Cups.Tests.Main is
-   Tmpfilename : constant String := "/tmp/mo.pdf";
+   Tmpfilename : constant String := "MUPP.ps";
    WIDTH    : constant := 595.0;
    HEIGHT   : constant := 842.0;
    Surface     : Cairo.Cairo_Surface := Cairo.PDF.Create
