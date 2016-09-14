@@ -30,18 +30,18 @@ package libCUPS.xlocale_h is
 
   -- Note: LC_ALL is not a valid index into this array.   
   -- 13 = __LC_LAST.  
-   --  skipped empty struct uu_locale_data
-
-   type anon1977_uu_locales_array is array (0 .. 12) of System.Address;
-   type anon1977_uu_names_array is array (0 .. 12) of Interfaces.C.Strings.chars_ptr;
+   type uu_locale_struct_uu_locales_array is array (0 .. 12) of System.Address;
+   type uu_locale_struct_uu_names_array is array (0 .. 12) of Interfaces.C.Strings.chars_ptr;
    type uu_locale_struct is record
-      uu_locales : anon1977_uu_locales_array;  -- xlocale.h:30
+      uu_locales : uu_locale_struct_uu_locales_array;  -- xlocale.h:30
       uu_ctype_b : access unsigned_short;  -- xlocale.h:33
       uu_ctype_tolower : access int;  -- xlocale.h:34
       uu_ctype_toupper : access int;  -- xlocale.h:35
-      uu_names : anon1977_uu_names_array;  -- xlocale.h:38
+      uu_names : uu_locale_struct_uu_names_array;  -- xlocale.h:38
    end record;
    pragma Convention (C_Pass_By_Copy, uu_locale_struct);  -- xlocale.h:27
+
+   --  skipped empty struct uu_locale_data
 
   -- To increase the speed of this solution we add some special members.   
   -- Note: LC_ALL is not a valid index into this array.   

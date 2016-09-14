@@ -24,10 +24,10 @@ package libCUPS.sys_un_h is
 
   -- Get the definition of the macro to define the common sockaddr members.   
   -- Structure describing the address of an AF_LOCAL (aka AF_UNIX) socket.   
-   subtype anon2821_sun_path_array is Interfaces.C.char_array (0 .. 107);
+   subtype sockaddr_un_sun_path_array is Interfaces.C.char_array (0 .. 107);
    type sockaddr_un is record
       sun_family : aliased libCUPS.bits_sockaddr_h.sa_family_t;  -- sys/un.h:31
-      sun_path : aliased anon2821_sun_path_array;  -- sys/un.h:32
+      sun_path : aliased sockaddr_un_sun_path_array;  -- sys/un.h:32
    end record;
    pragma Convention (C_Pass_By_Copy, sockaddr_un);  -- sys/un.h:29
 

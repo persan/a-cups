@@ -1051,477 +1051,477 @@ package libCUPS.cups_ipp_h is
   --  
 
    function ippAddBoolean
-     (arg1 : System.Address;
-      arg2 : ipp_tag_t;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : char) return System.Address;  -- cups/ipp.h:837
+     (ipp : System.Address;
+      group : ipp_tag_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      value : char) return System.Address;  -- cups/ipp.h:837
    pragma Import (C, ippAddBoolean, "ippAddBoolean");
 
    function ippAddBooleans
-     (arg1 : System.Address;
-      arg2 : ipp_tag_t;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : int;
-      arg5 : Interfaces.C.Strings.chars_ptr) return System.Address;  -- cups/ipp.h:839
+     (ipp : System.Address;
+      group : ipp_tag_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      num_values : int;
+      values : Interfaces.C.Strings.chars_ptr) return System.Address;  -- cups/ipp.h:839
    pragma Import (C, ippAddBooleans, "ippAddBooleans");
 
    function ippAddDate
-     (arg1 : System.Address;
-      arg2 : ipp_tag_t;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : access ipp_uchar_t) return System.Address;  -- cups/ipp.h:842
+     (ipp : System.Address;
+      group : ipp_tag_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      value : access ipp_uchar_t) return System.Address;  -- cups/ipp.h:842
    pragma Import (C, ippAddDate, "ippAddDate");
 
    function ippAddInteger
-     (arg1 : System.Address;
-      arg2 : ipp_tag_t;
-      arg3 : ipp_tag_t;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : int) return System.Address;  -- cups/ipp.h:844
+     (ipp : System.Address;
+      group : ipp_tag_t;
+      value_tag : ipp_tag_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      value : int) return System.Address;  -- cups/ipp.h:844
    pragma Import (C, ippAddInteger, "ippAddInteger");
 
    function ippAddIntegers
-     (arg1 : System.Address;
-      arg2 : ipp_tag_t;
-      arg3 : ipp_tag_t;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : int;
-      arg6 : access int) return System.Address;  -- cups/ipp.h:847
+     (ipp : System.Address;
+      group : ipp_tag_t;
+      value_tag : ipp_tag_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      num_values : int;
+      values : access int) return System.Address;  -- cups/ipp.h:847
    pragma Import (C, ippAddIntegers, "ippAddIntegers");
 
    function ippAddRange
-     (arg1 : System.Address;
-      arg2 : ipp_tag_t;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : int;
-      arg5 : int) return System.Address;  -- cups/ipp.h:850
+     (ipp : System.Address;
+      group : ipp_tag_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      lower : int;
+      upper : int) return System.Address;  -- cups/ipp.h:850
    pragma Import (C, ippAddRange, "ippAddRange");
 
    function ippAddRanges
-     (arg1 : System.Address;
-      arg2 : ipp_tag_t;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : int;
-      arg5 : access int;
-      arg6 : access int) return System.Address;  -- cups/ipp.h:852
+     (ipp : System.Address;
+      group : ipp_tag_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      num_values : int;
+      lower : access int;
+      upper : access int) return System.Address;  -- cups/ipp.h:852
    pragma Import (C, ippAddRanges, "ippAddRanges");
 
    function ippAddResolution
-     (arg1 : System.Address;
-      arg2 : ipp_tag_t;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : ipp_res_t;
-      arg5 : int;
-      arg6 : int) return System.Address;  -- cups/ipp.h:855
+     (ipp : System.Address;
+      group : ipp_tag_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      units : ipp_res_t;
+      xres : int;
+      yres : int) return System.Address;  -- cups/ipp.h:855
    pragma Import (C, ippAddResolution, "ippAddResolution");
 
    function ippAddResolutions
-     (arg1 : System.Address;
-      arg2 : ipp_tag_t;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : int;
-      arg5 : ipp_res_t;
-      arg6 : access int;
-      arg7 : access int) return System.Address;  -- cups/ipp.h:858
+     (ipp : System.Address;
+      group : ipp_tag_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      num_values : int;
+      units : ipp_res_t;
+      xres : access int;
+      yres : access int) return System.Address;  -- cups/ipp.h:858
    pragma Import (C, ippAddResolutions, "ippAddResolutions");
 
-   function ippAddSeparator (arg1 : System.Address) return System.Address;  -- cups/ipp.h:862
+   function ippAddSeparator (ipp : System.Address) return System.Address;  -- cups/ipp.h:862
    pragma Import (C, ippAddSeparator, "ippAddSeparator");
 
    function ippAddString
-     (arg1 : System.Address;
-      arg2 : ipp_tag_t;
-      arg3 : ipp_tag_t;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : Interfaces.C.Strings.chars_ptr;
-      arg6 : Interfaces.C.Strings.chars_ptr) return System.Address;  -- cups/ipp.h:863
+     (ipp : System.Address;
+      group : ipp_tag_t;
+      value_tag : ipp_tag_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      language : Interfaces.C.Strings.chars_ptr;
+      value : Interfaces.C.Strings.chars_ptr) return System.Address;  -- cups/ipp.h:863
    pragma Import (C, ippAddString, "ippAddString");
 
    function ippAddStrings
-     (arg1 : System.Address;
-      arg2 : ipp_tag_t;
-      arg3 : ipp_tag_t;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : int;
-      arg6 : Interfaces.C.Strings.chars_ptr;
-      arg7 : System.Address) return System.Address;  -- cups/ipp.h:866
+     (ipp : System.Address;
+      group : ipp_tag_t;
+      value_tag : ipp_tag_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      num_values : int;
+      language : Interfaces.C.Strings.chars_ptr;
+      values : System.Address) return System.Address;  -- cups/ipp.h:866
    pragma Import (C, ippAddStrings, "ippAddStrings");
 
-   function ippDateToTime (arg1 : access ipp_uchar_t) return libCUPS.time_h.time_t;  -- cups/ipp.h:870
+   function ippDateToTime (date : access ipp_uchar_t) return libCUPS.time_h.time_t;  -- cups/ipp.h:870
    pragma Import (C, ippDateToTime, "ippDateToTime");
 
-   procedure ippDelete (arg1 : System.Address);  -- cups/ipp.h:871
+   procedure ippDelete (ipp : System.Address);  -- cups/ipp.h:871
    pragma Import (C, ippDelete, "ippDelete");
 
-   function ippErrorString (arg1 : ipp_status_t) return Interfaces.C.Strings.chars_ptr;  -- cups/ipp.h:872
+   function ippErrorString (error : ipp_status_t) return Interfaces.C.Strings.chars_ptr;  -- cups/ipp.h:872
    pragma Import (C, ippErrorString, "ippErrorString");
 
    function ippFindAttribute
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : ipp_tag_t) return System.Address;  -- cups/ipp.h:873
+     (ipp : System.Address;
+      name : Interfaces.C.Strings.chars_ptr;
+      value_tag : ipp_tag_t) return System.Address;  -- cups/ipp.h:873
    pragma Import (C, ippFindAttribute, "ippFindAttribute");
 
    function ippFindNextAttribute
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : ipp_tag_t) return System.Address;  -- cups/ipp.h:875
+     (ipp : System.Address;
+      name : Interfaces.C.Strings.chars_ptr;
+      value_tag : ipp_tag_t) return System.Address;  -- cups/ipp.h:875
    pragma Import (C, ippFindNextAttribute, "ippFindNextAttribute");
 
-   function ippLength (arg1 : System.Address) return size_t;  -- cups/ipp.h:877
+   function ippLength (ipp : System.Address) return size_t;  -- cups/ipp.h:877
    pragma Import (C, ippLength, "ippLength");
 
    function ippNew return System.Address;  -- cups/ipp.h:878
    pragma Import (C, ippNew, "ippNew");
 
-   function ippRead (arg1 : System.Address; arg2 : System.Address) return ipp_state_t;  -- cups/ipp.h:879
+   function ippRead (http : System.Address; ipp : System.Address) return ipp_state_t;  -- cups/ipp.h:879
    pragma Import (C, ippRead, "ippRead");
 
-   function ippTimeToDate (arg1 : libCUPS.time_h.time_t) return access ipp_uchar_t;  -- cups/ipp.h:880
+   function ippTimeToDate (t : libCUPS.time_h.time_t) return access ipp_uchar_t;  -- cups/ipp.h:880
    pragma Import (C, ippTimeToDate, "ippTimeToDate");
 
-   function ippWrite (arg1 : System.Address; arg2 : System.Address) return ipp_state_t;  -- cups/ipp.h:881
+   function ippWrite (http : System.Address; ipp : System.Address) return ipp_state_t;  -- cups/ipp.h:881
    pragma Import (C, ippWrite, "ippWrite");
 
    function ippPort return int;  -- cups/ipp.h:882
    pragma Import (C, ippPort, "ippPort");
 
-   procedure ippSetPort (arg1 : int);  -- cups/ipp.h:883
+   procedure ippSetPort (p : int);  -- cups/ipp.h:883
    pragma Import (C, ippSetPort, "ippSetPort");
 
   --*** New in CUPS 1.1.19 *** 
    function ippAddCollection
-     (arg1 : System.Address;
-      arg2 : ipp_tag_t;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : System.Address) return System.Address;  -- cups/ipp.h:886
+     (ipp : System.Address;
+      group : ipp_tag_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      value : System.Address) return System.Address;  -- cups/ipp.h:886
    pragma Import (C, ippAddCollection, "ippAddCollection");
 
    function ippAddCollections
-     (arg1 : System.Address;
-      arg2 : ipp_tag_t;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : int;
-      arg5 : System.Address) return System.Address;  -- cups/ipp.h:888
+     (ipp : System.Address;
+      group : ipp_tag_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      num_values : int;
+      values : System.Address) return System.Address;  -- cups/ipp.h:888
    pragma Import (C, ippAddCollections, "ippAddCollections");
 
-   procedure ippDeleteAttribute (arg1 : System.Address; arg2 : System.Address);  -- cups/ipp.h:891
+   procedure ippDeleteAttribute (ipp : System.Address; attr : System.Address);  -- cups/ipp.h:891
    pragma Import (C, ippDeleteAttribute, "ippDeleteAttribute");
 
-   function ippReadFile (arg1 : int; arg2 : System.Address) return ipp_state_t;  -- cups/ipp.h:892
+   function ippReadFile (fd : int; ipp : System.Address) return ipp_state_t;  -- cups/ipp.h:892
    pragma Import (C, ippReadFile, "ippReadFile");
 
-   function ippWriteFile (arg1 : int; arg2 : System.Address) return ipp_state_t;  -- cups/ipp.h:893
+   function ippWriteFile (fd : int; ipp : System.Address) return ipp_state_t;  -- cups/ipp.h:893
    pragma Import (C, ippWriteFile, "ippWriteFile");
 
   --*** New in CUPS 1.2/OS X 10.5 *** 
    function ippAddOctetString
-     (arg1 : System.Address;
-      arg2 : ipp_tag_t;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : System.Address;
-      arg5 : int) return System.Address;  -- cups/ipp.h:896
+     (ipp : System.Address;
+      group : ipp_tag_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      data : System.Address;
+      datalen : int) return System.Address;  -- cups/ipp.h:896
    pragma Import (C, ippAddOctetString, "ippAddOctetString");
 
-   function ippErrorValue (arg1 : Interfaces.C.Strings.chars_ptr) return ipp_status_t;  -- cups/ipp.h:899
+   function ippErrorValue (name : Interfaces.C.Strings.chars_ptr) return ipp_status_t;  -- cups/ipp.h:899
    pragma Import (C, ippErrorValue, "ippErrorValue");
 
-   function ippNewRequest (arg1 : ipp_op_t) return System.Address;  -- cups/ipp.h:900
+   function ippNewRequest (op : ipp_op_t) return System.Address;  -- cups/ipp.h:900
    pragma Import (C, ippNewRequest, "ippNewRequest");
 
-   function ippOpString (arg1 : ipp_op_t) return Interfaces.C.Strings.chars_ptr;  -- cups/ipp.h:901
+   function ippOpString (op : ipp_op_t) return Interfaces.C.Strings.chars_ptr;  -- cups/ipp.h:901
    pragma Import (C, ippOpString, "ippOpString");
 
-   function ippOpValue (arg1 : Interfaces.C.Strings.chars_ptr) return ipp_op_t;  -- cups/ipp.h:902
+   function ippOpValue (name : Interfaces.C.Strings.chars_ptr) return ipp_op_t;  -- cups/ipp.h:902
    pragma Import (C, ippOpValue, "ippOpValue");
 
    function ippReadIO
-     (arg1 : System.Address;
-      arg2 : ipp_iocb_t;
-      arg3 : int;
-      arg4 : System.Address;
-      arg5 : System.Address) return ipp_state_t;  -- cups/ipp.h:903
+     (src : System.Address;
+      cb : ipp_iocb_t;
+      blocking : int;
+      parent : System.Address;
+      ipp : System.Address) return ipp_state_t;  -- cups/ipp.h:903
    pragma Import (C, ippReadIO, "ippReadIO");
 
    function ippWriteIO
-     (arg1 : System.Address;
-      arg2 : ipp_iocb_t;
-      arg3 : int;
-      arg4 : System.Address;
-      arg5 : System.Address) return ipp_state_t;  -- cups/ipp.h:905
+     (dst : System.Address;
+      cb : ipp_iocb_t;
+      blocking : int;
+      parent : System.Address;
+      ipp : System.Address) return ipp_state_t;  -- cups/ipp.h:905
    pragma Import (C, ippWriteIO, "ippWriteIO");
 
   --*** New in CUPS 1.4/OS X 10.6 *** 
-   function ippTagString (arg1 : ipp_tag_t) return Interfaces.C.Strings.chars_ptr;  -- cups/ipp.h:909
+   function ippTagString (tag : ipp_tag_t) return Interfaces.C.Strings.chars_ptr;  -- cups/ipp.h:909
    pragma Import (C, ippTagString, "ippTagString");
 
-   function ippTagValue (arg1 : Interfaces.C.Strings.chars_ptr) return ipp_tag_t;  -- cups/ipp.h:910
+   function ippTagValue (name : Interfaces.C.Strings.chars_ptr) return ipp_tag_t;  -- cups/ipp.h:910
    pragma Import (C, ippTagValue, "ippTagValue");
 
   --*** New in CUPS 1.6/OS X 10.8 *** 
    function ippAddOutOfBand
-     (arg1 : System.Address;
-      arg2 : ipp_tag_t;
-      arg3 : ipp_tag_t;
-      arg4 : Interfaces.C.Strings.chars_ptr) return System.Address;  -- cups/ipp.h:913
+     (ipp : System.Address;
+      group : ipp_tag_t;
+      value_tag : ipp_tag_t;
+      name : Interfaces.C.Strings.chars_ptr) return System.Address;  -- cups/ipp.h:913
    pragma Import (C, ippAddOutOfBand, "ippAddOutOfBand");
 
    function ippAttributeString
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : size_t) return size_t;  -- cups/ipp.h:916
+     (attr : System.Address;
+      buffer : Interfaces.C.Strings.chars_ptr;
+      bufsize : size_t) return size_t;  -- cups/ipp.h:916
    pragma Import (C, ippAttributeString, "ippAttributeString");
 
    function ippCopyAttribute
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : int) return System.Address;  -- cups/ipp.h:918
+     (dst : System.Address;
+      attr : System.Address;
+      quickcopy : int) return System.Address;  -- cups/ipp.h:918
    pragma Import (C, ippCopyAttribute, "ippCopyAttribute");
 
    function ippCopyAttributes
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : int;
-      arg4 : ipp_copycb_t;
-      arg5 : System.Address) return int;  -- cups/ipp.h:920
+     (dst : System.Address;
+      src : System.Address;
+      quickcopy : int;
+      cb : ipp_copycb_t;
+      context : System.Address) return int;  -- cups/ipp.h:920
    pragma Import (C, ippCopyAttributes, "ippCopyAttributes");
 
    function ippDeleteValues
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : int;
-      arg4 : int) return int;  -- cups/ipp.h:923
+     (ipp : System.Address;
+      attr : System.Address;
+      element : int;
+      count : int) return int;  -- cups/ipp.h:923
    pragma Import (C, ippDeleteValues, "ippDeleteValues");
 
-   function ippEnumString (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : int) return Interfaces.C.Strings.chars_ptr;  -- cups/ipp.h:925
+   function ippEnumString (attrname : Interfaces.C.Strings.chars_ptr; enumvalue : int) return Interfaces.C.Strings.chars_ptr;  -- cups/ipp.h:925
    pragma Import (C, ippEnumString, "ippEnumString");
 
-   function ippEnumValue (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/ipp.h:927
+   function ippEnumValue (attrname : Interfaces.C.Strings.chars_ptr; enumstring : Interfaces.C.Strings.chars_ptr) return int;  -- cups/ipp.h:927
    pragma Import (C, ippEnumValue, "ippEnumValue");
 
-   function ippFirstAttribute (arg1 : System.Address) return System.Address;  -- cups/ipp.h:929
+   function ippFirstAttribute (ipp : System.Address) return System.Address;  -- cups/ipp.h:929
    pragma Import (C, ippFirstAttribute, "ippFirstAttribute");
 
-   function ippGetBoolean (arg1 : System.Address; arg2 : int) return int;  -- cups/ipp.h:930
+   function ippGetBoolean (attr : System.Address; element : int) return int;  -- cups/ipp.h:930
    pragma Import (C, ippGetBoolean, "ippGetBoolean");
 
-   function ippGetCollection (arg1 : System.Address; arg2 : int) return System.Address;  -- cups/ipp.h:932
+   function ippGetCollection (attr : System.Address; element : int) return System.Address;  -- cups/ipp.h:932
    pragma Import (C, ippGetCollection, "ippGetCollection");
 
-   function ippGetCount (arg1 : System.Address) return int;  -- cups/ipp.h:934
+   function ippGetCount (attr : System.Address) return int;  -- cups/ipp.h:934
    pragma Import (C, ippGetCount, "ippGetCount");
 
-   function ippGetDate (arg1 : System.Address; arg2 : int) return access ipp_uchar_t;  -- cups/ipp.h:935
+   function ippGetDate (attr : System.Address; element : int) return access ipp_uchar_t;  -- cups/ipp.h:935
    pragma Import (C, ippGetDate, "ippGetDate");
 
-   function ippGetGroupTag (arg1 : System.Address) return ipp_tag_t;  -- cups/ipp.h:937
+   function ippGetGroupTag (attr : System.Address) return ipp_tag_t;  -- cups/ipp.h:937
    pragma Import (C, ippGetGroupTag, "ippGetGroupTag");
 
-   function ippGetInteger (arg1 : System.Address; arg2 : int) return int;  -- cups/ipp.h:938
+   function ippGetInteger (attr : System.Address; element : int) return int;  -- cups/ipp.h:938
    pragma Import (C, ippGetInteger, "ippGetInteger");
 
-   function ippGetName (arg1 : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/ipp.h:940
+   function ippGetName (attr : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/ipp.h:940
    pragma Import (C, ippGetName, "ippGetName");
 
-   function ippGetOperation (arg1 : System.Address) return ipp_op_t;  -- cups/ipp.h:941
+   function ippGetOperation (ipp : System.Address) return ipp_op_t;  -- cups/ipp.h:941
    pragma Import (C, ippGetOperation, "ippGetOperation");
 
    function ippGetRange
-     (arg1 : System.Address;
-      arg2 : int;
-      arg3 : access int) return int;  -- cups/ipp.h:942
+     (attr : System.Address;
+      element : int;
+      upper : access int) return int;  -- cups/ipp.h:942
    pragma Import (C, ippGetRange, "ippGetRange");
 
-   function ippGetRequestId (arg1 : System.Address) return int;  -- cups/ipp.h:944
+   function ippGetRequestId (ipp : System.Address) return int;  -- cups/ipp.h:944
    pragma Import (C, ippGetRequestId, "ippGetRequestId");
 
    function ippGetResolution
-     (arg1 : System.Address;
-      arg2 : int;
-      arg3 : access int;
-      arg4 : access ipp_res_t) return int;  -- cups/ipp.h:945
+     (attr : System.Address;
+      element : int;
+      yres : access int;
+      units : access ipp_res_t) return int;  -- cups/ipp.h:945
    pragma Import (C, ippGetResolution, "ippGetResolution");
 
-   function ippGetState (arg1 : System.Address) return ipp_state_t;  -- cups/ipp.h:948
+   function ippGetState (ipp : System.Address) return ipp_state_t;  -- cups/ipp.h:948
    pragma Import (C, ippGetState, "ippGetState");
 
-   function ippGetStatusCode (arg1 : System.Address) return ipp_status_t;  -- cups/ipp.h:949
+   function ippGetStatusCode (ipp : System.Address) return ipp_status_t;  -- cups/ipp.h:949
    pragma Import (C, ippGetStatusCode, "ippGetStatusCode");
 
    function ippGetString
-     (arg1 : System.Address;
-      arg2 : int;
-      arg3 : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/ipp.h:950
+     (attr : System.Address;
+      element : int;
+      language : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/ipp.h:950
    pragma Import (C, ippGetString, "ippGetString");
 
-   function ippGetValueTag (arg1 : System.Address) return ipp_tag_t;  -- cups/ipp.h:952
+   function ippGetValueTag (attr : System.Address) return ipp_tag_t;  -- cups/ipp.h:952
    pragma Import (C, ippGetValueTag, "ippGetValueTag");
 
-   function ippGetVersion (arg1 : System.Address; arg2 : access int) return int;  -- cups/ipp.h:953
+   function ippGetVersion (ipp : System.Address; minor : access int) return int;  -- cups/ipp.h:953
    pragma Import (C, ippGetVersion, "ippGetVersion");
 
-   function ippNextAttribute (arg1 : System.Address) return System.Address;  -- cups/ipp.h:954
+   function ippNextAttribute (ipp : System.Address) return System.Address;  -- cups/ipp.h:954
    pragma Import (C, ippNextAttribute, "ippNextAttribute");
 
    function ippSetBoolean
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : int;
-      arg4 : int) return int;  -- cups/ipp.h:955
+     (ipp : System.Address;
+      attr : System.Address;
+      element : int;
+      boolvalue : int) return int;  -- cups/ipp.h:955
    pragma Import (C, ippSetBoolean, "ippSetBoolean");
 
    function ippSetCollection
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : int;
-      arg4 : System.Address) return int;  -- cups/ipp.h:957
+     (ipp : System.Address;
+      attr : System.Address;
+      element : int;
+      colvalue : System.Address) return int;  -- cups/ipp.h:957
    pragma Import (C, ippSetCollection, "ippSetCollection");
 
    function ippSetDate
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : int;
-      arg4 : access ipp_uchar_t) return int;  -- cups/ipp.h:960
+     (ipp : System.Address;
+      attr : System.Address;
+      element : int;
+      datevalue : access ipp_uchar_t) return int;  -- cups/ipp.h:960
    pragma Import (C, ippSetDate, "ippSetDate");
 
    function ippSetGroupTag
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : ipp_tag_t) return int;  -- cups/ipp.h:963
+     (ipp : System.Address;
+      attr : System.Address;
+      group_tag : ipp_tag_t) return int;  -- cups/ipp.h:963
    pragma Import (C, ippSetGroupTag, "ippSetGroupTag");
 
    function ippSetInteger
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : int;
-      arg4 : int) return int;  -- cups/ipp.h:965
+     (ipp : System.Address;
+      attr : System.Address;
+      element : int;
+      intvalue : int) return int;  -- cups/ipp.h:965
    pragma Import (C, ippSetInteger, "ippSetInteger");
 
    function ippSetName
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/ipp.h:967
+     (ipp : System.Address;
+      attr : System.Address;
+      name : Interfaces.C.Strings.chars_ptr) return int;  -- cups/ipp.h:967
    pragma Import (C, ippSetName, "ippSetName");
 
-   function ippSetOperation (arg1 : System.Address; arg2 : ipp_op_t) return int;  -- cups/ipp.h:969
+   function ippSetOperation (ipp : System.Address; op : ipp_op_t) return int;  -- cups/ipp.h:969
    pragma Import (C, ippSetOperation, "ippSetOperation");
 
    function ippSetRange
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : int;
-      arg4 : int;
-      arg5 : int) return int;  -- cups/ipp.h:970
+     (ipp : System.Address;
+      attr : System.Address;
+      element : int;
+      lowervalue : int;
+      uppervalue : int) return int;  -- cups/ipp.h:970
    pragma Import (C, ippSetRange, "ippSetRange");
 
-   function ippSetRequestId (arg1 : System.Address; arg2 : int) return int;  -- cups/ipp.h:973
+   function ippSetRequestId (ipp : System.Address; request_id : int) return int;  -- cups/ipp.h:973
    pragma Import (C, ippSetRequestId, "ippSetRequestId");
 
    function ippSetResolution
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : int;
-      arg4 : ipp_res_t;
-      arg5 : int;
-      arg6 : int) return int;  -- cups/ipp.h:975
+     (ipp : System.Address;
+      attr : System.Address;
+      element : int;
+      unitsvalue : ipp_res_t;
+      xresvalue : int;
+      yresvalue : int) return int;  -- cups/ipp.h:975
    pragma Import (C, ippSetResolution, "ippSetResolution");
 
-   function ippSetState (arg1 : System.Address; arg2 : ipp_state_t) return int;  -- cups/ipp.h:979
+   function ippSetState (ipp : System.Address; state : ipp_state_t) return int;  -- cups/ipp.h:979
    pragma Import (C, ippSetState, "ippSetState");
 
-   function ippSetStatusCode (arg1 : System.Address; arg2 : ipp_status_t) return int;  -- cups/ipp.h:981
+   function ippSetStatusCode (ipp : System.Address; status : ipp_status_t) return int;  -- cups/ipp.h:981
    pragma Import (C, ippSetStatusCode, "ippSetStatusCode");
 
    function ippSetString
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : int;
-      arg4 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/ipp.h:983
+     (ipp : System.Address;
+      attr : System.Address;
+      element : int;
+      strvalue : Interfaces.C.Strings.chars_ptr) return int;  -- cups/ipp.h:983
    pragma Import (C, ippSetString, "ippSetString");
 
    function ippSetValueTag
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : ipp_tag_t) return int;  -- cups/ipp.h:986
+     (ipp : System.Address;
+      attr : System.Address;
+      value_tag : ipp_tag_t) return int;  -- cups/ipp.h:986
    pragma Import (C, ippSetValueTag, "ippSetValueTag");
 
    function ippSetVersion
-     (arg1 : System.Address;
-      arg2 : int;
-      arg3 : int) return int;  -- cups/ipp.h:988
+     (ipp : System.Address;
+      major : int;
+      minor : int) return int;  -- cups/ipp.h:988
    pragma Import (C, ippSetVersion, "ippSetVersion");
 
   --*** New in CUPS 1.7 *** 
    function ippAddStringf
-     (arg1 : System.Address;
-      arg2 : ipp_tag_t;
-      arg3 : ipp_tag_t;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : Interfaces.C.Strings.chars_ptr;
-      arg6 : Interfaces.C.Strings.chars_ptr  -- , ...
+     (ipp : System.Address;
+      group : ipp_tag_t;
+      value_tag : ipp_tag_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      language : Interfaces.C.Strings.chars_ptr;
+      format : Interfaces.C.Strings.chars_ptr  -- , ...
       ) return System.Address;  -- cups/ipp.h:992
    pragma Import (C, ippAddStringf, "ippAddStringf");
 
    function ippAddStringfv
-     (arg1 : System.Address;
-      arg2 : ipp_tag_t;
-      arg3 : ipp_tag_t;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : Interfaces.C.Strings.chars_ptr;
-      arg6 : Interfaces.C.Strings.chars_ptr;
-      arg7 : access System.Address) return System.Address;  -- cups/ipp.h:996
+     (ipp : System.Address;
+      group : ipp_tag_t;
+      value_tag : ipp_tag_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      language : Interfaces.C.Strings.chars_ptr;
+      format : Interfaces.C.Strings.chars_ptr;
+      ap : access System.Address) return System.Address;  -- cups/ipp.h:996
    pragma Import (C, ippAddStringfv, "ippAddStringfv");
 
-   function ippContainsInteger (arg1 : System.Address; arg2 : int) return int;  -- cups/ipp.h:1001
+   function ippContainsInteger (attr : System.Address; value : int) return int;  -- cups/ipp.h:1001
    pragma Import (C, ippContainsInteger, "ippContainsInteger");
 
-   function ippContainsString (arg1 : System.Address; arg2 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/ipp.h:1003
+   function ippContainsString (attr : System.Address; value : Interfaces.C.Strings.chars_ptr) return int;  -- cups/ipp.h:1003
    pragma Import (C, ippContainsString, "ippContainsString");
 
-   function ippCreateRequestedArray (arg1 : System.Address) return System.Address;  -- cups/ipp.h:1005
+   function ippCreateRequestedArray (request : System.Address) return System.Address;  -- cups/ipp.h:1005
    pragma Import (C, ippCreateRequestedArray, "ippCreateRequestedArray");
 
    function ippGetOctetString
-     (arg1 : System.Address;
-      arg2 : int;
-      arg3 : access int) return System.Address;  -- cups/ipp.h:1006
+     (attr : System.Address;
+      element : int;
+      datalen : access int) return System.Address;  -- cups/ipp.h:1006
    pragma Import (C, ippGetOctetString, "ippGetOctetString");
 
-   function ippNewResponse (arg1 : System.Address) return System.Address;  -- cups/ipp.h:1008
+   function ippNewResponse (request : System.Address) return System.Address;  -- cups/ipp.h:1008
    pragma Import (C, ippNewResponse, "ippNewResponse");
 
    function ippSetOctetString
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : int;
-      arg4 : System.Address;
-      arg5 : int) return int;  -- cups/ipp.h:1009
+     (ipp : System.Address;
+      attr : System.Address;
+      element : int;
+      data : System.Address;
+      datalen : int) return int;  -- cups/ipp.h:1009
    pragma Import (C, ippSetOctetString, "ippSetOctetString");
 
    function ippSetStringf
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : int;
-      arg4 : Interfaces.C.Strings.chars_ptr  -- , ...
+     (ipp : System.Address;
+      attr : System.Address;
+      element : int;
+      format : Interfaces.C.Strings.chars_ptr  -- , ...
       ) return int;  -- cups/ipp.h:1012
    pragma Import (C, ippSetStringf, "ippSetStringf");
 
    function ippSetStringfv
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : int;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : access System.Address) return int;  -- cups/ipp.h:1015
+     (ipp : System.Address;
+      attr : System.Address;
+      element : int;
+      format : Interfaces.C.Strings.chars_ptr;
+      ap : access System.Address) return int;  -- cups/ipp.h:1015
    pragma Import (C, ippSetStringfv, "ippSetStringfv");
 
-   function ippValidateAttribute (arg1 : System.Address) return int;  -- cups/ipp.h:1018
+   function ippValidateAttribute (attr : System.Address) return int;  -- cups/ipp.h:1018
    pragma Import (C, ippValidateAttribute, "ippValidateAttribute");
 
-   function ippValidateAttributes (arg1 : System.Address) return int;  -- cups/ipp.h:1020
+   function ippValidateAttributes (ipp : System.Address) return int;  -- cups/ipp.h:1020
    pragma Import (C, ippValidateAttributes, "ippValidateAttributes");
 
   --*** New in CUPS 2.0 *** 
-   function ippStateString (arg1 : ipp_state_t) return Interfaces.C.Strings.chars_ptr;  -- cups/ipp.h:1024
+   function ippStateString (state : ipp_state_t) return Interfaces.C.Strings.chars_ptr;  -- cups/ipp.h:1024
    pragma Import (C, ippStateString, "ippStateString");
 
   -- * C++ magic...

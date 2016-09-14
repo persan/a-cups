@@ -27,6 +27,8 @@ package libCUPS.unistd_h is
    F_LOCK : constant := 1;  --  unistd.h:1079
    F_TLOCK : constant := 2;  --  unistd.h:1080
    F_TEST : constant := 3;  --  unistd.h:1081
+   --  arg-macro: function TEMP_FAILURE_RETRY (__extension__ ({ long int __result; do __result := (long int) (expression); while (__result = -1  and then  errno = EINTR); __result; })
+   --    return __extension__ ({ long int __result; do __result := (long int) (expression); while (__result = -1  and then  errno = EINTR); __result; });
 
   -- Copyright (C) 1991-2016 Free Software Foundation, Inc.
   --   This file is part of the GNU C Library.
@@ -166,8 +168,6 @@ package libCUPS.unistd_h is
   -- The Single Unix specification says that some more types are
   --   available here.   
 
-   subtype useconds_t is libCUPS.bits_types_h.uu_useconds_t;  -- unistd.h:258
-
    subtype intptr_t is libCUPS.bits_types_h.uu_intptr_t;  -- unistd.h:270
 
    subtype socklen_t is libCUPS.bits_types_h.uu_socklen_t;  -- unistd.h:277
@@ -176,22 +176,28 @@ package libCUPS.unistd_h is
   --   These may be OR'd together.   
 
   -- Test for access to NAME using the real UID and real GID.   
-   function c_access (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : int) return int;  -- unistd.h:290
+   function c_access (uu_name : Interfaces.C.Strings.chars_ptr; uu_type : int) return int;  -- unistd.h:290
    pragma Import (C, c_access, "access");
 
   -- Test for access to NAME using the effective UID and GID
   --   (as normal file operations use).   
 
+   function euidaccess (uu_name : Interfaces.C.Strings.chars_ptr; uu_type : int) return int;  -- unistd.h:295
+   pragma Import (C, euidaccess, "euidaccess");
+
   -- An alias for `euidaccess', used by some other systems.   
+   function eaccess (uu_name : Interfaces.C.Strings.chars_ptr; uu_type : int) return int;  -- unistd.h:299
+   pragma Import (C, eaccess, "eaccess");
+
   -- Test for access to FILE relative to the directory FD is open on.
   --   If AT_EACCESS is set in FLAG, then use effective IDs like `eaccess',
   --   otherwise use real IDs like `access'.   
 
    function faccessat
-     (arg1 : int;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int;
-      arg4 : int) return int;  -- unistd.h:307
+     (uu_fd : int;
+      uu_file : Interfaces.C.Strings.chars_ptr;
+      uu_type : int;
+      uu_flag : int) return int;  -- unistd.h:307
    pragma Import (C, faccessat, "faccessat");
 
   -- Values for the WHENCE argument to lseek.   
@@ -203,16 +209,22 @@ package libCUPS.unistd_h is
   --   Return the new file position.   
 
    function lseek
-     (arg1 : int;
-      arg2 : libCUPS.bits_types_h.uu_off_t;
-      arg3 : int) return libCUPS.bits_types_h.uu_off_t;  -- unistd.h:337
+     (uu_fd : int;
+      uu_offset : libCUPS.bits_types_h.uu_off_t;
+      uu_whence : int) return libCUPS.bits_types_h.uu_off_t;  -- unistd.h:337
    pragma Import (C, lseek, "lseek");
+
+   function lseek64
+     (uu_fd : int;
+      uu_offset : libCUPS.bits_types_h.uu_off64_t;
+      uu_whence : int) return libCUPS.bits_types_h.uu_off64_t;  -- unistd.h:348
+   pragma Import (C, lseek64, "lseek64");
 
   -- Close the file descriptor FD.
   --   This function is a cancellation point and therefore not marked with
   --   __THROW.   
 
-   function close (arg1 : int) return int;  -- unistd.h:356
+   function close (uu_fd : int) return int;  -- unistd.h:356
    pragma Import (C, close, "close");
 
   -- Read NBYTES into BUF from FD.  Return the
@@ -221,9 +233,9 @@ package libCUPS.unistd_h is
   --   __THROW.   
 
    function read
-     (arg1 : int;
-      arg2 : System.Address;
-      arg3 : size_t) return size_t;  -- unistd.h:363
+     (uu_fd : int;
+      uu_buf : System.Address;
+      uu_nbytes : size_t) return size_t;  -- unistd.h:363
    pragma Import (C, read, "read");
 
   -- Write N bytes of BUF to FD.  Return the number written, or -1.
@@ -231,9 +243,9 @@ package libCUPS.unistd_h is
   --   __THROW.   
 
    function write
-     (arg1 : int;
-      arg2 : System.Address;
-      arg3 : size_t) return size_t;  -- unistd.h:369
+     (uu_fd : int;
+      uu_buf : System.Address;
+      uu_n : size_t) return size_t;  -- unistd.h:369
    pragma Import (C, write, "write");
 
   -- Read NBYTES into BUF from FD at the given position OFFSET without
@@ -243,10 +255,10 @@ package libCUPS.unistd_h is
   --   __THROW.   
 
    function pread
-     (arg1 : int;
-      arg2 : System.Address;
-      arg3 : size_t;
-      arg4 : libCUPS.bits_types_h.uu_off_t) return size_t;  -- unistd.h:379
+     (uu_fd : int;
+      uu_buf : System.Address;
+      uu_nbytes : size_t;
+      uu_offset : libCUPS.bits_types_h.uu_off_t) return size_t;  -- unistd.h:379
    pragma Import (C, pread, "pread");
 
   -- Write N bytes of BUF to FD at the given position OFFSET without
@@ -255,29 +267,46 @@ package libCUPS.unistd_h is
   --   __THROW.   
 
    function pwrite
-     (arg1 : int;
-      arg2 : System.Address;
-      arg3 : size_t;
-      arg4 : libCUPS.bits_types_h.uu_off_t) return size_t;  -- unistd.h:387
+     (uu_fd : int;
+      uu_buf : System.Address;
+      uu_n : size_t;
+      uu_offset : libCUPS.bits_types_h.uu_off_t) return size_t;  -- unistd.h:387
    pragma Import (C, pwrite, "pwrite");
 
   -- Read NBYTES into BUF from FD at the given position OFFSET without
   --   changing the file pointer.  Return the number read, -1 for errors
   --   or 0 for EOF.   
 
+   function pread64
+     (uu_fd : int;
+      uu_buf : System.Address;
+      uu_nbytes : size_t;
+      uu_offset : libCUPS.bits_types_h.uu_off64_t) return size_t;  -- unistd.h:407
+   pragma Import (C, pread64, "pread64");
+
   -- Write N bytes of BUF to FD at the given position OFFSET without
   --   changing the file pointer.  Return the number written, or -1.   
+
+   function pwrite64
+     (uu_fd : int;
+      uu_buf : System.Address;
+      uu_n : size_t;
+      uu_offset : libCUPS.bits_types_h.uu_off64_t) return size_t;  -- unistd.h:411
+   pragma Import (C, pwrite64, "pwrite64");
 
   -- Create a one-way communication channel (pipe).
   --   If successful, two file descriptors are stored in PIPEDES;
   --   bytes written on PIPEDES[1] can be read from PIPEDES[0].
   --   Returns 0 if successful, -1 if not.   
 
-   function pipe (arg1 : access int) return int;  -- unistd.h:420
+   function pipe (uu_pipedes : access int) return int;  -- unistd.h:420
    pragma Import (C, pipe, "pipe");
 
   -- Same as pipe but apply flags passed in FLAGS to the new file
   --   descriptors.   
+
+   function pipe2 (uu_pipedes : access int; uu_flags : int) return int;  -- unistd.h:425
+   pragma Import (C, pipe2, "pipe2");
 
   -- Schedule an alarm.  In SECONDS seconds, the process will get a SIGALRM.
   --   If SECONDS is zero, any currently scheduled alarm will be cancelled.
@@ -287,7 +316,7 @@ package libCUPS.unistd_h is
   --   to 0 and check its value after calling `alarm', and this might tell you.
   --   The signal may come late due to processor scheduling.   
 
-   function alarm (arg1 : unsigned) return unsigned;  -- unistd.h:435
+   function alarm (uu_seconds : unsigned) return unsigned;  -- unistd.h:435
    pragma Import (C, alarm, "alarm");
 
   -- Make the process sleep for SECONDS seconds, or until a signal arrives
@@ -300,7 +329,7 @@ package libCUPS.unistd_h is
   --   This function is a cancellation point and therefore not marked with
   --   __THROW.   
 
-   function sleep (arg1 : unsigned) return unsigned;  -- unistd.h:447
+   function sleep (uu_seconds : unsigned) return unsigned;  -- unistd.h:447
    pragma Import (C, sleep, "sleep");
 
   -- Set an alarm to go off (generating a SIGALRM signal) in VALUE
@@ -308,7 +337,7 @@ package libCUPS.unistd_h is
   --   timer is reset to go off every INTERVAL microseconds thereafter.
   --   Returns the number of microseconds remaining before the alarm.   
 
-   function ualarm (arg1 : libCUPS.bits_types_h.uu_useconds_t; arg2 : libCUPS.bits_types_h.uu_useconds_t) return libCUPS.bits_types_h.uu_useconds_t;  -- unistd.h:455
+   function ualarm (uu_value : libCUPS.bits_types_h.uu_useconds_t; uu_interval : libCUPS.bits_types_h.uu_useconds_t) return libCUPS.bits_types_h.uu_useconds_t;  -- unistd.h:455
    pragma Import (C, ualarm, "ualarm");
 
   -- Sleep USECONDS microseconds, or until a signal arrives that is not blocked
@@ -316,7 +345,7 @@ package libCUPS.unistd_h is
   --   This function is a cancellation point and therefore not marked with
   --   __THROW.   
 
-   function usleep (arg1 : libCUPS.bits_types_h.uu_useconds_t) return int;  -- unistd.h:463
+   function usleep (uu_useconds : libCUPS.bits_types_h.uu_useconds_t) return int;  -- unistd.h:463
    pragma Import (C, usleep, "usleep");
 
   -- Suspend the process until a signal arrives.
@@ -329,44 +358,44 @@ package libCUPS.unistd_h is
 
   -- Change the owner and group of FILE.   
    function chown
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : libCUPS.bits_types_h.uu_uid_t;
-      arg3 : libCUPS.bits_types_h.uu_gid_t) return int;  -- unistd.h:476
+     (uu_file : Interfaces.C.Strings.chars_ptr;
+      uu_owner : libCUPS.bits_types_h.uu_uid_t;
+      uu_group : libCUPS.bits_types_h.uu_gid_t) return int;  -- unistd.h:476
    pragma Import (C, chown, "chown");
 
   -- Change the owner and group of the file that FD is open on.   
    function fchown
-     (arg1 : int;
-      arg2 : libCUPS.bits_types_h.uu_uid_t;
-      arg3 : libCUPS.bits_types_h.uu_gid_t) return int;  -- unistd.h:481
+     (uu_fd : int;
+      uu_owner : libCUPS.bits_types_h.uu_uid_t;
+      uu_group : libCUPS.bits_types_h.uu_gid_t) return int;  -- unistd.h:481
    pragma Import (C, fchown, "fchown");
 
   -- Change owner and group of FILE, if it is a symbolic
   --   link the ownership of the symbolic link is changed.   
 
    function lchown
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : libCUPS.bits_types_h.uu_uid_t;
-      arg3 : libCUPS.bits_types_h.uu_gid_t) return int;  -- unistd.h:486
+     (uu_file : Interfaces.C.Strings.chars_ptr;
+      uu_owner : libCUPS.bits_types_h.uu_uid_t;
+      uu_group : libCUPS.bits_types_h.uu_gid_t) return int;  -- unistd.h:486
    pragma Import (C, lchown, "lchown");
 
   -- Change the owner and group of FILE relative to the directory FD is open
   --   on.   
 
    function fchownat
-     (arg1 : int;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : libCUPS.bits_types_h.uu_uid_t;
-      arg4 : libCUPS.bits_types_h.uu_gid_t;
-      arg5 : int) return int;  -- unistd.h:494
+     (uu_fd : int;
+      uu_file : Interfaces.C.Strings.chars_ptr;
+      uu_owner : libCUPS.bits_types_h.uu_uid_t;
+      uu_group : libCUPS.bits_types_h.uu_gid_t;
+      uu_flag : int) return int;  -- unistd.h:494
    pragma Import (C, fchownat, "fchownat");
 
   -- Change the process's working directory to PATH.   
-   function chdir (arg1 : Interfaces.C.Strings.chars_ptr) return int;  -- unistd.h:500
+   function chdir (uu_path : Interfaces.C.Strings.chars_ptr) return int;  -- unistd.h:500
    pragma Import (C, chdir, "chdir");
 
   -- Change the process's working directory to the one FD is open on.   
-   function fchdir (arg1 : int) return int;  -- unistd.h:504
+   function fchdir (uu_fd : int) return int;  -- unistd.h:504
    pragma Import (C, fchdir, "fchdir");
 
   -- Get the pathname of the current working directory,
@@ -377,87 +406,105 @@ package libCUPS.unistd_h is
   --   bytes long, unless SIZE == 0, in which case it is as
   --   big as necessary.   
 
-   function getcwd (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : size_t) return Interfaces.C.Strings.chars_ptr;  -- unistd.h:514
+   function getcwd (uu_buf : Interfaces.C.Strings.chars_ptr; uu_size : size_t) return Interfaces.C.Strings.chars_ptr;  -- unistd.h:514
    pragma Import (C, getcwd, "getcwd");
 
   -- Return a malloc'd string containing the current directory name.
   --   If the environment variable `PWD' is set, and its value is correct,
   --   that value is used.   
 
+   function get_current_dir_name return Interfaces.C.Strings.chars_ptr;  -- unistd.h:520
+   pragma Import (C, get_current_dir_name, "get_current_dir_name");
+
   -- Put the absolute pathname of the current working directory in BUF.
   --   If successful, return BUF.  If not, put an error message in
   --   BUF and return NULL.  BUF should be at least PATH_MAX bytes long.   
 
-   function getwd (arg1 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- unistd.h:528
+   function getwd (uu_buf : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- unistd.h:528
    pragma Import (C, getwd, "getwd");
 
   -- Duplicate FD, returning a new file descriptor on the same file.   
-   function dup (arg1 : int) return int;  -- unistd.h:534
+   function dup (uu_fd : int) return int;  -- unistd.h:534
    pragma Import (C, dup, "dup");
 
   -- Duplicate FD to FD2, closing FD2 and making it open on the same file.   
-   function dup2 (arg1 : int; arg2 : int) return int;  -- unistd.h:537
+   function dup2 (uu_fd : int; uu_fd2 : int) return int;  -- unistd.h:537
    pragma Import (C, dup2, "dup2");
 
   -- Duplicate FD to FD2, closing FD2 and making it open on the same
   --   file while setting flags according to FLAGS.   
 
+   function dup3
+     (uu_fd : int;
+      uu_fd2 : int;
+      uu_flags : int) return int;  -- unistd.h:542
+   pragma Import (C, dup3, "dup3");
+
   -- NULL-terminated array of "NAME=VALUE" environment variables.   
+   environ : System.Address;  -- unistd.h:548
+   pragma Import (C, environ, "environ");
+
   -- Replace the current process, executing PATH with arguments ARGV and
   --   environment ENVP.  ARGV and ENVP are terminated by NULL pointers.   
 
    function execve
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : System.Address;
-      arg3 : System.Address) return int;  -- unistd.h:554
+     (uu_path : Interfaces.C.Strings.chars_ptr;
+      uu_argv : System.Address;
+      uu_envp : System.Address) return int;  -- unistd.h:554
    pragma Import (C, execve, "execve");
 
   -- Execute the file FD refers to, overlaying the running program image.
   --   ARGV and ENVP are passed to the new program, as for `execve'.   
 
    function fexecve
-     (arg1 : int;
-      arg2 : System.Address;
-      arg3 : System.Address) return int;  -- unistd.h:560
+     (uu_fd : int;
+      uu_argv : System.Address;
+      uu_envp : System.Address) return int;  -- unistd.h:560
    pragma Import (C, fexecve, "fexecve");
 
   -- Execute PATH with arguments ARGV and environment from `environ'.   
-   function execv (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : System.Address) return int;  -- unistd.h:566
+   function execv (uu_path : Interfaces.C.Strings.chars_ptr; uu_argv : System.Address) return int;  -- unistd.h:566
    pragma Import (C, execv, "execv");
 
   -- Execute PATH with all arguments after PATH until a NULL pointer,
   --   and the argument after that for environment.   
 
-   function execle (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : Interfaces.C.Strings.chars_ptr  -- , ...
+   function execle (uu_path : Interfaces.C.Strings.chars_ptr; uu_arg : Interfaces.C.Strings.chars_ptr  -- , ...
       ) return int;  -- unistd.h:571
    pragma Import (C, execle, "execle");
 
   -- Execute PATH with all arguments after PATH until
   --   a NULL pointer and environment from `environ'.   
 
-   function execl (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : Interfaces.C.Strings.chars_ptr  -- , ...
+   function execl (uu_path : Interfaces.C.Strings.chars_ptr; uu_arg : Interfaces.C.Strings.chars_ptr  -- , ...
       ) return int;  -- unistd.h:576
    pragma Import (C, execl, "execl");
 
   -- Execute FILE, searching in the `PATH' environment variable if it contains
   --   no slashes, with arguments ARGV and environment from `environ'.   
 
-   function execvp (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : System.Address) return int;  -- unistd.h:581
+   function execvp (uu_file : Interfaces.C.Strings.chars_ptr; uu_argv : System.Address) return int;  -- unistd.h:581
    pragma Import (C, execvp, "execvp");
 
   -- Execute FILE, searching in the `PATH' environment variable if
   --   it contains no slashes, with all arguments after FILE until a
   --   NULL pointer and environment from `environ'.   
 
-   function execlp (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : Interfaces.C.Strings.chars_ptr  -- , ...
+   function execlp (uu_file : Interfaces.C.Strings.chars_ptr; uu_arg : Interfaces.C.Strings.chars_ptr  -- , ...
       ) return int;  -- unistd.h:587
    pragma Import (C, execlp, "execlp");
 
   -- Execute FILE, searching in the `PATH' environment variable if it contains
   --   no slashes, with arguments ARGV and environment from `environ'.   
 
+   function execvpe
+     (uu_file : Interfaces.C.Strings.chars_ptr;
+      uu_argv : System.Address;
+      uu_envp : System.Address) return int;  -- unistd.h:593
+   pragma Import (C, execvpe, "execvpe");
+
   -- Add INC to priority of the current process.   
-   function nice (arg1 : int) return int;  -- unistd.h:601
+   function nice (uu_inc : int) return int;  -- unistd.h:601
    pragma Import (C, nice, "nice");
 
   -- Terminate program execution with the low-order 8 bits of STATUS.   
@@ -468,22 +515,22 @@ package libCUPS.unistd_h is
   --   and the `_CS_*' symbols for the NAME argument to `confstr'.   
 
   -- Get file-specific configuration information about PATH.   
-   function pathconf (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : int) return long;  -- unistd.h:615
+   function pathconf (uu_path : Interfaces.C.Strings.chars_ptr; uu_name : int) return long;  -- unistd.h:615
    pragma Import (C, pathconf, "pathconf");
 
   -- Get file-specific configuration about descriptor FD.   
-   function fpathconf (arg1 : int; arg2 : int) return long;  -- unistd.h:619
+   function fpathconf (uu_fd : int; uu_name : int) return long;  -- unistd.h:619
    pragma Import (C, fpathconf, "fpathconf");
 
   -- Get the value of the system variable NAME.   
-   function sysconf (arg1 : int) return long;  -- unistd.h:622
+   function sysconf (uu_name : int) return long;  -- unistd.h:622
    pragma Import (C, sysconf, "sysconf");
 
   -- Get the value of the string-valued system variable NAME.   
    function confstr
-     (arg1 : int;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : size_t) return size_t;  -- unistd.h:626
+     (uu_name : int;
+      uu_buf : Interfaces.C.Strings.chars_ptr;
+      uu_len : size_t) return size_t;  -- unistd.h:626
    pragma Import (C, confstr, "confstr");
 
   -- Get the process ID of the calling process.   
@@ -501,14 +548,14 @@ package libCUPS.unistd_h is
   -- Get the process group ID of process PID.   
    --  skipped func __getpgid
 
-   function getpgid (arg1 : libCUPS.bits_types_h.uu_pid_t) return libCUPS.bits_types_h.uu_pid_t;  -- unistd.h:642
+   function getpgid (uu_pid : libCUPS.bits_types_h.uu_pid_t) return libCUPS.bits_types_h.uu_pid_t;  -- unistd.h:642
    pragma Import (C, getpgid, "getpgid");
 
   -- Set the process group ID of the process matching PID to PGID.
   --   If PID is zero, the current process's process group ID is set.
   --   If PGID is zero, the process ID of the process is used.   
 
-   function setpgid (arg1 : libCUPS.bits_types_h.uu_pid_t; arg2 : libCUPS.bits_types_h.uu_pid_t) return int;  -- unistd.h:649
+   function setpgid (uu_pid : libCUPS.bits_types_h.uu_pid_t; uu_pgid : libCUPS.bits_types_h.uu_pid_t) return int;  -- unistd.h:649
    pragma Import (C, setpgid, "setpgid");
 
   -- Both System V and BSD have `setpgrp' functions, but with different
@@ -532,7 +579,7 @@ package libCUPS.unistd_h is
    pragma Import (C, setsid, "setsid");
 
   -- Return the session ID of the given process.   
-   function getsid (arg1 : libCUPS.bits_types_h.uu_pid_t) return libCUPS.bits_types_h.uu_pid_t;  -- unistd.h:674
+   function getsid (uu_pid : libCUPS.bits_types_h.uu_pid_t) return libCUPS.bits_types_h.uu_pid_t;  -- unistd.h:674
    pragma Import (C, getsid, "getsid");
 
   -- Get the real user ID of the calling process.   
@@ -555,26 +602,29 @@ package libCUPS.unistd_h is
   --   the calling process is in.  Otherwise, fill in the group IDs
   --   of its supplementary groups in LIST and return the number written.   
 
-   function getgroups (arg1 : int; arg2 : access libCUPS.bits_types_h.uu_gid_t) return int;  -- unistd.h:692
+   function getgroups (uu_size : int; uu_list : access libCUPS.bits_types_h.uu_gid_t) return int;  -- unistd.h:692
    pragma Import (C, getgroups, "getgroups");
 
   -- Return nonzero iff the calling process is in group GID.   
+   function group_member (uu_gid : libCUPS.bits_types_h.uu_gid_t) return int;  -- unistd.h:696
+   pragma Import (C, group_member, "group_member");
+
   -- Set the user ID of the calling process to UID.
   --   If the calling process is the super-user, set the real
   --   and effective user IDs, and the saved set-user-ID to UID;
   --   if not, the effective user ID is set to UID.   
 
-   function setuid (arg1 : libCUPS.bits_types_h.uu_uid_t) return int;  -- unistd.h:703
+   function setuid (uu_uid : libCUPS.bits_types_h.uu_uid_t) return int;  -- unistd.h:703
    pragma Import (C, setuid, "setuid");
 
   -- Set the real user ID of the calling process to RUID,
   --   and the effective user ID of the calling process to EUID.   
 
-   function setreuid (arg1 : libCUPS.bits_types_h.uu_uid_t; arg2 : libCUPS.bits_types_h.uu_uid_t) return int;  -- unistd.h:708
+   function setreuid (uu_ruid : libCUPS.bits_types_h.uu_uid_t; uu_euid : libCUPS.bits_types_h.uu_uid_t) return int;  -- unistd.h:708
    pragma Import (C, setreuid, "setreuid");
 
   -- Set the effective user ID of the calling process to UID.   
-   function seteuid (arg1 : libCUPS.bits_types_h.uu_uid_t) return int;  -- unistd.h:713
+   function seteuid (uu_uid : libCUPS.bits_types_h.uu_uid_t) return int;  -- unistd.h:713
    pragma Import (C, seteuid, "seteuid");
 
   -- Set the group ID of the calling process to GID.
@@ -582,30 +632,54 @@ package libCUPS.unistd_h is
   --   and effective group IDs, and the saved set-group-ID to GID;
   --   if not, the effective group ID is set to GID.   
 
-   function setgid (arg1 : libCUPS.bits_types_h.uu_gid_t) return int;  -- unistd.h:720
+   function setgid (uu_gid : libCUPS.bits_types_h.uu_gid_t) return int;  -- unistd.h:720
    pragma Import (C, setgid, "setgid");
 
   -- Set the real group ID of the calling process to RGID,
   --   and the effective group ID of the calling process to EGID.   
 
-   function setregid (arg1 : libCUPS.bits_types_h.uu_gid_t; arg2 : libCUPS.bits_types_h.uu_gid_t) return int;  -- unistd.h:725
+   function setregid (uu_rgid : libCUPS.bits_types_h.uu_gid_t; uu_egid : libCUPS.bits_types_h.uu_gid_t) return int;  -- unistd.h:725
    pragma Import (C, setregid, "setregid");
 
   -- Set the effective group ID of the calling process to GID.   
-   function setegid (arg1 : libCUPS.bits_types_h.uu_gid_t) return int;  -- unistd.h:730
+   function setegid (uu_gid : libCUPS.bits_types_h.uu_gid_t) return int;  -- unistd.h:730
    pragma Import (C, setegid, "setegid");
 
   -- Fetch the real user ID, effective user ID, and saved-set user ID,
   --   of the calling process.   
 
+   function getresuid
+     (uu_ruid : access libCUPS.bits_types_h.uu_uid_t;
+      uu_euid : access libCUPS.bits_types_h.uu_uid_t;
+      uu_suid : access libCUPS.bits_types_h.uu_uid_t) return int;  -- unistd.h:736
+   pragma Import (C, getresuid, "getresuid");
+
   -- Fetch the real group ID, effective group ID, and saved-set group ID,
   --   of the calling process.   
+
+   function getresgid
+     (uu_rgid : access libCUPS.bits_types_h.uu_gid_t;
+      uu_egid : access libCUPS.bits_types_h.uu_gid_t;
+      uu_sgid : access libCUPS.bits_types_h.uu_gid_t) return int;  -- unistd.h:741
+   pragma Import (C, getresgid, "getresgid");
 
   -- Set the real user ID, effective user ID, and saved-set user ID,
   --   of the calling process to RUID, EUID, and SUID, respectively.   
 
+   function setresuid
+     (uu_ruid : libCUPS.bits_types_h.uu_uid_t;
+      uu_euid : libCUPS.bits_types_h.uu_uid_t;
+      uu_suid : libCUPS.bits_types_h.uu_uid_t) return int;  -- unistd.h:746
+   pragma Import (C, setresuid, "setresuid");
+
   -- Set the real group ID, effective group ID, and saved-set group ID,
   --   of the calling process to RGID, EGID, and SGID, respectively.   
+
+   function setresgid
+     (uu_rgid : libCUPS.bits_types_h.uu_gid_t;
+      uu_egid : libCUPS.bits_types_h.uu_gid_t;
+      uu_sgid : libCUPS.bits_types_h.uu_gid_t) return int;  -- unistd.h:751
+   pragma Import (C, setresgid, "setresgid");
 
   -- Clone the calling process, creating an exact copy.
   --   Return -1 for errors, 0 to the new process,
@@ -625,22 +699,22 @@ package libCUPS.unistd_h is
   -- Return the pathname of the terminal FD is open on, or NULL on errors.
   --   The returned storage is good only until the next call to this function.   
 
-   function ttyname (arg1 : int) return Interfaces.C.Strings.chars_ptr;  -- unistd.h:773
+   function ttyname (uu_fd : int) return Interfaces.C.Strings.chars_ptr;  -- unistd.h:773
    pragma Import (C, ttyname, "ttyname");
 
   -- Store at most BUFLEN characters of the pathname of the terminal FD is
   --   open on in BUF.  Return 0 on success, otherwise an error number.   
 
    function ttyname_r
-     (arg1 : int;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : size_t) return int;  -- unistd.h:777
+     (uu_fd : int;
+      uu_buf : Interfaces.C.Strings.chars_ptr;
+      uu_buflen : size_t) return int;  -- unistd.h:777
    pragma Import (C, ttyname_r, "ttyname_r");
 
   -- Return 1 if FD is a valid descriptor associated
   --   with a terminal, zero if not.   
 
-   function isatty (arg1 : int) return int;  -- unistd.h:782
+   function isatty (uu_fd : int) return int;  -- unistd.h:782
    pragma Import (C, isatty, "isatty");
 
   -- Return the index into the active-logins file (utmp) for
@@ -650,22 +724,22 @@ package libCUPS.unistd_h is
    pragma Import (C, ttyslot, "ttyslot");
 
   -- Make a link to FROM named TO.   
-   function link (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : Interfaces.C.Strings.chars_ptr) return int;  -- unistd.h:793
+   function link (uu_from : Interfaces.C.Strings.chars_ptr; uu_to : Interfaces.C.Strings.chars_ptr) return int;  -- unistd.h:793
    pragma Import (C, link, "link");
 
   -- Like link but relative paths in TO and FROM are interpreted relative
   --   to FROMFD and TOFD respectively.   
 
    function linkat
-     (arg1 : int;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : int) return int;  -- unistd.h:799
+     (uu_fromfd : int;
+      uu_from : Interfaces.C.Strings.chars_ptr;
+      uu_tofd : int;
+      uu_to : Interfaces.C.Strings.chars_ptr;
+      uu_flags : int) return int;  -- unistd.h:799
    pragma Import (C, linkat, "linkat");
 
   -- Make a symbolic link to FROM named TO.   
-   function symlink (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : Interfaces.C.Strings.chars_ptr) return int;  -- unistd.h:806
+   function symlink (uu_from : Interfaces.C.Strings.chars_ptr; uu_to : Interfaces.C.Strings.chars_ptr) return int;  -- unistd.h:806
    pragma Import (C, symlink, "symlink");
 
   -- Read the contents of the symbolic link PATH into no more than
@@ -673,47 +747,47 @@ package libCUPS.unistd_h is
   --   Returns the number of characters read, or -1 for errors.   
 
    function readlink
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : size_t) return size_t;  -- unistd.h:812
+     (uu_path : Interfaces.C.Strings.chars_ptr;
+      uu_buf : Interfaces.C.Strings.chars_ptr;
+      uu_len : size_t) return size_t;  -- unistd.h:812
    pragma Import (C, readlink, "readlink");
 
   -- Like symlink but a relative path in TO is interpreted relative to TOFD.   
    function symlinkat
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : int;
-      arg3 : Interfaces.C.Strings.chars_ptr) return int;  -- unistd.h:819
+     (uu_from : Interfaces.C.Strings.chars_ptr;
+      uu_tofd : int;
+      uu_to : Interfaces.C.Strings.chars_ptr) return int;  -- unistd.h:819
    pragma Import (C, symlinkat, "symlinkat");
 
   -- Like readlink but a relative PATH is interpreted relative to FD.   
    function readlinkat
-     (arg1 : int;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : size_t) return size_t;  -- unistd.h:823
+     (uu_fd : int;
+      uu_path : Interfaces.C.Strings.chars_ptr;
+      uu_buf : Interfaces.C.Strings.chars_ptr;
+      uu_len : size_t) return size_t;  -- unistd.h:823
    pragma Import (C, readlinkat, "readlinkat");
 
   -- Remove the link NAME.   
-   function unlink (arg1 : Interfaces.C.Strings.chars_ptr) return int;  -- unistd.h:829
+   function unlink (uu_name : Interfaces.C.Strings.chars_ptr) return int;  -- unistd.h:829
    pragma Import (C, unlink, "unlink");
 
   -- Remove the link NAME relative to FD.   
    function unlinkat
-     (arg1 : int;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int) return int;  -- unistd.h:833
+     (uu_fd : int;
+      uu_name : Interfaces.C.Strings.chars_ptr;
+      uu_flag : int) return int;  -- unistd.h:833
    pragma Import (C, unlinkat, "unlinkat");
 
   -- Remove the directory PATH.   
-   function rmdir (arg1 : Interfaces.C.Strings.chars_ptr) return int;  -- unistd.h:838
+   function rmdir (uu_path : Interfaces.C.Strings.chars_ptr) return int;  -- unistd.h:838
    pragma Import (C, rmdir, "rmdir");
 
   -- Return the foreground process group ID of FD.   
-   function tcgetpgrp (arg1 : int) return libCUPS.bits_types_h.uu_pid_t;  -- unistd.h:842
+   function tcgetpgrp (uu_fd : int) return libCUPS.bits_types_h.uu_pid_t;  -- unistd.h:842
    pragma Import (C, tcgetpgrp, "tcgetpgrp");
 
   -- Set the foreground process group ID of FD set PGRP_ID.   
-   function tcsetpgrp (arg1 : int; arg2 : libCUPS.bits_types_h.uu_pid_t) return int;  -- unistd.h:845
+   function tcsetpgrp (uu_fd : int; uu_pgrp_id : libCUPS.bits_types_h.uu_pid_t) return int;  -- unistd.h:845
    pragma Import (C, tcsetpgrp, "tcsetpgrp");
 
   -- Return the login name of the user.
@@ -729,11 +803,11 @@ package libCUPS.unistd_h is
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function getlogin_r (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : size_t) return int;  -- unistd.h:860
+   function getlogin_r (uu_name : Interfaces.C.Strings.chars_ptr; uu_name_len : size_t) return int;  -- unistd.h:860
    pragma Import (C, getlogin_r, "getlogin_r");
 
   -- Set the login name returned by `getlogin'.   
-   function setlogin (arg1 : Interfaces.C.Strings.chars_ptr) return int;  -- unistd.h:865
+   function setlogin (uu_name : Interfaces.C.Strings.chars_ptr) return int;  -- unistd.h:865
    pragma Import (C, setlogin, "setlogin");
 
   -- Get definitions and prototypes for functions to process the
@@ -744,29 +818,29 @@ package libCUPS.unistd_h is
   --   The result is null-terminated if LEN is large enough for the full
   --   name and the terminator.   
 
-   function gethostname (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : size_t) return int;  -- unistd.h:882
+   function gethostname (uu_name : Interfaces.C.Strings.chars_ptr; uu_len : size_t) return int;  -- unistd.h:882
    pragma Import (C, gethostname, "gethostname");
 
   -- Set the name of the current host to NAME, which is LEN bytes long.
   --   This call is restricted to the super-user.   
 
-   function sethostname (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : size_t) return int;  -- unistd.h:889
+   function sethostname (uu_name : Interfaces.C.Strings.chars_ptr; uu_len : size_t) return int;  -- unistd.h:889
    pragma Import (C, sethostname, "sethostname");
 
   -- Set the current machine's Internet number to ID.
   --   This call is restricted to the super-user.   
 
-   function sethostid (arg1 : long) return int;  -- unistd.h:894
+   function sethostid (uu_id : long) return int;  -- unistd.h:894
    pragma Import (C, sethostid, "sethostid");
 
   -- Get and set the NIS (aka YP) domain name, if any.
   --   Called just like `gethostname' and `sethostname'.
   --   The NIS domain name is usually the empty string when not using NIS.   
 
-   function getdomainname (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : size_t) return int;  -- unistd.h:900
+   function getdomainname (uu_name : Interfaces.C.Strings.chars_ptr; uu_len : size_t) return int;  -- unistd.h:900
    pragma Import (C, getdomainname, "getdomainname");
 
-   function setdomainname (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : size_t) return int;  -- unistd.h:902
+   function setdomainname (uu_name : Interfaces.C.Strings.chars_ptr; uu_len : size_t) return int;  -- unistd.h:902
    pragma Import (C, setdomainname, "setdomainname");
 
   -- Revoke access permissions to all processes currently communicating
@@ -777,7 +851,7 @@ package libCUPS.unistd_h is
    pragma Import (C, vhangup, "vhangup");
 
   -- Revoke the access of all descriptors currently open on FILE.   
-   function revoke (arg1 : Interfaces.C.Strings.chars_ptr) return int;  -- unistd.h:912
+   function revoke (uu_file : Interfaces.C.Strings.chars_ptr) return int;  -- unistd.h:912
    pragma Import (C, revoke, "revoke");
 
   -- Enable statistical profiling, writing samples of the PC into at most
@@ -787,17 +861,17 @@ package libCUPS.unistd_h is
   --   disable profiling.  Returns zero on success, -1 on error.   
 
    function profil
-     (arg1 : access unsigned_short;
-      arg2 : size_t;
-      arg3 : size_t;
-      arg4 : unsigned) return int;  -- unistd.h:920
+     (uu_sample_buffer : access unsigned_short;
+      uu_size : size_t;
+      uu_offset : size_t;
+      uu_scale : unsigned) return int;  -- unistd.h:920
    pragma Import (C, profil, "profil");
 
   -- Turn accounting on if NAME is an existing file.  The system will then write
   --   a record for each process as it terminates, to this file.  If NAME is NULL,
   --   turn accounting off.  This call is restricted to the super-user.   
 
-   function acct (arg1 : Interfaces.C.Strings.chars_ptr) return int;  -- unistd.h:928
+   function acct (uu_name : Interfaces.C.Strings.chars_ptr) return int;  -- unistd.h:928
    pragma Import (C, acct, "acct");
 
   -- Successive calls return the shells listed in `/etc/shells'.   
@@ -816,30 +890,33 @@ package libCUPS.unistd_h is
   --   terminal.  If NOCHDIR is zero, do `chdir ("/")'.  If NOCLOSE is zero,
   --   redirects stdin, stdout, and stderr to /dev/null.   
 
-   function daemon (arg1 : int; arg2 : int) return int;  -- unistd.h:940
+   function daemon (uu_nochdir : int; uu_noclose : int) return int;  -- unistd.h:940
    pragma Import (C, daemon, "daemon");
 
   -- Make PATH be the root directory (the starting point for absolute paths).
   --   This call is restricted to the super-user.   
 
-   function chroot (arg1 : Interfaces.C.Strings.chars_ptr) return int;  -- unistd.h:947
+   function chroot (uu_path : Interfaces.C.Strings.chars_ptr) return int;  -- unistd.h:947
    pragma Import (C, chroot, "chroot");
 
   -- Prompt with PROMPT and read a string from the terminal without echoing.
   --   Uses /dev/tty if possible; otherwise stderr and stdin.   
 
-   function getpass (arg1 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- unistd.h:951
+   function getpass (uu_prompt : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- unistd.h:951
    pragma Import (C, getpass, "getpass");
 
   -- Make all changes done to FD actually appear on disk.
   --   This function is a cancellation point and therefore not marked with
   --   __THROW.   
 
-   function fsync (arg1 : int) return int;  -- unistd.h:959
+   function fsync (uu_fd : int) return int;  -- unistd.h:959
    pragma Import (C, fsync, "fsync");
 
   -- Make all changes done to all files on the file system associated
   --   with FD actually appear on disk.   
+
+   function syncfs (uu_fd : int) return int;  -- unistd.h:965
+   pragma Import (C, syncfs, "syncfs");
 
   -- Return identifier for the current host.   
    function gethostid return long;  -- unistd.h:972
@@ -862,17 +939,23 @@ package libCUPS.unistd_h is
    pragma Import (C, getdtablesize, "getdtablesize");
 
   -- Truncate FILE to LENGTH bytes.   
-   function truncate (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : libCUPS.bits_types_h.uu_off_t) return int;  -- unistd.h:996
+   function truncate (uu_file : Interfaces.C.Strings.chars_ptr; uu_length : libCUPS.bits_types_h.uu_off_t) return int;  -- unistd.h:996
    pragma Import (C, truncate, "truncate");
 
+   function truncate64 (uu_file : Interfaces.C.Strings.chars_ptr; uu_length : libCUPS.bits_types_h.uu_off64_t) return int;  -- unistd.h:1008
+   pragma Import (C, truncate64, "truncate64");
+
   -- Truncate the file FD is open on to LENGTH bytes.   
-   function ftruncate (arg1 : int; arg2 : libCUPS.bits_types_h.uu_off_t) return int;  -- unistd.h:1019
+   function ftruncate (uu_fd : int; uu_length : libCUPS.bits_types_h.uu_off_t) return int;  -- unistd.h:1019
    pragma Import (C, ftruncate, "ftruncate");
+
+   function ftruncate64 (uu_fd : int; uu_length : libCUPS.bits_types_h.uu_off64_t) return int;  -- unistd.h:1029
+   pragma Import (C, ftruncate64, "ftruncate64");
 
   -- Set the end of accessible data space (aka "the break") to ADDR.
   --   Returns zero on success and -1 for errors (with errno set).   
 
-   function brk (arg1 : System.Address) return int;  -- unistd.h:1040
+   function brk (uu_addr : System.Address) return int;  -- unistd.h:1040
    pragma Import (C, brk, "brk");
 
   -- Increase or decrease the end of accessible data space by DELTA bytes.
@@ -880,7 +963,7 @@ package libCUPS.unistd_h is
   --   (i.e. the beginning of the new space, if DELTA > 0);
   --   returns (void *) -1 for errors (with errno set).   
 
-   function sbrk (arg1 : intptr_t) return System.Address;  -- unistd.h:1046
+   function sbrk (uu_delta : intptr_t) return System.Address;  -- unistd.h:1046
    pragma Import (C, sbrk, "sbrk");
 
   -- Invoke `system call' number SYSNO, passing it the remaining arguments.
@@ -892,7 +975,7 @@ package libCUPS.unistd_h is
   --   In Mach, all system calls take normal arguments and always return an
   --   error code (zero for success).   
 
-   function syscall (arg1 : long  -- , ...
+   function syscall (uu_sysno : long  -- , ...
       ) return long;  -- unistd.h:1061
    pragma Import (C, syscall, "syscall");
 
@@ -907,10 +990,16 @@ package libCUPS.unistd_h is
   --   __THROW.   
 
    function lockf
-     (arg1 : int;
-      arg2 : int;
-      arg3 : libCUPS.bits_types_h.uu_off_t) return int;  -- unistd.h:1084
+     (uu_fd : int;
+      uu_cmd : int;
+      uu_len : libCUPS.bits_types_h.uu_off_t) return int;  -- unistd.h:1084
    pragma Import (C, lockf, "lockf");
+
+   function lockf64
+     (uu_fd : int;
+      uu_cmd : int;
+      uu_len : libCUPS.bits_types_h.uu_off64_t) return int;  -- unistd.h:1094
+   pragma Import (C, lockf64, "lockf64");
 
   -- Evaluate EXPRESSION, and repeat as long as it returns -1 with `errno'
   --   set to EINTR.   
@@ -918,20 +1007,32 @@ package libCUPS.unistd_h is
   -- Synchronize at least the data part of a file with the underlying
   --   media.   
 
-   function fdatasync (arg1 : int) return int;  -- unistd.h:1115
+   function fdatasync (uu_fildes : int) return int;  -- unistd.h:1115
    pragma Import (C, fdatasync, "fdatasync");
 
   -- XPG4.2 specifies that prototypes for the encryption functions must
   --   be defined here.   
 
   -- Encrypt at most 8 characters from KEY using salt to perturb DES.   
+   function crypt (uu_key : Interfaces.C.Strings.chars_ptr; uu_salt : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- unistd.h:1123
+   pragma Import (C, crypt, "crypt");
+
   -- Encrypt data in BLOCK in place if EDFLAG is zero; otherwise decrypt
   --   block in place.   
+
+   procedure encrypt (uu_glibc_block : Interfaces.C.Strings.chars_ptr; uu_edflag : int);  -- unistd.h:1128
+   pragma Import (C, encrypt, "encrypt");
 
   -- Swab pairs bytes in the first N bytes of the area pointed to by
   --   FROM and copy the result to TO.  The value of TO must not be in the
   --   range [FROM - N + 1, FROM - 1].  If N is odd the first byte in FROM
   --   is without partner.   
+
+   procedure swab
+     (uu_from : System.Address;
+      uu_to : System.Address;
+      uu_n : size_t);  -- unistd.h:1136
+   pragma Import (C, swab, "swab");
 
   -- The Single Unix specification demands this prototype to be here.
   --   It is also found in <stdio.h>.   

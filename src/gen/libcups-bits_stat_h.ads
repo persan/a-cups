@@ -31,7 +31,7 @@ package libCUPS.bits_stat_h is
   -- i386 versions of the `xmknod' interface.   
   -- x86-64 versions of the `xmknod' interface.   
   -- Device.   
-   type anon3657_uu_glibc_reserved_array is array (0 .. 2) of aliased libCUPS.bits_types_h.uu_syscall_slong_t;
+   type stat_uu_glibc_reserved_array is array (0 .. 2) of aliased libCUPS.bits_types_h.uu_syscall_slong_t;
    type stat is record
       st_dev : aliased libCUPS.bits_types_h.uu_dev_t;  -- bits/stat.h:48
       st_ino : aliased libCUPS.bits_types_h.uu_ino_t;  -- bits/stat.h:53
@@ -47,7 +47,7 @@ package libCUPS.bits_stat_h is
       st_atim : aliased libCUPS.time_h.timespec;  -- bits/stat.h:91
       st_mtim : aliased libCUPS.time_h.timespec;  -- bits/stat.h:92
       st_ctim : aliased libCUPS.time_h.timespec;  -- bits/stat.h:93
-      uu_glibc_reserved : aliased anon3657_uu_glibc_reserved_array;  -- bits/stat.h:106
+      uu_glibc_reserved : aliased stat_uu_glibc_reserved_array;  -- bits/stat.h:106
    end record;
    pragma Convention (C_Pass_By_Copy, stat);  -- bits/stat.h:46
 
@@ -84,6 +84,26 @@ package libCUPS.bits_stat_h is
   -- File serial number.	 
   -- Note stat64 has the same shape as stat for x86-64.   
   -- Device.   
+   type stat64_uu_glibc_reserved_array is array (0 .. 2) of aliased libCUPS.bits_types_h.uu_syscall_slong_t;
+   type stat64 is record
+      st_dev : aliased libCUPS.bits_types_h.uu_dev_t;  -- bits/stat.h:121
+      st_ino : aliased libCUPS.bits_types_h.uu_ino64_t;  -- bits/stat.h:123
+      st_nlink : aliased libCUPS.bits_types_h.uu_nlink_t;  -- bits/stat.h:124
+      st_mode : aliased libCUPS.bits_types_h.uu_mode_t;  -- bits/stat.h:125
+      st_uid : aliased libCUPS.bits_types_h.uu_uid_t;  -- bits/stat.h:132
+      st_gid : aliased libCUPS.bits_types_h.uu_gid_t;  -- bits/stat.h:133
+      uu_pad0 : aliased int;  -- bits/stat.h:135
+      st_rdev : aliased libCUPS.bits_types_h.uu_dev_t;  -- bits/stat.h:136
+      st_size : aliased libCUPS.bits_types_h.uu_off_t;  -- bits/stat.h:137
+      st_blksize : aliased libCUPS.bits_types_h.uu_blksize_t;  -- bits/stat.h:143
+      st_blocks : aliased libCUPS.bits_types_h.uu_blkcnt64_t;  -- bits/stat.h:144
+      st_atim : aliased libCUPS.time_h.timespec;  -- bits/stat.h:152
+      st_mtim : aliased libCUPS.time_h.timespec;  -- bits/stat.h:153
+      st_ctim : aliased libCUPS.time_h.timespec;  -- bits/stat.h:154
+      uu_glibc_reserved : aliased stat64_uu_glibc_reserved_array;  -- bits/stat.h:164
+   end record;
+   pragma Convention (C_Pass_By_Copy, stat64);  -- bits/stat.h:119
+
   -- File serial number.   
   -- Link count.   
   -- File mode.   

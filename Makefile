@@ -20,7 +20,7 @@ gen:
 	@echo "#include <cups/sidechannel.h>" >>.gen/gen.c
 	@echo "#include <cups/transcode.h>" >>.gen/gen.c
 	@echo "#include <cups/versioning.h>" >>.gen/gen.c
-	cd .gen; gcc -C -c -fdump-ada-spec gen.c -fada-spec-parent=libCUPS
+	cd .gen; g++ -C -c -fdump-ada-spec gen.c -fada-spec-parent=libCUPS
 	rm .gen/gen.*
 	sed/patch.sh
 	cp .gen/libcups-cups_*.ads src/gen
@@ -46,12 +46,14 @@ gen:
 	cp .gen/libcups-stdarg_h.ads src/gen
 	cp .gen/libcups-ug_config_h.ads src/gen
 	cp .gen/libcups-wchar_h.ads src/gen
+	cp .gen/libcups-bits_siginfo_h.ads src/gen
+	cp .gen/libcups-bits_pthreadtypes_h.ads src/gen
 	${MAKE} compile
 compile:
 	gprbuild -j0 -p -P cups.gpr
 
 test:
-	gprbuild -j0 -p -P cups-tests.gpr
+	gprbuild -k -j0 -p -P cups-tests.gpr
 
 install:
 	gprinstall -p -P cups.gpr --mode=dev --prefix=${PREFIX}

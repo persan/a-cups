@@ -17,6 +17,9 @@ package libCUPS.stdio_h is
    SEEK_CUR : constant := 1;  --  stdio.h:141
    SEEK_END : constant := 2;  --  stdio.h:142
 
+   SEEK_DATA : constant := 3;  --  stdio.h:144
+   SEEK_HOLE : constant := 4;  --  stdio.h:145
+
    P_tmpdir : aliased constant String := "/tmp" & ASCII.NUL;  --  stdio.h:151
    --  unsupported macro: stdin stdin
    --  unsupported macro: stdout stdout
@@ -55,10 +58,14 @@ package libCUPS.stdio_h is
 
    subtype off_t is libCUPS.bits_types_h.uu_off_t;  -- stdio.h:90
 
+   subtype off64_t is libCUPS.bits_types_h.uu_off64_t;  -- stdio.h:97
+
    subtype ssize_t is libCUPS.bits_types_h.uu_ssize_t;  -- stdio.h:102
 
   -- The type of the second argument to `fgetpos' and `fsetpos'.   
-   subtype fpos_t is libCUPS.uG_config_h.u_G_fpos_t;  -- stdio.h:110
+   subtype fpos_t is libCUPS.uG_config_h.u_G_fpos_t;
+
+   subtype fpos64_t is libCUPS.uG_config_h.u_G_fpos64_t;
 
   -- The possibilities for the third argument to `setvbuf'.   
   -- Default buffer size.   
@@ -94,19 +101,19 @@ package libCUPS.stdio_h is
 
   -- C89/C99 say they're macros.  Make them happy.   
   -- Remove file FILENAME.   
-   function remove (arg1 : Interfaces.C.Strings.chars_ptr) return int;  -- stdio.h:178
+   function remove (uu_filename : Interfaces.C.Strings.chars_ptr) return int;  -- stdio.h:178
    pragma Import (C, remove, "remove");
 
   -- Rename file OLD to NEW.   
-   function rename (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : Interfaces.C.Strings.chars_ptr) return int;  -- stdio.h:180
+   function rename (uu_old : Interfaces.C.Strings.chars_ptr; uu_new : Interfaces.C.Strings.chars_ptr) return int;  -- stdio.h:180
    pragma Import (C, rename, "rename");
 
   -- Rename file OLD relative to OLDFD to NEW relative to NEWFD.   
    function renameat
-     (arg1 : int;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int;
-      arg4 : Interfaces.C.Strings.chars_ptr) return int;  -- stdio.h:185
+     (uu_oldfd : int;
+      uu_old : Interfaces.C.Strings.chars_ptr;
+      uu_newfd : int;
+      uu_new : Interfaces.C.Strings.chars_ptr) return int;  -- stdio.h:185
    pragma Import (C, renameat, "renameat");
 
   -- Create a temporary file and open it read/write.
@@ -116,14 +123,17 @@ package libCUPS.stdio_h is
    function tmpfile return access FILE;  -- stdio.h:195
    pragma Import (C, tmpfile, "tmpfile");
 
+   function tmpfile64 return access FILE;  -- stdio.h:205
+   pragma Import (C, tmpfile64, "tmpfile64");
+
   -- Generate a temporary filename.   
-   function tmpnam (arg1 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- stdio.h:209
+   function tmpnam (uu_s : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- stdio.h:209
    pragma Import (C, tmpnam, "tmpnam");
 
   -- This is the reentrant variant of `tmpnam'.  The only difference is
   --   that it does not allow S to be NULL.   
 
-   function tmpnam_r (arg1 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- stdio.h:215
+   function tmpnam_r (uu_s : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- stdio.h:215
    pragma Import (C, tmpnam_r, "tmpnam_r");
 
   -- Generate a unique temporary filename using up to five characters of PFX
@@ -134,21 +144,21 @@ package libCUPS.stdio_h is
   --   P_tmpdir is tried and finally "/tmp".  The storage for the filename
   --   is allocated by `malloc'.   
 
-   function tempnam (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- stdio.h:227
+   function tempnam (uu_dir : Interfaces.C.Strings.chars_ptr; uu_pfx : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- stdio.h:227
    pragma Import (C, tempnam, "tempnam");
 
   -- Close STREAM.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function fclose (arg1 : access FILE) return int;  -- stdio.h:237
+   function fclose (uu_stream : access FILE) return int;  -- stdio.h:237
    pragma Import (C, fclose, "fclose");
 
   -- Flush STREAM, or all streams if STREAM is NULL.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function fflush (arg1 : access FILE) return int;  -- stdio.h:242
+   function fflush (uu_stream : access FILE) return int;  -- stdio.h:242
    pragma Import (C, fflush, "fflush");
 
   -- Faster versions when locking is not required.
@@ -157,7 +167,7 @@ package libCUPS.stdio_h is
   --   or due to the implementation it is a cancellation point and
   --   therefore not marked with __THROW.   
 
-   function fflush_unlocked (arg1 : access FILE) return int;  -- stdio.h:252
+   function fflush_unlocked (uu_stream : access FILE) return int;  -- stdio.h:252
    pragma Import (C, fflush_unlocked, "fflush_unlocked");
 
   -- Close all streams.
@@ -166,11 +176,14 @@ package libCUPS.stdio_h is
   --   or due to the implementation it is a cancellation point and
   --   therefore not marked with __THROW.   
 
+   function fcloseall return int;  -- stdio.h:262
+   pragma Import (C, fcloseall, "fcloseall");
+
   -- Open a file and create a new stream for it.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function fopen (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : Interfaces.C.Strings.chars_ptr) return access FILE;  -- stdio.h:272
+   function fopen (uu_filename : Interfaces.C.Strings.chars_ptr; uu_modes : Interfaces.C.Strings.chars_ptr) return access FILE;  -- stdio.h:272
    pragma Import (C, fopen, "fopen");
 
   -- Open a file, replacing an existing stream with it.
@@ -178,36 +191,51 @@ package libCUPS.stdio_h is
   --   marked with __THROW.   
 
    function freopen
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : access FILE) return access FILE;  -- stdio.h:278
+     (uu_filename : Interfaces.C.Strings.chars_ptr;
+      uu_modes : Interfaces.C.Strings.chars_ptr;
+      uu_stream : access FILE) return access FILE;  -- stdio.h:278
    pragma Import (C, freopen, "freopen");
 
+   function fopen64 (uu_filename : Interfaces.C.Strings.chars_ptr; uu_modes : Interfaces.C.Strings.chars_ptr) return access FILE;  -- stdio.h:297
+   pragma Import (C, fopen64, "fopen64");
+
+   function freopen64
+     (uu_filename : Interfaces.C.Strings.chars_ptr;
+      uu_modes : Interfaces.C.Strings.chars_ptr;
+      uu_stream : access FILE) return access FILE;  -- stdio.h:299
+   pragma Import (C, freopen64, "freopen64");
+
   -- Create a new stream that refers to an existing system file descriptor.   
-   function fdopen (arg1 : int; arg2 : Interfaces.C.Strings.chars_ptr) return access FILE;  -- stdio.h:306
+   function fdopen (uu_fd : int; uu_modes : Interfaces.C.Strings.chars_ptr) return access FILE;  -- stdio.h:306
    pragma Import (C, fdopen, "fdopen");
 
   -- Create a new stream that refers to the given magic cookie,
   --   and uses the given functions for input and output.   
 
+   function fopencookie
+     (uu_magic_cookie : System.Address;
+      uu_modes : Interfaces.C.Strings.chars_ptr;
+      uu_io_funcs : libCUPS.libio_h.u_IO_cookie_io_functions_t) return access FILE;  -- stdio.h:312
+   pragma Import (C, fopencookie, "fopencookie");
+
   -- Create a new stream that refers to a memory buffer.   
    function fmemopen
-     (arg1 : System.Address;
-      arg2 : size_t;
-      arg3 : Interfaces.C.Strings.chars_ptr) return access FILE;  -- stdio.h:319
+     (uu_s : System.Address;
+      uu_len : size_t;
+      uu_modes : Interfaces.C.Strings.chars_ptr) return access FILE;  -- stdio.h:319
    pragma Import (C, fmemopen, "fmemopen");
 
   -- Open a stream that writes into a malloc'd buffer that is expanded as
   --   necessary.  *BUFLOC and *SIZELOC are updated with the buffer's location
   --   and the number of characters written on fflush or fclose.   
 
-   function open_memstream (arg1 : System.Address; arg2 : access size_t) return access FILE;  -- stdio.h:325
+   function open_memstream (uu_bufloc : System.Address; uu_sizeloc : access size_t) return access FILE;  -- stdio.h:325
    pragma Import (C, open_memstream, "open_memstream");
 
   -- If BUF is NULL, make STREAM unbuffered.
   --   Else make it use buffer BUF, of size BUFSIZ.   
 
-   procedure setbuf (arg1 : access FILE; arg2 : Interfaces.C.Strings.chars_ptr);  -- stdio.h:332
+   procedure setbuf (uu_stream : access FILE; uu_buf : Interfaces.C.Strings.chars_ptr);  -- stdio.h:332
    pragma Import (C, setbuf, "setbuf");
 
   -- Make STREAM use buffering mode MODE.
@@ -215,30 +243,30 @@ package libCUPS.stdio_h is
   --   else allocate an internal buffer N bytes long.   
 
    function setvbuf
-     (arg1 : access FILE;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int;
-      arg4 : size_t) return int;  -- stdio.h:336
+     (uu_stream : access FILE;
+      uu_buf : Interfaces.C.Strings.chars_ptr;
+      uu_modes : int;
+      uu_n : size_t) return int;  -- stdio.h:336
    pragma Import (C, setvbuf, "setvbuf");
 
   -- If BUF is NULL, make STREAM unbuffered.
   --   Else make it use SIZE bytes of BUF for buffering.   
 
    procedure setbuffer
-     (arg1 : access FILE;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : size_t);  -- stdio.h:343
+     (uu_stream : access FILE;
+      uu_buf : Interfaces.C.Strings.chars_ptr;
+      uu_size : size_t);  -- stdio.h:343
    pragma Import (C, setbuffer, "setbuffer");
 
   -- Make STREAM line-buffered.   
-   procedure setlinebuf (arg1 : access FILE);  -- stdio.h:347
+   procedure setlinebuf (uu_stream : access FILE);  -- stdio.h:347
    pragma Import (C, setlinebuf, "setlinebuf");
 
   -- Write formatted output to STREAM.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function fprintf (arg1 : access FILE; arg2 : Interfaces.C.Strings.chars_ptr  -- , ...
+   function fprintf (uu_stream : access FILE; uu_format : Interfaces.C.Strings.chars_ptr  -- , ...
       ) return int;  -- stdio.h:356
    pragma Import (C, fprintf, "fprintf");
 
@@ -246,12 +274,12 @@ package libCUPS.stdio_h is
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function printf (arg1 : Interfaces.C.Strings.chars_ptr  -- , ...
+   function printf (uu_format : Interfaces.C.Strings.chars_ptr  -- , ...
       ) return int;  -- stdio.h:362
    pragma Import (C, printf, "printf");
 
   -- Write formatted output to S.   
-   function sprintf (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : Interfaces.C.Strings.chars_ptr  -- , ...
+   function sprintf (uu_s : Interfaces.C.Strings.chars_ptr; uu_format : Interfaces.C.Strings.chars_ptr  -- , ...
       ) return int;  -- stdio.h:364
    pragma Import (C, sprintf, "sprintf");
 
@@ -260,51 +288,63 @@ package libCUPS.stdio_h is
   --   marked with __THROW.   
 
    function vfprintf
-     (arg1 : access FILE;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : access System.Address) return int;  -- stdio.h:371
+     (uu_s : access FILE;
+      uu_format : Interfaces.C.Strings.chars_ptr;
+      uu_arg : access System.Address) return int;  -- stdio.h:371
    pragma Import (C, vfprintf, "vfprintf");
 
   -- Write formatted output to stdout from argument list ARG.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function vprintf (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : access System.Address) return int;  -- stdio.h:377
+   function vprintf (uu_format : Interfaces.C.Strings.chars_ptr; uu_arg : access System.Address) return int;  -- stdio.h:377
    pragma Import (C, vprintf, "vprintf");
 
   -- Write formatted output to S from argument list ARG.   
    function vsprintf
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : access System.Address) return int;  -- stdio.h:379
+     (uu_s : Interfaces.C.Strings.chars_ptr;
+      uu_format : Interfaces.C.Strings.chars_ptr;
+      uu_arg : access System.Address) return int;  -- stdio.h:379
    pragma Import (C, vsprintf, "vsprintf");
 
   -- Maximum chars of output to write in MAXLEN.   
    function snprintf
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : size_t;
-      arg3 : Interfaces.C.Strings.chars_ptr  -- , ...
+     (uu_s : Interfaces.C.Strings.chars_ptr;
+      uu_maxlen : size_t;
+      uu_format : Interfaces.C.Strings.chars_ptr  -- , ...
       ) return int;  -- stdio.h:386
    pragma Import (C, snprintf, "snprintf");
 
    function vsnprintf
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : size_t;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : access System.Address) return int;  -- stdio.h:390
+     (uu_s : Interfaces.C.Strings.chars_ptr;
+      uu_maxlen : size_t;
+      uu_format : Interfaces.C.Strings.chars_ptr;
+      uu_arg : access System.Address) return int;  -- stdio.h:390
    pragma Import (C, vsnprintf, "vsnprintf");
 
   -- Write formatted output to a string dynamically allocated with `malloc'.
   --   Store the address of the string in *PTR.   
 
+   function vasprintf
+     (uu_ptr : System.Address;
+      uu_f : Interfaces.C.Strings.chars_ptr;
+      uu_arg : access System.Address) return int;  -- stdio.h:399
+   pragma Import (C, vasprintf, "vasprintf");
+
+   --  skipped func __asprintf
+
+   function asprintf (uu_ptr : System.Address; uu_fmt : Interfaces.C.Strings.chars_ptr  -- , ...
+      ) return int;  -- stdio.h:405
+   pragma Import (C, asprintf, "asprintf");
+
   -- Write formatted output to a file descriptor.   
    function vdprintf
-     (arg1 : int;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : access System.Address) return int;  -- stdio.h:412
+     (uu_fd : int;
+      uu_fmt : Interfaces.C.Strings.chars_ptr;
+      uu_arg : access System.Address) return int;  -- stdio.h:412
    pragma Import (C, vdprintf, "vdprintf");
 
-   function dprintf (arg1 : int; arg2 : Interfaces.C.Strings.chars_ptr  -- , ...
+   function dprintf (uu_fd : int; uu_fmt : Interfaces.C.Strings.chars_ptr  -- , ...
       ) return int;  -- stdio.h:415
    pragma Import (C, dprintf, "dprintf");
 
@@ -312,63 +352,63 @@ package libCUPS.stdio_h is
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
+   function fscanf (uu_stream : access FILE; uu_format : Interfaces.C.Strings.chars_ptr  -- , ...
+      ) return int;  -- stdio.h:425
+   pragma Import (C, fscanf, "fscanf");
+
   -- Read formatted input from stdin.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
+   function scanf (uu_format : Interfaces.C.Strings.chars_ptr  -- , ...
+      ) return int;  -- stdio.h:431
+   pragma Import (C, scanf, "scanf");
+
   -- Read formatted input from S.   
+   function sscanf (uu_s : Interfaces.C.Strings.chars_ptr; uu_format : Interfaces.C.Strings.chars_ptr  -- , ...
+      ) return int;  -- stdio.h:433
+   pragma Import (C, sscanf, "sscanf");
+
   -- For strict ISO C99 or POSIX compliance disallow %as, %aS and %a[
   --   GNU extension which conflicts with valid %a followed by letter
   --   s, S or [.   
-
-   function fscanf (arg1 : access FILE; arg2 : Interfaces.C.Strings.chars_ptr  -- , ...
-      ) return int;  -- stdio.h:443
-   pragma Import (C, fscanf, "__isoc99_fscanf");
-
-   function scanf (arg1 : Interfaces.C.Strings.chars_ptr  -- , ...
-      ) return int;  -- stdio.h:446
-   pragma Import (C, scanf, "__isoc99_scanf");
-
-   function sscanf (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : Interfaces.C.Strings.chars_ptr  -- , ...
-      ) return int;  -- stdio.h:448
-   pragma Import (C, sscanf, "__isoc99_sscanf");
 
   -- Read formatted input from S into argument list ARG.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
+   function vfscanf
+     (uu_s : access FILE;
+      uu_format : Interfaces.C.Strings.chars_ptr;
+      uu_arg : access System.Address) return int;  -- stdio.h:471
+   pragma Import (C, vfscanf, "vfscanf");
+
   -- Read formatted input from stdin into argument list ARG.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
+   function vscanf (uu_format : Interfaces.C.Strings.chars_ptr; uu_arg : access System.Address) return int;  -- stdio.h:479
+   pragma Import (C, vscanf, "vscanf");
+
   -- Read formatted input from S into argument list ARG.   
+   function vsscanf
+     (uu_s : Interfaces.C.Strings.chars_ptr;
+      uu_format : Interfaces.C.Strings.chars_ptr;
+      uu_arg : access System.Address) return int;  -- stdio.h:483
+   pragma Import (C, vsscanf, "vsscanf");
+
   -- For strict ISO C99 or POSIX compliance disallow %as, %aS and %a[
   --   GNU extension which conflicts with valid %a followed by letter
   --   s, S or [.   
-
-   function vfscanf
-     (arg1 : access FILE;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : access System.Address) return int;  -- stdio.h:494
-   pragma Import (C, vfscanf, "__isoc99_vfscanf");
-
-   function vscanf (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : access System.Address) return int;  -- stdio.h:499
-   pragma Import (C, vscanf, "__isoc99_vscanf");
-
-   function vsscanf
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : access System.Address) return int;  -- stdio.h:502
-   pragma Import (C, vsscanf, "__isoc99_vsscanf");
 
   -- Read a character from STREAM.
   --   These functions are possible cancellation points and therefore not
   --   marked with __THROW.   
 
-   function fgetc (arg1 : access FILE) return int;  -- stdio.h:531
+   function fgetc (uu_stream : access FILE) return int;  -- stdio.h:531
    pragma Import (C, fgetc, "fgetc");
 
-   function getc (arg1 : access FILE) return int;  -- stdio.h:532
+   function getc (uu_stream : access FILE) return int;  -- stdio.h:532
    pragma Import (C, getc, "getc");
 
   -- Read a character from stdin.
@@ -385,7 +425,7 @@ package libCUPS.stdio_h is
   --   These functions are possible cancellation points and therefore not
   --   marked with __THROW.   
 
-   function getc_unlocked (arg1 : access FILE) return int;  -- stdio.h:550
+   function getc_unlocked (uu_stream : access FILE) return int;  -- stdio.h:550
    pragma Import (C, getc_unlocked, "getc_unlocked");
 
    function getchar_unlocked return int;  -- stdio.h:551
@@ -397,7 +437,7 @@ package libCUPS.stdio_h is
   --   or due to the implementation it is a cancellation point and
   --   therefore not marked with __THROW.   
 
-   function fgetc_unlocked (arg1 : access FILE) return int;  -- stdio.h:561
+   function fgetc_unlocked (uu_stream : access FILE) return int;  -- stdio.h:561
    pragma Import (C, fgetc_unlocked, "fgetc_unlocked");
 
   -- Write a character to STREAM.
@@ -406,17 +446,17 @@ package libCUPS.stdio_h is
   --   These functions is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function fputc (arg1 : int; arg2 : access FILE) return int;  -- stdio.h:573
+   function fputc (uu_c : int; uu_stream : access FILE) return int;  -- stdio.h:573
    pragma Import (C, fputc, "fputc");
 
-   function putc (arg1 : int; arg2 : access FILE) return int;  -- stdio.h:574
+   function putc (uu_c : int; uu_stream : access FILE) return int;  -- stdio.h:574
    pragma Import (C, putc, "putc");
 
   -- Write a character to stdout.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function putchar (arg1 : int) return int;  -- stdio.h:580
+   function putchar (uu_c : int) return int;  -- stdio.h:580
    pragma Import (C, putchar, "putchar");
 
   -- The C standard explicitly says this can be a macro,
@@ -428,25 +468,25 @@ package libCUPS.stdio_h is
   --   or due to the implementation it is a cancellation point and
   --   therefore not marked with __THROW.   
 
-   function fputc_unlocked (arg1 : int; arg2 : access FILE) return int;  -- stdio.h:594
+   function fputc_unlocked (uu_c : int; uu_stream : access FILE) return int;  -- stdio.h:594
    pragma Import (C, fputc_unlocked, "fputc_unlocked");
 
   -- These are defined in POSIX.1:1996.
   --   These functions are possible cancellation points and therefore not
   --   marked with __THROW.   
 
-   function putc_unlocked (arg1 : int; arg2 : access FILE) return int;  -- stdio.h:602
+   function putc_unlocked (uu_c : int; uu_stream : access FILE) return int;  -- stdio.h:602
    pragma Import (C, putc_unlocked, "putc_unlocked");
 
-   function putchar_unlocked (arg1 : int) return int;  -- stdio.h:603
+   function putchar_unlocked (uu_c : int) return int;  -- stdio.h:603
    pragma Import (C, putchar_unlocked, "putchar_unlocked");
 
   -- Get a word (int) from STREAM.   
-   function getw (arg1 : access FILE) return int;  -- stdio.h:610
+   function getw (uu_stream : access FILE) return int;  -- stdio.h:610
    pragma Import (C, getw, "getw");
 
   -- Write a word (int) to STREAM.   
-   function putw (arg1 : int; arg2 : access FILE) return int;  -- stdio.h:613
+   function putw (uu_w : int; uu_stream : access FILE) return int;  -- stdio.h:613
    pragma Import (C, putw, "putw");
 
   -- Get a newline-terminated string of finite length from STREAM.
@@ -454,9 +494,9 @@ package libCUPS.stdio_h is
   --   marked with __THROW.   
 
    function fgets
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : int;
-      arg3 : access FILE) return Interfaces.C.Strings.chars_ptr;  -- stdio.h:622
+     (uu_s : Interfaces.C.Strings.chars_ptr;
+      uu_n : int;
+      uu_stream : access FILE) return Interfaces.C.Strings.chars_ptr;  -- stdio.h:622
    pragma Import (C, fgets, "fgets");
 
   -- Get a newline-terminated string from stdin, removing the newline.
@@ -469,7 +509,7 @@ package libCUPS.stdio_h is
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function gets (arg1 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- stdio.h:638
+   function gets (uu_s : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- stdio.h:638
    pragma Import (C, gets, "gets");
 
   -- This function does the same as `fgets' but does not lock the stream.
@@ -477,6 +517,12 @@ package libCUPS.stdio_h is
   --   cancellation point.  But due to similarity with an POSIX interface
   --   or due to the implementation it is a cancellation point and
   --   therefore not marked with __THROW.   
+
+   function fgets_unlocked
+     (uu_s : Interfaces.C.Strings.chars_ptr;
+      uu_n : int;
+      uu_stream : access FILE) return Interfaces.C.Strings.chars_ptr;  -- stdio.h:649
+   pragma Import (C, fgets_unlocked, "fgets_unlocked");
 
   -- Read up to (and including) a DELIMITER from STREAM into *LINEPTR
   --   (and null-terminate it). *LINEPTR is a pointer returned from malloc (or
@@ -491,10 +537,10 @@ package libCUPS.stdio_h is
    --  skipped func __getdelim
 
    function getdelim
-     (arg1 : System.Address;
-      arg2 : access size_t;
-      arg3 : int;
-      arg4 : access FILE) return libCUPS.bits_types_h.uu_ssize_t;  -- stdio.h:668
+     (uu_lineptr : System.Address;
+      uu_n : access size_t;
+      uu_delimiter : int;
+      uu_stream : access FILE) return libCUPS.bits_types_h.uu_ssize_t;  -- stdio.h:668
    pragma Import (C, getdelim, "getdelim");
 
   -- Like `getdelim', but reads up to a newline.
@@ -504,30 +550,30 @@ package libCUPS.stdio_h is
   --   therefore not marked with __THROW.   
 
    function getline
-     (arg1 : System.Address;
-      arg2 : access size_t;
-      arg3 : access FILE) return libCUPS.bits_types_h.uu_ssize_t;  -- stdio.h:678
+     (uu_lineptr : System.Address;
+      uu_n : access size_t;
+      uu_stream : access FILE) return libCUPS.bits_types_h.uu_ssize_t;  -- stdio.h:678
    pragma Import (C, getline, "getline");
 
   -- Write a string to STREAM.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function fputs (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : access FILE) return int;  -- stdio.h:689
+   function fputs (uu_s : Interfaces.C.Strings.chars_ptr; uu_stream : access FILE) return int;  -- stdio.h:689
    pragma Import (C, fputs, "fputs");
 
   -- Write a string, followed by a newline, to stdout.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function puts (arg1 : Interfaces.C.Strings.chars_ptr) return int;  -- stdio.h:695
+   function puts (uu_s : Interfaces.C.Strings.chars_ptr) return int;  -- stdio.h:695
    pragma Import (C, puts, "puts");
 
   -- Push a character back onto the input buffer of STREAM.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function ungetc (arg1 : int; arg2 : access FILE) return int;  -- stdio.h:702
+   function ungetc (uu_c : int; uu_stream : access FILE) return int;  -- stdio.h:702
    pragma Import (C, ungetc, "ungetc");
 
   -- Read chunks of generic data from STREAM.
@@ -535,10 +581,10 @@ package libCUPS.stdio_h is
   --   marked with __THROW.   
 
    function fread
-     (arg1 : System.Address;
-      arg2 : size_t;
-      arg3 : size_t;
-      arg4 : access FILE) return size_t;  -- stdio.h:709
+     (uu_ptr : System.Address;
+      uu_size : size_t;
+      uu_n : size_t;
+      uu_stream : access FILE) return size_t;  -- stdio.h:709
    pragma Import (C, fread, "fread");
 
   -- Write chunks of generic data to STREAM.
@@ -546,10 +592,10 @@ package libCUPS.stdio_h is
   --   marked with __THROW.   
 
    function fwrite
-     (arg1 : System.Address;
-      arg2 : size_t;
-      arg3 : size_t;
-      arg4 : access FILE) return size_t;  -- stdio.h:715
+     (uu_ptr : System.Address;
+      uu_size : size_t;
+      uu_n : size_t;
+      uu_s : access FILE) return size_t;  -- stdio.h:715
    pragma Import (C, fwrite, "fwrite");
 
   -- This function does the same as `fputs' but does not lock the stream.
@@ -558,6 +604,9 @@ package libCUPS.stdio_h is
   --   or due to the implementation it is a cancellation point and
   --   therefore not marked with __THROW.   
 
+   function fputs_unlocked (uu_s : Interfaces.C.Strings.chars_ptr; uu_stream : access FILE) return int;  -- stdio.h:726
+   pragma Import (C, fputs_unlocked, "fputs_unlocked");
+
   -- Faster versions when locking is not necessary.
   --   These functions are not part of POSIX and therefore no official
   --   cancellation point.  But due to similarity with an POSIX interface
@@ -565,17 +614,17 @@ package libCUPS.stdio_h is
   --   therefore not marked with __THROW.   
 
    function fread_unlocked
-     (arg1 : System.Address;
-      arg2 : size_t;
-      arg3 : size_t;
-      arg4 : access FILE) return size_t;  -- stdio.h:737
+     (uu_ptr : System.Address;
+      uu_size : size_t;
+      uu_n : size_t;
+      uu_stream : access FILE) return size_t;  -- stdio.h:737
    pragma Import (C, fread_unlocked, "fread_unlocked");
 
    function fwrite_unlocked
-     (arg1 : System.Address;
-      arg2 : size_t;
-      arg3 : size_t;
-      arg4 : access FILE) return size_t;  -- stdio.h:739
+     (uu_ptr : System.Address;
+      uu_size : size_t;
+      uu_n : size_t;
+      uu_stream : access FILE) return size_t;  -- stdio.h:739
    pragma Import (C, fwrite_unlocked, "fwrite_unlocked");
 
   -- Seek to a certain position on STREAM.
@@ -583,23 +632,23 @@ package libCUPS.stdio_h is
   --   marked with __THROW.   
 
    function fseek
-     (arg1 : access FILE;
-      arg2 : long;
-      arg3 : int) return int;  -- stdio.h:749
+     (uu_stream : access FILE;
+      uu_off : long;
+      uu_whence : int) return int;  -- stdio.h:749
    pragma Import (C, fseek, "fseek");
 
   -- Return the current position of STREAM.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function ftell (arg1 : access FILE) return long;  -- stdio.h:754
+   function ftell (uu_stream : access FILE) return long;  -- stdio.h:754
    pragma Import (C, ftell, "ftell");
 
   -- Rewind to the beginning of STREAM.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   procedure rewind (arg1 : access FILE);  -- stdio.h:759
+   procedure rewind (uu_stream : access FILE);  -- stdio.h:759
    pragma Import (C, rewind, "rewind");
 
   -- The Single Unix Specification, Version 2, specifies an alternative,
@@ -612,59 +661,74 @@ package libCUPS.stdio_h is
   --   marked with __THROW.   
 
    function fseeko
-     (arg1 : access FILE;
-      arg2 : libCUPS.bits_types_h.uu_off_t;
-      arg3 : int) return int;  -- stdio.h:773
+     (uu_stream : access FILE;
+      uu_off : libCUPS.bits_types_h.uu_off_t;
+      uu_whence : int) return int;  -- stdio.h:773
    pragma Import (C, fseeko, "fseeko");
 
   -- Return the current position of STREAM.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function ftello (arg1 : access FILE) return libCUPS.bits_types_h.uu_off_t;  -- stdio.h:778
+   function ftello (uu_stream : access FILE) return libCUPS.bits_types_h.uu_off_t;  -- stdio.h:778
    pragma Import (C, ftello, "ftello");
 
   -- Get STREAM's position.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function fgetpos (arg1 : access FILE; arg2 : access fpos_t) return int;  -- stdio.h:798
+   function fgetpos (uu_stream : access FILE; uu_pos : access fpos_t) return int;  -- stdio.h:798
    pragma Import (C, fgetpos, "fgetpos");
 
   -- Set STREAM's position.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function fsetpos (arg1 : access FILE; arg2 : access constant fpos_t) return int;  -- stdio.h:803
+   function fsetpos (uu_stream : access FILE; uu_pos : access constant fpos_t) return int;  -- stdio.h:803
    pragma Import (C, fsetpos, "fsetpos");
 
+   function fseeko64
+     (uu_stream : access FILE;
+      uu_off : libCUPS.bits_types_h.uu_off64_t;
+      uu_whence : int) return int;  -- stdio.h:818
+   pragma Import (C, fseeko64, "fseeko64");
+
+   function ftello64 (uu_stream : access FILE) return libCUPS.bits_types_h.uu_off64_t;  -- stdio.h:819
+   pragma Import (C, ftello64, "ftello64");
+
+   function fgetpos64 (uu_stream : access FILE; uu_pos : access fpos64_t) return int;  -- stdio.h:820
+   pragma Import (C, fgetpos64, "fgetpos64");
+
+   function fsetpos64 (uu_stream : access FILE; uu_pos : access constant fpos64_t) return int;  -- stdio.h:821
+   pragma Import (C, fsetpos64, "fsetpos64");
+
   -- Clear the error and EOF indicators for STREAM.   
-   procedure clearerr (arg1 : access FILE);  -- stdio.h:826
+   procedure clearerr (uu_stream : access FILE);  -- stdio.h:826
    pragma Import (C, clearerr, "clearerr");
 
   -- Return the EOF indicator for STREAM.   
-   function feof (arg1 : access FILE) return int;  -- stdio.h:828
+   function feof (uu_stream : access FILE) return int;  -- stdio.h:828
    pragma Import (C, feof, "feof");
 
   -- Return the error indicator for STREAM.   
-   function ferror (arg1 : access FILE) return int;  -- stdio.h:830
+   function ferror (uu_stream : access FILE) return int;  -- stdio.h:830
    pragma Import (C, ferror, "ferror");
 
   -- Faster versions when locking is not required.   
-   procedure clearerr_unlocked (arg1 : access FILE);  -- stdio.h:835
+   procedure clearerr_unlocked (uu_stream : access FILE);  -- stdio.h:835
    pragma Import (C, clearerr_unlocked, "clearerr_unlocked");
 
-   function feof_unlocked (arg1 : access FILE) return int;  -- stdio.h:836
+   function feof_unlocked (uu_stream : access FILE) return int;  -- stdio.h:836
    pragma Import (C, feof_unlocked, "feof_unlocked");
 
-   function ferror_unlocked (arg1 : access FILE) return int;  -- stdio.h:837
+   function ferror_unlocked (uu_stream : access FILE) return int;  -- stdio.h:837
    pragma Import (C, ferror_unlocked, "ferror_unlocked");
 
   -- Print a message describing the meaning of the value of errno.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   procedure perror (arg1 : Interfaces.C.Strings.chars_ptr);  -- stdio.h:846
+   procedure perror (uu_s : Interfaces.C.Strings.chars_ptr);  -- stdio.h:846
    pragma Import (C, perror, "perror");
 
   -- Provide the declarations for `sys_errlist' and `sys_nerr' if they
@@ -673,47 +737,62 @@ package libCUPS.stdio_h is
   --   all the necessary functionality.   
 
   -- Return the system file descriptor for STREAM.   
-   function fileno (arg1 : access FILE) return int;  -- stdio.h:858
+   function fileno (uu_stream : access FILE) return int;  -- stdio.h:858
    pragma Import (C, fileno, "fileno");
 
   -- Faster version when locking is not required.   
-   function fileno_unlocked (arg1 : access FILE) return int;  -- stdio.h:863
+   function fileno_unlocked (uu_stream : access FILE) return int;  -- stdio.h:863
    pragma Import (C, fileno_unlocked, "fileno_unlocked");
 
   -- Create a new stream connected to a pipe running the given command.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function popen (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : Interfaces.C.Strings.chars_ptr) return access FILE;  -- stdio.h:872
+   function popen (uu_command : Interfaces.C.Strings.chars_ptr; uu_modes : Interfaces.C.Strings.chars_ptr) return access FILE;  -- stdio.h:872
    pragma Import (C, popen, "popen");
 
   -- Close a stream opened by popen and return the status of its child.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function pclose (arg1 : access FILE) return int;  -- stdio.h:878
+   function pclose (uu_stream : access FILE) return int;  -- stdio.h:878
    pragma Import (C, pclose, "pclose");
 
   -- Return the name of the controlling terminal.   
-   function ctermid (arg1 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- stdio.h:884
+   function ctermid (uu_s : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- stdio.h:884
    pragma Import (C, ctermid, "ctermid");
 
   -- Return the name of the current user.   
+   function cuserid (uu_s : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- stdio.h:890
+   pragma Import (C, cuserid, "cuserid");
+
   -- See <obstack.h>.   
+   --  skipped empty struct obstack
+
   -- Write formatted output to an obstack.   
+   function obstack_printf (uu_obstack : System.Address; uu_format : Interfaces.C.Strings.chars_ptr  -- , ...
+      ) return int;  -- stdio.h:898
+   pragma Import (C, obstack_printf, "obstack_printf");
+
+   function obstack_vprintf
+     (uu_obstack : System.Address;
+      uu_format : Interfaces.C.Strings.chars_ptr;
+      uu_args : access System.Address) return int;  -- stdio.h:901
+   pragma Import (C, obstack_vprintf, "obstack_vprintf");
+
   -- These are defined in POSIX.1:1996.   
   -- Acquire ownership of STREAM.   
-   procedure flockfile (arg1 : access FILE);  -- stdio.h:912
+   procedure flockfile (uu_stream : access FILE);  -- stdio.h:912
    pragma Import (C, flockfile, "flockfile");
 
   -- Try to acquire ownership of STREAM but do not block if it is not
   --   possible.   
 
-   function ftrylockfile (arg1 : access FILE) return int;  -- stdio.h:916
+   function ftrylockfile (uu_stream : access FILE) return int;  -- stdio.h:916
    pragma Import (C, ftrylockfile, "ftrylockfile");
 
   -- Relinquish the ownership granted for STREAM.   
-   procedure funlockfile (arg1 : access FILE);  -- stdio.h:919
+   procedure funlockfile (uu_stream : access FILE);  -- stdio.h:919
    pragma Import (C, funlockfile, "funlockfile");
 
   -- The X/Open standard requires some functions and variables to be

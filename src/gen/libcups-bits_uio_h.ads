@@ -4,6 +4,9 @@ pragma Style_Checks (Off);
 with Interfaces.C; use Interfaces.C;
 with System;
 
+with libCUPS.sys_types_h;
+with libCUPS.stdio_h;
+with Interfaces.C_Streams;
 
 package libCUPS.bits_uio_h is
 
@@ -44,5 +47,23 @@ package libCUPS.bits_uio_h is
 
   -- Length of data.   
   -- Read from another process' address space.   
+   function process_vm_readv
+     (uu_pid : libCUPS.sys_types_h.pid_t;
+      uu_lvec : access constant iovec;
+      uu_liovcnt : unsigned_long;
+      uu_rvec : access constant iovec;
+      uu_riovcnt : unsigned_long;
+      uu_flags : unsigned_long) return size_t;  -- bits/uio.h:59
+   pragma Import (C, process_vm_readv, "process_vm_readv");
+
   -- Write to another process' address space.   
+   function process_vm_writev
+     (uu_pid : libCUPS.sys_types_h.pid_t;
+      uu_lvec : access constant iovec;
+      uu_liovcnt : unsigned_long;
+      uu_rvec : access constant iovec;
+      uu_riovcnt : unsigned_long;
+      uu_flags : unsigned_long) return size_t;  -- bits/uio.h:67
+   pragma Import (C, process_vm_writev, "process_vm_writev");
+
 end libCUPS.bits_uio_h;

@@ -305,30 +305,30 @@ package libCUPS.cups_raster_h is
   --*** Version 1 page header @deprecated@ *** 
   --*** Standard Page Device Dictionary String Values *** 
   -- MediaClass string  
-   subtype anon3970_MediaClass_array is Interfaces.C.char_array (0 .. 63);
-   subtype anon3970_MediaColor_array is Interfaces.C.char_array (0 .. 63);
-   subtype anon3970_MediaType_array is Interfaces.C.char_array (0 .. 63);
-   subtype anon3970_OutputType_array is Interfaces.C.char_array (0 .. 63);
-   type anon3970_HWResolution_array is array (0 .. 1) of aliased unsigned;
-   type anon3970_ImagingBoundingBox_array is array (0 .. 3) of aliased unsigned;
-   type anon3970_Margins_array is array (0 .. 1) of aliased unsigned;
-   type anon3970_PageSize_array is array (0 .. 1) of aliased unsigned;
+   subtype cups_page_header_s_MediaClass_array is Interfaces.C.char_array (0 .. 63);
+   subtype cups_page_header_s_MediaColor_array is Interfaces.C.char_array (0 .. 63);
+   subtype cups_page_header_s_MediaType_array is Interfaces.C.char_array (0 .. 63);
+   subtype cups_page_header_s_OutputType_array is Interfaces.C.char_array (0 .. 63);
+   type cups_page_header_s_HWResolution_array is array (0 .. 1) of aliased unsigned;
+   type cups_page_header_s_ImagingBoundingBox_array is array (0 .. 3) of aliased unsigned;
+   type cups_page_header_s_Margins_array is array (0 .. 1) of aliased unsigned;
+   type cups_page_header_s_PageSize_array is array (0 .. 1) of aliased unsigned;
    type cups_page_header_s is record
-      MediaClass : aliased anon3970_MediaClass_array;  -- cups/raster.h:223
-      MediaColor : aliased anon3970_MediaColor_array;  -- cups/raster.h:224
-      MediaType : aliased anon3970_MediaType_array;  -- cups/raster.h:225
-      OutputType : aliased anon3970_OutputType_array;  -- cups/raster.h:226
+      MediaClass : aliased cups_page_header_s_MediaClass_array;  -- cups/raster.h:223
+      MediaColor : aliased cups_page_header_s_MediaColor_array;  -- cups/raster.h:224
+      MediaType : aliased cups_page_header_s_MediaType_array;  -- cups/raster.h:225
+      OutputType : aliased cups_page_header_s_OutputType_array;  -- cups/raster.h:226
       AdvanceDistance : aliased unsigned;  -- cups/raster.h:229
       AdvanceMedia : aliased cups_adv_t;  -- cups/raster.h:230
       Collate : aliased cups_bool_t;  -- cups/raster.h:231
       CutMedia : aliased cups_cut_t;  -- cups/raster.h:232
       Duplex : aliased cups_bool_t;  -- cups/raster.h:233
-      HWResolution : aliased anon3970_HWResolution_array;  -- cups/raster.h:234
-      ImagingBoundingBox : aliased anon3970_ImagingBoundingBox_array;  -- cups/raster.h:235
+      HWResolution : aliased cups_page_header_s_HWResolution_array;  -- cups/raster.h:234
+      ImagingBoundingBox : aliased cups_page_header_s_ImagingBoundingBox_array;  -- cups/raster.h:235
       InsertSheet : aliased cups_bool_t;  -- cups/raster.h:236
       Jog : aliased cups_jog_t;  -- cups/raster.h:237
       LeadingEdge : aliased cups_edge_t;  -- cups/raster.h:238
-      Margins : aliased anon3970_Margins_array;  -- cups/raster.h:239
+      Margins : aliased cups_page_header_s_Margins_array;  -- cups/raster.h:239
       ManualFeed : aliased cups_bool_t;  -- cups/raster.h:240
       MediaPosition : aliased unsigned;  -- cups/raster.h:241
       MediaWeight : aliased unsigned;  -- cups/raster.h:242
@@ -337,7 +337,7 @@ package libCUPS.cups_raster_h is
       NumCopies : aliased unsigned;  -- cups/raster.h:245
       Orientation : aliased cups_orient_t;  -- cups/raster.h:246
       OutputFaceUp : aliased cups_bool_t;  -- cups/raster.h:247
-      PageSize : aliased anon3970_PageSize_array;  -- cups/raster.h:248
+      PageSize : aliased cups_page_header_s_PageSize_array;  -- cups/raster.h:248
       Separations : aliased cups_bool_t;  -- cups/raster.h:249
       TraySwitch : aliased cups_bool_t;  -- cups/raster.h:250
       Tumble : aliased cups_bool_t;  -- cups/raster.h:251
@@ -402,38 +402,38 @@ package libCUPS.cups_raster_h is
   --*** Version 2 page header @since CUPS 1.2/OS X 10.5@ *** 
   --*** Standard Page Device Dictionary String Values *** 
   -- MediaClass string  
-   subtype anon3988_MediaClass_array is Interfaces.C.char_array (0 .. 63);
-   subtype anon3988_MediaColor_array is Interfaces.C.char_array (0 .. 63);
-   subtype anon3988_MediaType_array is Interfaces.C.char_array (0 .. 63);
-   subtype anon3988_OutputType_array is Interfaces.C.char_array (0 .. 63);
-   type anon3988_HWResolution_array is array (0 .. 1) of aliased unsigned;
-   type anon3988_ImagingBoundingBox_array is array (0 .. 3) of aliased unsigned;
-   type anon3988_Margins_array is array (0 .. 1) of aliased unsigned;
-   type anon3988_PageSize_array is array (0 .. 1) of aliased unsigned;
-   type anon3988_cupsPageSize_array is array (0 .. 1) of aliased float;
-   type anon3988_cupsImagingBBox_array is array (0 .. 3) of aliased float;
-   type anon3988_cupsInteger_array is array (0 .. 15) of aliased unsigned;
-   type anon3988_cupsReal_array is array (0 .. 15) of aliased float;
-   type anon3988_cupsString_array is array (0 .. 15, 0 .. 63) of aliased char;
-   subtype anon3988_cupsMarkerType_array is Interfaces.C.char_array (0 .. 63);
-   subtype anon3988_cupsRenderingIntent_array is Interfaces.C.char_array (0 .. 63);
-   subtype anon3988_cupsPageSizeName_array is Interfaces.C.char_array (0 .. 63);
+   subtype cups_page_header2_s_MediaClass_array is Interfaces.C.char_array (0 .. 63);
+   subtype cups_page_header2_s_MediaColor_array is Interfaces.C.char_array (0 .. 63);
+   subtype cups_page_header2_s_MediaType_array is Interfaces.C.char_array (0 .. 63);
+   subtype cups_page_header2_s_OutputType_array is Interfaces.C.char_array (0 .. 63);
+   type cups_page_header2_s_HWResolution_array is array (0 .. 1) of aliased unsigned;
+   type cups_page_header2_s_ImagingBoundingBox_array is array (0 .. 3) of aliased unsigned;
+   type cups_page_header2_s_Margins_array is array (0 .. 1) of aliased unsigned;
+   type cups_page_header2_s_PageSize_array is array (0 .. 1) of aliased unsigned;
+   type cups_page_header2_s_cupsPageSize_array is array (0 .. 1) of aliased float;
+   type cups_page_header2_s_cupsImagingBBox_array is array (0 .. 3) of aliased float;
+   type cups_page_header2_s_cupsInteger_array is array (0 .. 15) of aliased unsigned;
+   type cups_page_header2_s_cupsReal_array is array (0 .. 15) of aliased float;
+   type cups_page_header2_s_cupsString_array is array (0 .. 15, 0 .. 63) of aliased char;
+   subtype cups_page_header2_s_cupsMarkerType_array is Interfaces.C.char_array (0 .. 63);
+   subtype cups_page_header2_s_cupsRenderingIntent_array is Interfaces.C.char_array (0 .. 63);
+   subtype cups_page_header2_s_cupsPageSizeName_array is Interfaces.C.char_array (0 .. 63);
    type cups_page_header2_s is record
-      MediaClass : aliased anon3988_MediaClass_array;  -- cups/raster.h:272
-      MediaColor : aliased anon3988_MediaColor_array;  -- cups/raster.h:273
-      MediaType : aliased anon3988_MediaType_array;  -- cups/raster.h:274
-      OutputType : aliased anon3988_OutputType_array;  -- cups/raster.h:275
+      MediaClass : aliased cups_page_header2_s_MediaClass_array;  -- cups/raster.h:272
+      MediaColor : aliased cups_page_header2_s_MediaColor_array;  -- cups/raster.h:273
+      MediaType : aliased cups_page_header2_s_MediaType_array;  -- cups/raster.h:274
+      OutputType : aliased cups_page_header2_s_OutputType_array;  -- cups/raster.h:275
       AdvanceDistance : aliased unsigned;  -- cups/raster.h:278
       AdvanceMedia : aliased cups_adv_t;  -- cups/raster.h:279
       Collate : aliased cups_bool_t;  -- cups/raster.h:280
       CutMedia : aliased cups_cut_t;  -- cups/raster.h:281
       Duplex : aliased cups_bool_t;  -- cups/raster.h:282
-      HWResolution : aliased anon3988_HWResolution_array;  -- cups/raster.h:283
-      ImagingBoundingBox : aliased anon3988_ImagingBoundingBox_array;  -- cups/raster.h:284
+      HWResolution : aliased cups_page_header2_s_HWResolution_array;  -- cups/raster.h:283
+      ImagingBoundingBox : aliased cups_page_header2_s_ImagingBoundingBox_array;  -- cups/raster.h:284
       InsertSheet : aliased cups_bool_t;  -- cups/raster.h:285
       Jog : aliased cups_jog_t;  -- cups/raster.h:286
       LeadingEdge : aliased cups_edge_t;  -- cups/raster.h:287
-      Margins : aliased anon3988_Margins_array;  -- cups/raster.h:288
+      Margins : aliased cups_page_header2_s_Margins_array;  -- cups/raster.h:288
       ManualFeed : aliased cups_bool_t;  -- cups/raster.h:289
       MediaPosition : aliased unsigned;  -- cups/raster.h:290
       MediaWeight : aliased unsigned;  -- cups/raster.h:291
@@ -442,7 +442,7 @@ package libCUPS.cups_raster_h is
       NumCopies : aliased unsigned;  -- cups/raster.h:294
       Orientation : aliased cups_orient_t;  -- cups/raster.h:295
       OutputFaceUp : aliased cups_bool_t;  -- cups/raster.h:296
-      PageSize : aliased anon3988_PageSize_array;  -- cups/raster.h:297
+      PageSize : aliased cups_page_header2_s_PageSize_array;  -- cups/raster.h:297
       Separations : aliased cups_bool_t;  -- cups/raster.h:298
       TraySwitch : aliased cups_bool_t;  -- cups/raster.h:299
       Tumble : aliased cups_bool_t;  -- cups/raster.h:300
@@ -460,14 +460,14 @@ package libCUPS.cups_raster_h is
       cupsRowStep : aliased unsigned;  -- cups/raster.h:314
       cupsNumColors : aliased unsigned;  -- cups/raster.h:317
       cupsBorderlessScalingFactor : aliased float;  -- cups/raster.h:318
-      cupsPageSize : aliased anon3988_cupsPageSize_array;  -- cups/raster.h:320
-      cupsImagingBBox : aliased anon3988_cupsImagingBBox_array;  -- cups/raster.h:322
-      cupsInteger : aliased anon3988_cupsInteger_array;  -- cups/raster.h:325
-      cupsReal : aliased anon3988_cupsReal_array;  -- cups/raster.h:326
-      cupsString : aliased anon3988_cupsString_array;  -- cups/raster.h:327
-      cupsMarkerType : aliased anon3988_cupsMarkerType_array;  -- cups/raster.h:328
-      cupsRenderingIntent : aliased anon3988_cupsRenderingIntent_array;  -- cups/raster.h:329
-      cupsPageSizeName : aliased anon3988_cupsPageSizeName_array;  -- cups/raster.h:330
+      cupsPageSize : aliased cups_page_header2_s_cupsPageSize_array;  -- cups/raster.h:320
+      cupsImagingBBox : aliased cups_page_header2_s_cupsImagingBBox_array;  -- cups/raster.h:322
+      cupsInteger : aliased cups_page_header2_s_cupsInteger_array;  -- cups/raster.h:325
+      cupsReal : aliased cups_page_header2_s_cupsReal_array;  -- cups/raster.h:326
+      cupsString : aliased cups_page_header2_s_cupsString_array;  -- cups/raster.h:327
+      cupsMarkerType : aliased cups_page_header2_s_cupsMarkerType_array;  -- cups/raster.h:328
+      cupsRenderingIntent : aliased cups_page_header2_s_cupsRenderingIntent_array;  -- cups/raster.h:329
+      cupsPageSizeName : aliased cups_page_header2_s_cupsPageSizeName_array;  -- cups/raster.h:330
    end record;
    pragma Convention (C_Pass_By_Copy, cups_page_header2_s);  -- cups/raster.h:269
 
@@ -571,43 +571,43 @@ package libCUPS.cups_raster_h is
   -- * Prototypes...
   --  
 
-   procedure cupsRasterClose (arg1 : System.Address);  -- cups/raster.h:368
+   procedure cupsRasterClose (r : System.Address);  -- cups/raster.h:368
    pragma Import (C, cupsRasterClose, "cupsRasterClose");
 
-   function cupsRasterOpen (arg1 : int; arg2 : cups_mode_t) return System.Address;  -- cups/raster.h:369
+   function cupsRasterOpen (fd : int; mode : cups_mode_t) return System.Address;  -- cups/raster.h:369
    pragma Import (C, cupsRasterOpen, "cupsRasterOpen");
 
-   function cupsRasterReadHeader (arg1 : System.Address; arg2 : access cups_page_header_t) return unsigned;  -- cups/raster.h:370
+   function cupsRasterReadHeader (r : System.Address; h : access cups_page_header_t) return unsigned;  -- cups/raster.h:370
    pragma Import (C, cupsRasterReadHeader, "cupsRasterReadHeader");
 
    function cupsRasterReadPixels
-     (arg1 : System.Address;
-      arg2 : access unsigned_char;
-      arg3 : unsigned) return unsigned;  -- cups/raster.h:372
+     (r : System.Address;
+      p : access unsigned_char;
+      len : unsigned) return unsigned;  -- cups/raster.h:372
    pragma Import (C, cupsRasterReadPixels, "cupsRasterReadPixels");
 
-   function cupsRasterWriteHeader (arg1 : System.Address; arg2 : access cups_page_header_t) return unsigned;  -- cups/raster.h:374
+   function cupsRasterWriteHeader (r : System.Address; h : access cups_page_header_t) return unsigned;  -- cups/raster.h:374
    pragma Import (C, cupsRasterWriteHeader, "cupsRasterWriteHeader");
 
    function cupsRasterWritePixels
-     (arg1 : System.Address;
-      arg2 : access unsigned_char;
-      arg3 : unsigned) return unsigned;  -- cups/raster.h:376
+     (r : System.Address;
+      p : access unsigned_char;
+      len : unsigned) return unsigned;  -- cups/raster.h:376
    pragma Import (C, cupsRasterWritePixels, "cupsRasterWritePixels");
 
   --*** New in CUPS 1.2 *** 
    function cupsRasterInterpretPPD
-     (arg1 : access cups_page_header2_t;
-      arg2 : access libCUPS.cups_ppd_h.ppd_file_t;
-      arg3 : int;
-      arg4 : access libCUPS.cups_cups_h.cups_option_t;
-      arg5 : cups_interpret_cb_t) return int;  -- cups/raster.h:380
+     (h : access cups_page_header2_t;
+      ppd : access libCUPS.cups_ppd_h.ppd_file_t;
+      num_options : int;
+      options : access libCUPS.cups_cups_h.cups_option_t;
+      func : cups_interpret_cb_t) return int;  -- cups/raster.h:380
    pragma Import (C, cupsRasterInterpretPPD, "cupsRasterInterpretPPD");
 
-   function cupsRasterReadHeader2 (arg1 : System.Address; arg2 : access cups_page_header2_t) return unsigned;  -- cups/raster.h:385
+   function cupsRasterReadHeader2 (r : System.Address; h : access cups_page_header2_t) return unsigned;  -- cups/raster.h:385
    pragma Import (C, cupsRasterReadHeader2, "cupsRasterReadHeader2");
 
-   function cupsRasterWriteHeader2 (arg1 : System.Address; arg2 : access cups_page_header2_t) return unsigned;  -- cups/raster.h:387
+   function cupsRasterWriteHeader2 (r : System.Address; h : access cups_page_header2_t) return unsigned;  -- cups/raster.h:387
    pragma Import (C, cupsRasterWriteHeader2, "cupsRasterWriteHeader2");
 
   --*** New in CUPS 1.3 *** 
@@ -616,9 +616,9 @@ package libCUPS.cups_raster_h is
 
   --*** New in CUPS 1.5 *** 
    function cupsRasterOpenIO
-     (arg1 : cups_raster_iocb_t;
-      arg2 : System.Address;
-      arg3 : cups_mode_t) return System.Address;  -- cups/raster.h:394
+     (iocb : cups_raster_iocb_t;
+      ctx : System.Address;
+      mode : cups_mode_t) return System.Address;  -- cups/raster.h:394
    pragma Import (C, cupsRasterOpenIO, "cupsRasterOpenIO");
 
   -- * End of "$Id: raster.h 4027 2012-11-16 01:00:05Z msweet $".

@@ -124,6 +124,8 @@ package libCUPS.bits_types_h is
    end record;
    pragma Convention (C_Pass_By_Copy, uu_fsid_t);  -- bits/types.h:134
 
+   --  skipped anonymous struct anon_0
+
   -- Type of CPU usage counts.   
    subtype uu_clock_t is long;  -- bits/types.h:135
 

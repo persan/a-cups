@@ -40,9 +40,9 @@ package libCUPS.cups_dir_h is
 
   --*** Directory entry type *** 
   -- File name  
-   subtype anon3727_filename_array is Interfaces.C.char_array (0 .. 259);
+   subtype cups_dentry_s_filename_array is Interfaces.C.char_array (0 .. 259);
    type cups_dentry_s is record
-      filename : aliased anon3727_filename_array;  -- cups/dir.h:47
+      filename : aliased cups_dentry_s_filename_array;  -- cups/dir.h:47
       fileinfo : aliased libCUPS.bits_stat_h.stat;  -- cups/dir.h:48
    end record;
    pragma Convention (C_Pass_By_Copy, cups_dentry_s);  -- cups/dir.h:45
@@ -53,16 +53,16 @@ package libCUPS.cups_dir_h is
   -- * Prototypes...
   --  
 
-   procedure cupsDirClose (arg1 : System.Address);  -- cups/dir.h:56
+   procedure cupsDirClose (dp : System.Address);  -- cups/dir.h:56
    pragma Import (C, cupsDirClose, "cupsDirClose");
 
-   function cupsDirOpen (arg1 : Interfaces.C.Strings.chars_ptr) return System.Address;  -- cups/dir.h:57
+   function cupsDirOpen (directory : Interfaces.C.Strings.chars_ptr) return System.Address;  -- cups/dir.h:57
    pragma Import (C, cupsDirOpen, "cupsDirOpen");
 
-   function cupsDirRead (arg1 : System.Address) return access cups_dentry_t;  -- cups/dir.h:58
+   function cupsDirRead (dp : System.Address) return access cups_dentry_t;  -- cups/dir.h:58
    pragma Import (C, cupsDirRead, "cupsDirRead");
 
-   procedure cupsDirRewind (arg1 : System.Address);  -- cups/dir.h:59
+   procedure cupsDirRewind (dp : System.Address);  -- cups/dir.h:59
    pragma Import (C, cupsDirRewind, "cupsDirRewind");
 
   -- * End of "$Id: dir.h 10996 2013-05-29 11:51:34Z msweet $".

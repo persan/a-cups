@@ -60,29 +60,29 @@ package libCUPS.cups_transcode_h is
   --  
 
    function cupsCharsetToUTF8
-     (arg1 : access cups_utf8_t;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int;
-      arg4 : libCUPS.cups_language_h.cups_encoding_t) return int;  -- cups/transcode.h:57
+     (dest : access cups_utf8_t;
+      src : Interfaces.C.Strings.chars_ptr;
+      maxout : int;
+      encoding : libCUPS.cups_language_h.cups_encoding_t) return int;  -- cups/transcode.h:57
    pragma Import (C, cupsCharsetToUTF8, "cupsCharsetToUTF8");
 
    function cupsUTF8ToCharset
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : access cups_utf8_t;
-      arg3 : int;
-      arg4 : libCUPS.cups_language_h.cups_encoding_t) return int;  -- cups/transcode.h:61
+     (dest : Interfaces.C.Strings.chars_ptr;
+      src : access cups_utf8_t;
+      maxout : int;
+      encoding : libCUPS.cups_language_h.cups_encoding_t) return int;  -- cups/transcode.h:61
    pragma Import (C, cupsUTF8ToCharset, "cupsUTF8ToCharset");
 
    function cupsUTF8ToUTF32
-     (arg1 : access cups_utf32_t;
-      arg2 : access cups_utf8_t;
-      arg3 : int) return int;  -- cups/transcode.h:65
+     (dest : access cups_utf32_t;
+      src : access cups_utf8_t;
+      maxout : int) return int;  -- cups/transcode.h:65
    pragma Import (C, cupsUTF8ToUTF32, "cupsUTF8ToUTF32");
 
    function cupsUTF32ToUTF8
-     (arg1 : access cups_utf8_t;
-      arg2 : access cups_utf32_t;
-      arg3 : int) return int;  -- cups/transcode.h:68
+     (dest : access cups_utf8_t;
+      src : access cups_utf32_t;
+      maxout : int) return int;  -- cups/transcode.h:68
    pragma Import (C, cupsUTF32ToUTF8, "cupsUTF32ToUTF8");
 
   -- * End of "$Id: transcode.h 10996 2013-05-29 11:51:34Z msweet $"

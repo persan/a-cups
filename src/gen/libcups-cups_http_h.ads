@@ -496,7 +496,7 @@ package libCUPS.cups_http_h is
   --					 *** 
 
   -- Base structure for family value  
-   subtype anon2846_pad_array is Interfaces.C.char_array (0 .. 255);
+   subtype u_http_addr_u_pad_array is Interfaces.C.char_array (0 .. 255);
    type u_http_addr_u (discr : unsigned := 0) is record
       case discr is
          when 0 =>
@@ -508,7 +508,7 @@ package libCUPS.cups_http_h is
          when 3 =>
             un : aliased libCUPS.sys_un_h.sockaddr_un;  -- cups/http.h:423
          when others =>
-            pad : aliased anon2846_pad_array;  -- cups/http.h:425
+            pad : aliased u_http_addr_u_pad_array;  -- cups/http.h:425
       end case;
    end record;
    pragma Convention (C_Pass_By_Copy, u_http_addr_u);
@@ -559,132 +559,132 @@ package libCUPS.cups_http_h is
   -- * Prototypes...
   --  
 
-   procedure httpBlocking (arg1 : System.Address; arg2 : int);  -- cups/http.h:455
+   procedure httpBlocking (http : System.Address; b : int);  -- cups/http.h:455
    pragma Import (C, httpBlocking, "httpBlocking");
 
-   function httpCheck (arg1 : System.Address) return int;  -- cups/http.h:456
+   function httpCheck (http : System.Address) return int;  -- cups/http.h:456
    pragma Import (C, httpCheck, "httpCheck");
 
-   procedure httpClearFields (arg1 : System.Address);  -- cups/http.h:457
+   procedure httpClearFields (http : System.Address);  -- cups/http.h:457
    pragma Import (C, httpClearFields, "httpClearFields");
 
-   procedure httpClose (arg1 : System.Address);  -- cups/http.h:458
+   procedure httpClose (http : System.Address);  -- cups/http.h:458
    pragma Import (C, httpClose, "httpClose");
 
-   function httpConnect (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : int) return System.Address;  -- cups/http.h:459
+   function httpConnect (host : Interfaces.C.Strings.chars_ptr; port : int) return System.Address;  -- cups/http.h:459
    pragma Import (C, httpConnect, "httpConnect");
 
    function httpConnectEncrypt
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : int;
-      arg3 : http_encryption_t) return System.Address;  -- cups/http.h:461
+     (host : Interfaces.C.Strings.chars_ptr;
+      port : int;
+      encryption : http_encryption_t) return System.Address;  -- cups/http.h:461
    pragma Import (C, httpConnectEncrypt, "httpConnectEncrypt");
 
-   function httpDelete (arg1 : System.Address; arg2 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/http.h:464
+   function httpDelete (http : System.Address; uri : Interfaces.C.Strings.chars_ptr) return int;  -- cups/http.h:464
    pragma Import (C, httpDelete, "httpDelete");
 
-   function httpEncryption (arg1 : System.Address; arg2 : http_encryption_t) return int;  -- cups/http.h:465
+   function httpEncryption (http : System.Address; e : http_encryption_t) return int;  -- cups/http.h:465
    pragma Import (C, httpEncryption, "httpEncryption");
 
-   function httpError (arg1 : System.Address) return int;  -- cups/http.h:466
+   function httpError (http : System.Address) return int;  -- cups/http.h:466
    pragma Import (C, httpError, "httpError");
 
-   procedure httpFlush (arg1 : System.Address);  -- cups/http.h:467
+   procedure httpFlush (http : System.Address);  -- cups/http.h:467
    pragma Import (C, httpFlush, "httpFlush");
 
-   function httpGet (arg1 : System.Address; arg2 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/http.h:468
+   function httpGet (http : System.Address; uri : Interfaces.C.Strings.chars_ptr) return int;  -- cups/http.h:468
    pragma Import (C, httpGet, "httpGet");
 
    function httpGets
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : int;
-      arg3 : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:469
+     (line : Interfaces.C.Strings.chars_ptr;
+      length : int;
+      http : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:469
    pragma Import (C, httpGets, "httpGets");
 
-   function httpGetDateString (arg1 : libCUPS.time_h.time_t) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:470
+   function httpGetDateString (t : libCUPS.time_h.time_t) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:470
    pragma Import (C, httpGetDateString, "httpGetDateString");
 
-   function httpGetDateTime (arg1 : Interfaces.C.Strings.chars_ptr) return libCUPS.time_h.time_t;  -- cups/http.h:471
+   function httpGetDateTime (s : Interfaces.C.Strings.chars_ptr) return libCUPS.time_h.time_t;  -- cups/http.h:471
    pragma Import (C, httpGetDateTime, "httpGetDateTime");
 
-   function httpGetField (arg1 : System.Address; arg2 : http_field_t) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:472
+   function httpGetField (http : System.Address; field : http_field_t) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:472
    pragma Import (C, httpGetField, "httpGetField");
 
-   function httpGetHostByName (arg1 : Interfaces.C.Strings.chars_ptr) return access libCUPS.netdb_h.hostent;  -- cups/http.h:473
+   function httpGetHostByName (name : Interfaces.C.Strings.chars_ptr) return access libCUPS.netdb_h.hostent;  -- cups/http.h:473
    pragma Import (C, httpGetHostByName, "httpGetHostByName");
 
    function httpGetSubField
-     (arg1 : System.Address;
-      arg2 : http_field_t;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:474
+     (http : System.Address;
+      field : http_field_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      value : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:474
    pragma Import (C, httpGetSubField, "httpGetSubField");
 
-   function httpHead (arg1 : System.Address; arg2 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/http.h:476
+   function httpHead (http : System.Address; uri : Interfaces.C.Strings.chars_ptr) return int;  -- cups/http.h:476
    pragma Import (C, httpHead, "httpHead");
 
    procedure httpInitialize;  -- cups/http.h:477
    pragma Import (C, httpInitialize, "httpInitialize");
 
-   function httpOptions (arg1 : System.Address; arg2 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/http.h:478
+   function httpOptions (http : System.Address; uri : Interfaces.C.Strings.chars_ptr) return int;  -- cups/http.h:478
    pragma Import (C, httpOptions, "httpOptions");
 
-   function httpPost (arg1 : System.Address; arg2 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/http.h:479
+   function httpPost (http : System.Address; uri : Interfaces.C.Strings.chars_ptr) return int;  -- cups/http.h:479
    pragma Import (C, httpPost, "httpPost");
 
-   function httpPrintf (arg1 : System.Address; arg2 : Interfaces.C.Strings.chars_ptr  -- , ...
+   function httpPrintf (http : System.Address; format : Interfaces.C.Strings.chars_ptr  -- , ...
       ) return int;  -- cups/http.h:480
    pragma Import (C, httpPrintf, "httpPrintf");
 
-   function httpPut (arg1 : System.Address; arg2 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/http.h:482
+   function httpPut (http : System.Address; uri : Interfaces.C.Strings.chars_ptr) return int;  -- cups/http.h:482
    pragma Import (C, httpPut, "httpPut");
 
    function httpRead
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int) return int;  -- cups/http.h:483
+     (http : System.Address;
+      buffer : Interfaces.C.Strings.chars_ptr;
+      length : int) return int;  -- cups/http.h:483
    pragma Import (C, httpRead, "httpRead");
 
-   function httpReconnect (arg1 : System.Address) return int;  -- cups/http.h:484
+   function httpReconnect (http : System.Address) return int;  -- cups/http.h:484
    pragma Import (C, httpReconnect, "httpReconnect");
 
    procedure httpSeparate
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : access int;
-      arg6 : Interfaces.C.Strings.chars_ptr);  -- cups/http.h:485
+     (uri : Interfaces.C.Strings.chars_ptr;
+      method : Interfaces.C.Strings.chars_ptr;
+      username : Interfaces.C.Strings.chars_ptr;
+      host : Interfaces.C.Strings.chars_ptr;
+      port : access int;
+      resource : Interfaces.C.Strings.chars_ptr);  -- cups/http.h:485
    pragma Import (C, httpSeparate, "httpSeparate");
 
    procedure httpSetField
-     (arg1 : System.Address;
-      arg2 : http_field_t;
-      arg3 : Interfaces.C.Strings.chars_ptr);  -- cups/http.h:488
+     (http : System.Address;
+      field : http_field_t;
+      value : Interfaces.C.Strings.chars_ptr);  -- cups/http.h:488
    pragma Import (C, httpSetField, "httpSetField");
 
-   function httpStatus (arg1 : http_status_t) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:490
+   function httpStatus (status : http_status_t) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:490
    pragma Import (C, httpStatus, "httpStatus");
 
-   function httpTrace (arg1 : System.Address; arg2 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/http.h:491
+   function httpTrace (http : System.Address; uri : Interfaces.C.Strings.chars_ptr) return int;  -- cups/http.h:491
    pragma Import (C, httpTrace, "httpTrace");
 
-   function httpUpdate (arg1 : System.Address) return http_status_t;  -- cups/http.h:492
+   function httpUpdate (http : System.Address) return http_status_t;  -- cups/http.h:492
    pragma Import (C, httpUpdate, "httpUpdate");
 
    function httpWrite
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int) return int;  -- cups/http.h:493
+     (http : System.Address;
+      buffer : Interfaces.C.Strings.chars_ptr;
+      length : int) return int;  -- cups/http.h:493
    pragma Import (C, httpWrite, "httpWrite");
 
-   function httpEncode64 (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:494
+   function httpEncode64 (c_out : Interfaces.C.Strings.chars_ptr; c_in : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:494
    pragma Import (C, httpEncode64, "httpEncode64");
 
-   function httpDecode64 (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:495
+   function httpDecode64 (c_out : Interfaces.C.Strings.chars_ptr; c_in : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:495
    pragma Import (C, httpDecode64, "httpDecode64");
 
-   function httpGetLength (arg1 : System.Address) return int;  -- cups/http.h:496
+   function httpGetLength (http : System.Address) return int;  -- cups/http.h:496
    pragma Import (C, httpGetLength, "httpGetLength");
 
    function httpMD5
@@ -705,368 +705,368 @@ package libCUPS.cups_http_h is
    pragma Import (C, httpMD5String, "httpMD5String");
 
   --*** New in CUPS 1.1.19 *** 
-   procedure httpClearCookie (arg1 : System.Address);  -- cups/http.h:504
+   procedure httpClearCookie (http : System.Address);  -- cups/http.h:504
    pragma Import (C, httpClearCookie, "httpClearCookie");
 
-   function httpGetCookie (arg1 : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:505
+   function httpGetCookie (http : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:505
    pragma Import (C, httpGetCookie, "httpGetCookie");
 
-   procedure httpSetCookie (arg1 : System.Address; arg2 : Interfaces.C.Strings.chars_ptr);  -- cups/http.h:506
+   procedure httpSetCookie (http : System.Address; cookie : Interfaces.C.Strings.chars_ptr);  -- cups/http.h:506
    pragma Import (C, httpSetCookie, "httpSetCookie");
 
-   function httpWait (arg1 : System.Address; arg2 : int) return int;  -- cups/http.h:507
+   function httpWait (http : System.Address; msec : int) return int;  -- cups/http.h:507
    pragma Import (C, httpWait, "httpWait");
 
   --*** New in CUPS 1.1.21 *** 
    function httpDecode64_2
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : access int;
-      arg3 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:510
+     (c_out : Interfaces.C.Strings.chars_ptr;
+      outlen : access int;
+      c_in : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:510
    pragma Import (C, httpDecode64_2, "httpDecode64_2");
 
    function httpEncode64_2
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : int;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : int) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:511
+     (c_out : Interfaces.C.Strings.chars_ptr;
+      outlen : int;
+      c_in : Interfaces.C.Strings.chars_ptr;
+      inlen : int) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:511
    pragma Import (C, httpEncode64_2, "httpEncode64_2");
 
    procedure httpSeparate2
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : int;
-      arg6 : Interfaces.C.Strings.chars_ptr;
-      arg7 : int;
-      arg8 : access int;
-      arg9 : Interfaces.C.Strings.chars_ptr;
-      arg10 : int);  -- cups/http.h:513
+     (uri : Interfaces.C.Strings.chars_ptr;
+      method : Interfaces.C.Strings.chars_ptr;
+      methodlen : int;
+      username : Interfaces.C.Strings.chars_ptr;
+      usernamelen : int;
+      host : Interfaces.C.Strings.chars_ptr;
+      hostlen : int;
+      port : access int;
+      resource : Interfaces.C.Strings.chars_ptr;
+      resourcelen : int);  -- cups/http.h:513
    pragma Import (C, httpSeparate2, "httpSeparate2");
 
   --*** New in CUPS 1.2/OS X 10.5 *** 
-   function httpAddrAny (arg1 : access constant http_addr_t) return int;  -- cups/http.h:520
+   function httpAddrAny (addr : access constant http_addr_t) return int;  -- cups/http.h:520
    pragma Import (C, httpAddrAny, "httpAddrAny");
 
-   function httpAddrConnect (arg1 : access http_addrlist_t; arg2 : access int) return access http_addrlist_t;  -- cups/http.h:521
+   function httpAddrConnect (addrlist : access http_addrlist_t; sock : access int) return access http_addrlist_t;  -- cups/http.h:521
    pragma Import (C, httpAddrConnect, "httpAddrConnect");
 
-   function httpAddrEqual (arg1 : access constant http_addr_t; arg2 : access constant http_addr_t) return int;  -- cups/http.h:522
+   function httpAddrEqual (addr1 : access constant http_addr_t; addr2 : access constant http_addr_t) return int;  -- cups/http.h:522
    pragma Import (C, httpAddrEqual, "httpAddrEqual");
 
-   procedure httpAddrFreeList (arg1 : access http_addrlist_t);  -- cups/http.h:524
+   procedure httpAddrFreeList (addrlist : access http_addrlist_t);  -- cups/http.h:524
    pragma Import (C, httpAddrFreeList, "httpAddrFreeList");
 
    function httpAddrGetList
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : int;
-      arg3 : Interfaces.C.Strings.chars_ptr) return access http_addrlist_t;  -- cups/http.h:525
+     (hostname : Interfaces.C.Strings.chars_ptr;
+      family : int;
+      service : Interfaces.C.Strings.chars_ptr) return access http_addrlist_t;  -- cups/http.h:525
    pragma Import (C, httpAddrGetList, "httpAddrGetList");
 
-   function httpAddrLength (arg1 : access constant http_addr_t) return int;  -- cups/http.h:527
+   function httpAddrLength (addr : access constant http_addr_t) return int;  -- cups/http.h:527
    pragma Import (C, httpAddrLength, "httpAddrLength");
 
-   function httpAddrLocalhost (arg1 : access constant http_addr_t) return int;  -- cups/http.h:528
+   function httpAddrLocalhost (addr : access constant http_addr_t) return int;  -- cups/http.h:528
    pragma Import (C, httpAddrLocalhost, "httpAddrLocalhost");
 
    function httpAddrLookup
-     (arg1 : access constant http_addr_t;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:529
+     (addr : access constant http_addr_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      namelen : int) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:529
    pragma Import (C, httpAddrLookup, "httpAddrLookup");
 
    function httpAddrString
-     (arg1 : access constant http_addr_t;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:531
+     (addr : access constant http_addr_t;
+      s : Interfaces.C.Strings.chars_ptr;
+      slen : int) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:531
    pragma Import (C, httpAddrString, "httpAddrString");
 
    function httpAssembleURI
-     (arg1 : http_uri_coding_t;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : Interfaces.C.Strings.chars_ptr;
-      arg6 : Interfaces.C.Strings.chars_ptr;
-      arg7 : int;
-      arg8 : Interfaces.C.Strings.chars_ptr) return http_uri_status_t;  -- cups/http.h:533
+     (encoding : http_uri_coding_t;
+      uri : Interfaces.C.Strings.chars_ptr;
+      urilen : int;
+      scheme : Interfaces.C.Strings.chars_ptr;
+      username : Interfaces.C.Strings.chars_ptr;
+      host : Interfaces.C.Strings.chars_ptr;
+      port : int;
+      resource : Interfaces.C.Strings.chars_ptr) return http_uri_status_t;  -- cups/http.h:533
    pragma Import (C, httpAssembleURI, "httpAssembleURI");
 
    function httpAssembleURIf
-     (arg1 : http_uri_coding_t;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : Interfaces.C.Strings.chars_ptr;
-      arg6 : Interfaces.C.Strings.chars_ptr;
-      arg7 : int;
-      arg8 : Interfaces.C.Strings.chars_ptr  -- , ...
+     (encoding : http_uri_coding_t;
+      uri : Interfaces.C.Strings.chars_ptr;
+      urilen : int;
+      scheme : Interfaces.C.Strings.chars_ptr;
+      username : Interfaces.C.Strings.chars_ptr;
+      host : Interfaces.C.Strings.chars_ptr;
+      port : int;
+      resourcef : Interfaces.C.Strings.chars_ptr  -- , ...
       ) return http_uri_status_t;  -- cups/http.h:539
    pragma Import (C, httpAssembleURIf, "httpAssembleURIf");
 
-   function httpFlushWrite (arg1 : System.Address) return int;  -- cups/http.h:545
+   function httpFlushWrite (http : System.Address) return int;  -- cups/http.h:545
    pragma Import (C, httpFlushWrite, "httpFlushWrite");
 
-   function httpGetBlocking (arg1 : System.Address) return int;  -- cups/http.h:546
+   function httpGetBlocking (http : System.Address) return int;  -- cups/http.h:546
    pragma Import (C, httpGetBlocking, "httpGetBlocking");
 
    function httpGetDateString2
-     (arg1 : libCUPS.time_h.time_t;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:547
+     (t : libCUPS.time_h.time_t;
+      s : Interfaces.C.Strings.chars_ptr;
+      slen : int) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:547
    pragma Import (C, httpGetDateString2, "httpGetDateString2");
 
-   function httpGetFd (arg1 : System.Address) return int;  -- cups/http.h:548
+   function httpGetFd (http : System.Address) return int;  -- cups/http.h:548
    pragma Import (C, httpGetFd, "httpGetFd");
 
    function httpGetHostname
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:549
+     (http : System.Address;
+      s : Interfaces.C.Strings.chars_ptr;
+      slen : int) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:549
    pragma Import (C, httpGetHostname, "httpGetHostname");
 
-   function httpGetLength2 (arg1 : System.Address) return libCUPS.stdio_h.off_t;  -- cups/http.h:550
+   function httpGetLength2 (http : System.Address) return libCUPS.stdio_h.off_t;  -- cups/http.h:550
    pragma Import (C, httpGetLength2, "httpGetLength2");
 
-   function httpGetStatus (arg1 : System.Address) return http_status_t;  -- cups/http.h:551
+   function httpGetStatus (http : System.Address) return http_status_t;  -- cups/http.h:551
    pragma Import (C, httpGetStatus, "httpGetStatus");
 
    function httpGetSubField2
-     (arg1 : System.Address;
-      arg2 : http_field_t;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : int) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:552
+     (http : System.Address;
+      field : http_field_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      value : Interfaces.C.Strings.chars_ptr;
+      valuelen : int) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:552
    pragma Import (C, httpGetSubField2, "httpGetSubField2");
 
    function httpRead2
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : size_t) return size_t;  -- cups/http.h:555
+     (http : System.Address;
+      buffer : Interfaces.C.Strings.chars_ptr;
+      length : size_t) return size_t;  -- cups/http.h:555
    pragma Import (C, httpRead2, "httpRead2");
 
    function httpSeparateURI
-     (arg1 : http_uri_coding_t;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : int;
-      arg5 : Interfaces.C.Strings.chars_ptr;
-      arg6 : int;
-      arg7 : Interfaces.C.Strings.chars_ptr;
-      arg8 : int;
-      arg9 : access int;
-      arg10 : Interfaces.C.Strings.chars_ptr;
-      arg11 : int) return http_uri_status_t;  -- cups/http.h:556
+     (decoding : http_uri_coding_t;
+      uri : Interfaces.C.Strings.chars_ptr;
+      scheme : Interfaces.C.Strings.chars_ptr;
+      schemelen : int;
+      username : Interfaces.C.Strings.chars_ptr;
+      usernamelen : int;
+      host : Interfaces.C.Strings.chars_ptr;
+      hostlen : int;
+      port : access int;
+      resource : Interfaces.C.Strings.chars_ptr;
+      resourcelen : int) return http_uri_status_t;  -- cups/http.h:556
    pragma Import (C, httpSeparateURI, "httpSeparateURI");
 
-   procedure httpSetExpect (arg1 : System.Address; arg2 : http_status_t);  -- cups/http.h:562
+   procedure httpSetExpect (http : System.Address; expect : http_status_t);  -- cups/http.h:562
    pragma Import (C, httpSetExpect, "httpSetExpect");
 
-   procedure httpSetLength (arg1 : System.Address; arg2 : size_t);  -- cups/http.h:563
+   procedure httpSetLength (http : System.Address; length : size_t);  -- cups/http.h:563
    pragma Import (C, httpSetLength, "httpSetLength");
 
    function httpWrite2
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : size_t) return size_t;  -- cups/http.h:564
+     (http : System.Address;
+      buffer : Interfaces.C.Strings.chars_ptr;
+      length : size_t) return size_t;  -- cups/http.h:564
    pragma Import (C, httpWrite2, "httpWrite2");
 
   --*** New in CUPS 1.3/OS X 10.5 *** 
-   function httpGetAuthString (arg1 : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:568
+   function httpGetAuthString (http : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:568
    pragma Import (C, httpGetAuthString, "httpGetAuthString");
 
    procedure httpSetAuthString
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr);  -- cups/http.h:569
+     (http : System.Address;
+      scheme : Interfaces.C.Strings.chars_ptr;
+      data : Interfaces.C.Strings.chars_ptr);  -- cups/http.h:569
    pragma Import (C, httpSetAuthString, "httpSetAuthString");
 
   --*** New in CUPS 1.5/OS X 10.7 *** 
    function httpAddCredential
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : size_t) return int;  -- cups/http.h:573
+     (credentials : System.Address;
+      data : System.Address;
+      datalen : size_t) return int;  -- cups/http.h:573
    pragma Import (C, httpAddCredential, "httpAddCredential");
 
-   function httpCopyCredentials (arg1 : System.Address; arg2 : System.Address) return int;  -- cups/http.h:576
+   function httpCopyCredentials (http : System.Address; credentials : System.Address) return int;  -- cups/http.h:576
    pragma Import (C, httpCopyCredentials, "httpCopyCredentials");
 
-   procedure httpFreeCredentials (arg1 : System.Address);  -- cups/http.h:579
+   procedure httpFreeCredentials (certs : System.Address);  -- cups/http.h:579
    pragma Import (C, httpFreeCredentials, "httpFreeCredentials");
 
-   function httpSetCredentials (arg1 : System.Address; arg2 : System.Address) return int;  -- cups/http.h:580
+   function httpSetCredentials (http : System.Address; certs : System.Address) return int;  -- cups/http.h:580
    pragma Import (C, httpSetCredentials, "httpSetCredentials");
 
    procedure httpSetTimeout
-     (arg1 : System.Address;
-      arg2 : double;
-      arg3 : http_timeout_cb_t;
-      arg4 : System.Address);  -- cups/http.h:582
+     (http : System.Address;
+      timeout : double;
+      cb : http_timeout_cb_t;
+      user_data : System.Address);  -- cups/http.h:582
    pragma Import (C, httpSetTimeout, "httpSetTimeout");
 
   --*** New in CUPS 1.6/OS X 10.8 *** 
    function httpAddrConnect2
-     (arg1 : access http_addrlist_t;
-      arg2 : access int;
-      arg3 : int;
-      arg4 : access int) return access http_addrlist_t;  -- cups/http.h:587
+     (addrlist : access http_addrlist_t;
+      sock : access int;
+      msec : int;
+      cancel : access int) return access http_addrlist_t;  -- cups/http.h:587
    pragma Import (C, httpAddrConnect2, "httpAddrConnect2");
 
-   function httpGetState (arg1 : System.Address) return http_state_t;  -- cups/http.h:590
+   function httpGetState (http : System.Address) return http_state_t;  -- cups/http.h:590
    pragma Import (C, httpGetState, "httpGetState");
 
-   function httpGetVersion (arg1 : System.Address) return http_version_t;  -- cups/http.h:591
+   function httpGetVersion (http : System.Address) return http_version_t;  -- cups/http.h:591
    pragma Import (C, httpGetVersion, "httpGetVersion");
 
    function httpReconnect2
-     (arg1 : System.Address;
-      arg2 : int;
-      arg3 : access int) return int;  -- cups/http.h:592
+     (http : System.Address;
+      msec : int;
+      cancel : access int) return int;  -- cups/http.h:592
    pragma Import (C, httpReconnect2, "httpReconnect2");
 
   --*** New in CUPS 1.7/OS X 10.9 *** 
-   function httpAcceptConnection (arg1 : int; arg2 : int) return System.Address;  -- cups/http.h:597
+   function httpAcceptConnection (fd : int; blocking : int) return System.Address;  -- cups/http.h:597
    pragma Import (C, httpAcceptConnection, "httpAcceptConnection");
 
-   function httpAddrCopyList (arg1 : access http_addrlist_t) return access http_addrlist_t;  -- cups/http.h:599
+   function httpAddrCopyList (src : access http_addrlist_t) return access http_addrlist_t;  -- cups/http.h:599
    pragma Import (C, httpAddrCopyList, "httpAddrCopyList");
 
-   function httpAddrListen (arg1 : access http_addr_t; arg2 : int) return int;  -- cups/http.h:600
+   function httpAddrListen (addr : access http_addr_t; port : int) return int;  -- cups/http.h:600
    pragma Import (C, httpAddrListen, "httpAddrListen");
 
-   function httpAddrPort (arg1 : access http_addr_t) return int;  -- cups/http.h:602
+   function httpAddrPort (addr : access http_addr_t) return int;  -- cups/http.h:602
    pragma Import (C, httpAddrPort, "httpAddrPort");
 
    function httpAssembleUUID
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : int;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : int;
-      arg5 : Interfaces.C.Strings.chars_ptr;
-      arg6 : size_t) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:603
+     (server : Interfaces.C.Strings.chars_ptr;
+      port : int;
+      name : Interfaces.C.Strings.chars_ptr;
+      number : int;
+      buffer : Interfaces.C.Strings.chars_ptr;
+      bufsize : size_t) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:603
    pragma Import (C, httpAssembleUUID, "httpAssembleUUID");
 
    function httpConnect2
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : int;
-      arg3 : access http_addrlist_t;
-      arg4 : int;
-      arg5 : http_encryption_t;
-      arg6 : int;
-      arg7 : int;
-      arg8 : access int) return System.Address;  -- cups/http.h:607
+     (host : Interfaces.C.Strings.chars_ptr;
+      port : int;
+      addrlist : access http_addrlist_t;
+      family : int;
+      encryption : http_encryption_t;
+      blocking : int;
+      msec : int;
+      cancel : access int) return System.Address;  -- cups/http.h:607
    pragma Import (C, httpConnect2, "httpConnect2");
 
-   function httpGetContentEncoding (arg1 : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:612
+   function httpGetContentEncoding (http : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:612
    pragma Import (C, httpGetContentEncoding, "httpGetContentEncoding");
 
-   function httpGetExpect (arg1 : System.Address) return http_status_t;  -- cups/http.h:613
+   function httpGetExpect (http : System.Address) return http_status_t;  -- cups/http.h:613
    pragma Import (C, httpGetExpect, "httpGetExpect");
 
    function httpPeek
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : size_t) return size_t;  -- cups/http.h:614
+     (http : System.Address;
+      buffer : Interfaces.C.Strings.chars_ptr;
+      length : size_t) return size_t;  -- cups/http.h:614
    pragma Import (C, httpPeek, "httpPeek");
 
    function httpReadRequest
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : size_t) return http_state_t;  -- cups/http.h:616
+     (http : System.Address;
+      resource : Interfaces.C.Strings.chars_ptr;
+      resourcelen : size_t) return http_state_t;  -- cups/http.h:616
    pragma Import (C, httpReadRequest, "httpReadRequest");
 
    procedure httpSetDefaultField
-     (arg1 : System.Address;
-      arg2 : http_field_t;
-      arg3 : Interfaces.C.Strings.chars_ptr);  -- cups/http.h:618
+     (http : System.Address;
+      field : http_field_t;
+      value : Interfaces.C.Strings.chars_ptr);  -- cups/http.h:618
    pragma Import (C, httpSetDefaultField, "httpSetDefaultField");
 
-   function httpWriteResponse (arg1 : System.Address; arg2 : http_status_t) return http_state_t;  -- cups/http.h:620
+   function httpWriteResponse (http : System.Address; status : http_status_t) return http_state_t;  -- cups/http.h:620
    pragma Import (C, httpWriteResponse, "httpWriteResponse");
 
   -- New in CUPS 2.0/OS X 10.10  
-   function httpAddrClose (arg1 : access http_addr_t; arg2 : int) return int;  -- cups/http.h:624
+   function httpAddrClose (addr : access http_addr_t; fd : int) return int;  -- cups/http.h:624
    pragma Import (C, httpAddrClose, "httpAddrClose");
 
-   function httpAddrFamily (arg1 : access http_addr_t) return int;  -- cups/http.h:625
+   function httpAddrFamily (addr : access http_addr_t) return int;  -- cups/http.h:625
    pragma Import (C, httpAddrFamily, "httpAddrFamily");
 
-   function httpCompareCredentials (arg1 : System.Address; arg2 : System.Address) return int;  -- cups/http.h:626
+   function httpCompareCredentials (cred1 : System.Address; cred2 : System.Address) return int;  -- cups/http.h:626
    pragma Import (C, httpCompareCredentials, "httpCompareCredentials");
 
-   function httpCredentialsAreValidForName (arg1 : System.Address; arg2 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/http.h:627
+   function httpCredentialsAreValidForName (credentials : System.Address; common_name : Interfaces.C.Strings.chars_ptr) return int;  -- cups/http.h:627
    pragma Import (C, httpCredentialsAreValidForName, "httpCredentialsAreValidForName");
 
-   function httpCredentialsGetExpiration (arg1 : System.Address) return libCUPS.time_h.time_t;  -- cups/http.h:628
+   function httpCredentialsGetExpiration (credentials : System.Address) return libCUPS.time_h.time_t;  -- cups/http.h:628
    pragma Import (C, httpCredentialsGetExpiration, "httpCredentialsGetExpiration");
 
-   function httpCredentialsGetTrust (arg1 : System.Address; arg2 : Interfaces.C.Strings.chars_ptr) return http_trust_t;  -- cups/http.h:629
+   function httpCredentialsGetTrust (credentials : System.Address; common_name : Interfaces.C.Strings.chars_ptr) return http_trust_t;  -- cups/http.h:629
    pragma Import (C, httpCredentialsGetTrust, "httpCredentialsGetTrust");
 
    function httpCredentialsString
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : size_t) return size_t;  -- cups/http.h:630
+     (credentials : System.Address;
+      buffer : Interfaces.C.Strings.chars_ptr;
+      bufsize : size_t) return size_t;  -- cups/http.h:630
    pragma Import (C, httpCredentialsString, "httpCredentialsString");
 
-   function httpFieldValue (arg1 : Interfaces.C.Strings.chars_ptr) return http_field_t;  -- cups/http.h:631
+   function httpFieldValue (name : Interfaces.C.Strings.chars_ptr) return http_field_t;  -- cups/http.h:631
    pragma Import (C, httpFieldValue, "httpFieldValue");
 
-   function httpGetActivity (arg1 : System.Address) return libCUPS.time_h.time_t;  -- cups/http.h:632
+   function httpGetActivity (http : System.Address) return libCUPS.time_h.time_t;  -- cups/http.h:632
    pragma Import (C, httpGetActivity, "httpGetActivity");
 
-   function httpGetAddress (arg1 : System.Address) return access http_addr_t;  -- cups/http.h:633
+   function httpGetAddress (http : System.Address) return access http_addr_t;  -- cups/http.h:633
    pragma Import (C, httpGetAddress, "httpGetAddress");
 
-   function httpGetEncryption (arg1 : System.Address) return http_encryption_t;  -- cups/http.h:634
+   function httpGetEncryption (http : System.Address) return http_encryption_t;  -- cups/http.h:634
    pragma Import (C, httpGetEncryption, "httpGetEncryption");
 
-   function httpGetKeepAlive (arg1 : System.Address) return http_keepalive_t;  -- cups/http.h:635
+   function httpGetKeepAlive (http : System.Address) return http_keepalive_t;  -- cups/http.h:635
    pragma Import (C, httpGetKeepAlive, "httpGetKeepAlive");
 
-   function httpGetPending (arg1 : System.Address) return size_t;  -- cups/http.h:636
+   function httpGetPending (http : System.Address) return size_t;  -- cups/http.h:636
    pragma Import (C, httpGetPending, "httpGetPending");
 
-   function httpGetReady (arg1 : System.Address) return size_t;  -- cups/http.h:637
+   function httpGetReady (http : System.Address) return size_t;  -- cups/http.h:637
    pragma Import (C, httpGetReady, "httpGetReady");
 
-   function httpGetRemaining (arg1 : System.Address) return size_t;  -- cups/http.h:638
+   function httpGetRemaining (http : System.Address) return size_t;  -- cups/http.h:638
    pragma Import (C, httpGetRemaining, "httpGetRemaining");
 
-   function httpIsChunked (arg1 : System.Address) return int;  -- cups/http.h:639
+   function httpIsChunked (http : System.Address) return int;  -- cups/http.h:639
    pragma Import (C, httpIsChunked, "httpIsChunked");
 
-   function httpIsEncrypted (arg1 : System.Address) return int;  -- cups/http.h:640
+   function httpIsEncrypted (http : System.Address) return int;  -- cups/http.h:640
    pragma Import (C, httpIsEncrypted, "httpIsEncrypted");
 
    function httpLoadCredentials
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : System.Address;
-      arg3 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/http.h:641
+     (path : Interfaces.C.Strings.chars_ptr;
+      credentials : System.Address;
+      common_name : Interfaces.C.Strings.chars_ptr) return int;  -- cups/http.h:641
    pragma Import (C, httpLoadCredentials, "httpLoadCredentials");
 
    function httpResolveHostname
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : size_t) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:642
+     (http : System.Address;
+      buffer : Interfaces.C.Strings.chars_ptr;
+      bufsize : size_t) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:642
    pragma Import (C, httpResolveHostname, "httpResolveHostname");
 
    function httpSaveCredentials
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : System.Address;
-      arg3 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/http.h:643
+     (path : Interfaces.C.Strings.chars_ptr;
+      credentials : System.Address;
+      common_name : Interfaces.C.Strings.chars_ptr) return int;  -- cups/http.h:643
    pragma Import (C, httpSaveCredentials, "httpSaveCredentials");
 
-   procedure httpSetKeepAlive (arg1 : System.Address; arg2 : http_keepalive_t);  -- cups/http.h:644
+   procedure httpSetKeepAlive (http : System.Address; keep_alive : http_keepalive_t);  -- cups/http.h:644
    pragma Import (C, httpSetKeepAlive, "httpSetKeepAlive");
 
-   procedure httpShutdown (arg1 : System.Address);  -- cups/http.h:645
+   procedure httpShutdown (http : System.Address);  -- cups/http.h:645
    pragma Import (C, httpShutdown, "httpShutdown");
 
-   function httpStateString (arg1 : http_state_t) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:646
+   function httpStateString (state : http_state_t) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:646
    pragma Import (C, httpStateString, "httpStateString");
 
-   function httpURIStatusString (arg1 : http_uri_status_t) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:647
+   function httpURIStatusString (status : http_uri_status_t) return Interfaces.C.Strings.chars_ptr;  -- cups/http.h:647
    pragma Import (C, httpURIStatusString, "httpURIStatusString");
 
   -- * C++ magic...

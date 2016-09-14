@@ -124,12 +124,12 @@ package libCUPS.cups_language_h is
 
   --*** Language Cache Structure *** 
   -- Next language in cache  
-   subtype anon3363_language_array is Interfaces.C.char_array (0 .. 15);
+   subtype cups_lang_s_language_array is Interfaces.C.char_array (0 .. 15);
    type cups_lang_s is record
       next : access cups_lang_s;  -- cups/language.h:89
       used : aliased int;  -- cups/language.h:90
       encoding : aliased cups_encoding_t;  -- cups/language.h:91
-      language : aliased anon3363_language_array;  -- cups/language.h:92
+      language : aliased cups_lang_s_language_array;  -- cups/language.h:92
       strings : System.Address;  -- cups/language.h:93
    end record;
    pragma Convention (C_Pass_By_Copy, cups_lang_s);  -- cups/language.h:87
@@ -197,19 +197,57 @@ package libCUPS.cups_language_h is
   -- UTF-8  
   -- ISO-8859-13  
   -- ISO-8859-14  
+  -- ISO-8859-15  
+  -- CP-874  
+  -- CP-1250  
+  -- CP-1251  
+  -- CP-1252  
+  -- CP-1253  
+  -- CP-1254  
+  -- CP-1255  
+  -- CP-1256  
+  -- CP-1257  
+  -- CP-1258  
+  -- KOI-8-R  
+  -- KOI-8-U  
+  -- ISO-8859-11  
+  -- ISO-8859-16  
+  -- MacRoman  
+  -- End of single-byte encodings @private@  
+  -- Japanese JIS X0208-1990  
+  -- Simplified Chinese GB 2312-80  
+  -- Korean KS C5601-1992  
+  -- Traditional Chinese Big Five  
+  -- Korean Johab  
+  -- End of double-byte encodings @private@  
+  -- EUC Simplified Chinese  
+  -- EUC Japanese  
+  -- EUC Korean  
+  -- EUC Traditional Chinese  
+  -- JIS X0213 aka Shift JIS  
+  -- End of variable-length encodings @private@  
+  --*** Language Cache Structure *** 
+  -- Next language in cache  
+  -- Number of times this entry has been used.  
+  -- Text encoding  
+  -- Language/locale name  
+  -- Message strings @private@  
+  -- * Prototypes...
+  --  
+
    function cupsLangDefault return access cups_lang_t;  -- cups/language.h:101
    pragma Import (C, cupsLangDefault, "cupsLangDefault");
 
-   function cupsLangEncoding (arg1 : access cups_lang_t) return Interfaces.C.Strings.chars_ptr;  -- cups/language.h:102
+   function cupsLangEncoding (lang : access cups_lang_t) return Interfaces.C.Strings.chars_ptr;  -- cups/language.h:102
    pragma Import (C, cupsLangEncoding, "cupsLangEncoding");
 
    procedure cupsLangFlush;  -- cups/language.h:103
    pragma Import (C, cupsLangFlush, "cupsLangFlush");
 
-   procedure cupsLangFree (arg1 : access cups_lang_t);  -- cups/language.h:104
+   procedure cupsLangFree (lang : access cups_lang_t);  -- cups/language.h:104
    pragma Import (C, cupsLangFree, "cupsLangFree");
 
-   function cupsLangGet (arg1 : Interfaces.C.Strings.chars_ptr) return access cups_lang_t;  -- cups/language.h:105
+   function cupsLangGet (language : Interfaces.C.Strings.chars_ptr) return access cups_lang_t;  -- cups/language.h:105
    pragma Import (C, cupsLangGet, "cupsLangGet");
 
   -- * End of "$Id: language.h 10996 2013-05-29 11:51:34Z msweet $".

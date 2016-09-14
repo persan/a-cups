@@ -369,9 +369,9 @@ package libCUPS.cups_cups_h is
 
   --*** Media Size @since CUPS 1.6/OS X 10.8@ *** 
   -- Media name to use  
-   subtype anon3412_media_array is Interfaces.C.char_array (0 .. 127);
+   subtype cups_size_s_media_array is Interfaces.C.char_array (0 .. 127);
    type cups_size_s is record
-      media : aliased anon3412_media_array;  -- cups/cups.h:296
+      media : aliased cups_size_s_media_array;  -- cups/cups.h:296
       width : aliased int;  -- cups/cups.h:297
       length : aliased int;  -- cups/cups.h:298
       bottom : aliased int;  -- cups/cups.h:300
@@ -462,140 +462,140 @@ package libCUPS.cups_cups_h is
   -- * Functions...
   --  
 
-   function cupsCancelJob (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : int) return int;  -- cups/cups.h:355
+   function cupsCancelJob (name : Interfaces.C.Strings.chars_ptr; job_id : int) return int;  -- cups/cups.h:355
    pragma Import (C, cupsCancelJob, "cupsCancelJob");
 
    function cupsDoFileRequest
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : Interfaces.C.Strings.chars_ptr) return System.Address;  -- cups/cups.h:356
+     (http : System.Address;
+      request : System.Address;
+      resource : Interfaces.C.Strings.chars_ptr;
+      filename : Interfaces.C.Strings.chars_ptr) return System.Address;  -- cups/cups.h:356
    pragma Import (C, cupsDoFileRequest, "cupsDoFileRequest");
 
    function cupsDoRequest
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : Interfaces.C.Strings.chars_ptr) return System.Address;  -- cups/cups.h:359
+     (http : System.Address;
+      request : System.Address;
+      resource : Interfaces.C.Strings.chars_ptr) return System.Address;  -- cups/cups.h:359
    pragma Import (C, cupsDoRequest, "cupsDoRequest");
 
    function cupsEncryption return libCUPS.cups_http_h.http_encryption_t;  -- cups/cups.h:361
    pragma Import (C, cupsEncryption, "cupsEncryption");
 
-   procedure cupsFreeJobs (arg1 : int; arg2 : access cups_job_t);  -- cups/cups.h:362
+   procedure cupsFreeJobs (num_jobs : int; jobs : access cups_job_t);  -- cups/cups.h:362
    pragma Import (C, cupsFreeJobs, "cupsFreeJobs");
 
-   function cupsGetClasses (arg1 : System.Address) return int;  -- cups/cups.h:363
+   function cupsGetClasses (classes : System.Address) return int;  -- cups/cups.h:363
    pragma Import (C, cupsGetClasses, "cupsGetClasses");
 
    function cupsGetDefault return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:364
    pragma Import (C, cupsGetDefault, "cupsGetDefault");
 
    function cupsGetJobs
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int;
-      arg4 : int) return int;  -- cups/cups.h:365
+     (jobs : System.Address;
+      name : Interfaces.C.Strings.chars_ptr;
+      myjobs : int;
+      whichjobs : int) return int;  -- cups/cups.h:365
    pragma Import (C, cupsGetJobs, "cupsGetJobs");
 
-   function cupsGetPPD (arg1 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:367
+   function cupsGetPPD (name : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:367
    pragma Import (C, cupsGetPPD, "cupsGetPPD");
 
-   function cupsGetPrinters (arg1 : System.Address) return int;  -- cups/cups.h:368
+   function cupsGetPrinters (printers : System.Address) return int;  -- cups/cups.h:368
    pragma Import (C, cupsGetPrinters, "cupsGetPrinters");
 
    function cupsLastError return libCUPS.cups_ipp_h.ipp_status_t;  -- cups/cups.h:369
    pragma Import (C, cupsLastError, "cupsLastError");
 
    function cupsPrintFile
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : int;
-      arg5 : access cups_option_t) return int;  -- cups/cups.h:370
+     (name : Interfaces.C.Strings.chars_ptr;
+      filename : Interfaces.C.Strings.chars_ptr;
+      title : Interfaces.C.Strings.chars_ptr;
+      num_options : int;
+      options : access cups_option_t) return int;  -- cups/cups.h:370
    pragma Import (C, cupsPrintFile, "cupsPrintFile");
 
    function cupsPrintFiles
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : int;
-      arg3 : System.Address;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : int;
-      arg6 : access cups_option_t) return int;  -- cups/cups.h:373
+     (name : Interfaces.C.Strings.chars_ptr;
+      num_files : int;
+      files : System.Address;
+      title : Interfaces.C.Strings.chars_ptr;
+      num_options : int;
+      options : access cups_option_t) return int;  -- cups/cups.h:373
    pragma Import (C, cupsPrintFiles, "cupsPrintFiles");
 
-   function cupsTempFile (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : int) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:376
+   function cupsTempFile (filename : Interfaces.C.Strings.chars_ptr; len : int) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:376
    pragma Import (C, cupsTempFile, "cupsTempFile");
 
-   function cupsTempFd (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : int) return int;  -- cups/cups.h:377
+   function cupsTempFd (filename : Interfaces.C.Strings.chars_ptr; len : int) return int;  -- cups/cups.h:377
    pragma Import (C, cupsTempFd, "cupsTempFd");
 
    function cupsAddDest
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int;
-      arg4 : System.Address) return int;  -- cups/cups.h:379
+     (name : Interfaces.C.Strings.chars_ptr;
+      instance : Interfaces.C.Strings.chars_ptr;
+      num_dests : int;
+      dests : System.Address) return int;  -- cups/cups.h:379
    pragma Import (C, cupsAddDest, "cupsAddDest");
 
-   procedure cupsFreeDests (arg1 : int; arg2 : access cups_dest_t);  -- cups/cups.h:381
+   procedure cupsFreeDests (num_dests : int; dests : access cups_dest_t);  -- cups/cups.h:381
    pragma Import (C, cupsFreeDests, "cupsFreeDests");
 
    function cupsGetDest
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int;
-      arg4 : access cups_dest_t) return access cups_dest_t;  -- cups/cups.h:382
+     (name : Interfaces.C.Strings.chars_ptr;
+      instance : Interfaces.C.Strings.chars_ptr;
+      num_dests : int;
+      dests : access cups_dest_t) return access cups_dest_t;  -- cups/cups.h:382
    pragma Import (C, cupsGetDest, "cupsGetDest");
 
-   function cupsGetDests (arg1 : System.Address) return int;  -- cups/cups.h:384
+   function cupsGetDests (dests : System.Address) return int;  -- cups/cups.h:384
    pragma Import (C, cupsGetDests, "cupsGetDests");
 
-   procedure cupsSetDests (arg1 : int; arg2 : access cups_dest_t);  -- cups/cups.h:385
+   procedure cupsSetDests (num_dests : int; dests : access cups_dest_t);  -- cups/cups.h:385
    pragma Import (C, cupsSetDests, "cupsSetDests");
 
    function cupsAddOption
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int;
-      arg4 : System.Address) return int;  -- cups/cups.h:387
+     (name : Interfaces.C.Strings.chars_ptr;
+      value : Interfaces.C.Strings.chars_ptr;
+      num_options : int;
+      options : System.Address) return int;  -- cups/cups.h:387
    pragma Import (C, cupsAddOption, "cupsAddOption");
 
    procedure cupsEncodeOptions
-     (arg1 : System.Address;
-      arg2 : int;
-      arg3 : access cups_option_t);  -- cups/cups.h:389
+     (ipp : System.Address;
+      num_options : int;
+      options : access cups_option_t);  -- cups/cups.h:389
    pragma Import (C, cupsEncodeOptions, "cupsEncodeOptions");
 
-   procedure cupsFreeOptions (arg1 : int; arg2 : access cups_option_t);  -- cups/cups.h:391
+   procedure cupsFreeOptions (num_options : int; options : access cups_option_t);  -- cups/cups.h:391
    pragma Import (C, cupsFreeOptions, "cupsFreeOptions");
 
    function cupsGetOption
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : int;
-      arg3 : access cups_option_t) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:393
+     (name : Interfaces.C.Strings.chars_ptr;
+      num_options : int;
+      options : access cups_option_t) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:393
    pragma Import (C, cupsGetOption, "cupsGetOption");
 
    function cupsParseOptions
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : int;
-      arg3 : System.Address) return int;  -- cups/cups.h:395
+     (arg : Interfaces.C.Strings.chars_ptr;
+      num_options : int;
+      options : System.Address) return int;  -- cups/cups.h:395
    pragma Import (C, cupsParseOptions, "cupsParseOptions");
 
-   function cupsGetPassword (arg1 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:398
+   function cupsGetPassword (prompt : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:398
    pragma Import (C, cupsGetPassword, "cupsGetPassword");
 
    function cupsServer return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:399
    pragma Import (C, cupsServer, "cupsServer");
 
-   procedure cupsSetEncryption (arg1 : libCUPS.cups_http_h.http_encryption_t);  -- cups/cups.h:400
+   procedure cupsSetEncryption (e : libCUPS.cups_http_h.http_encryption_t);  -- cups/cups.h:400
    pragma Import (C, cupsSetEncryption, "cupsSetEncryption");
 
-   procedure cupsSetPasswordCB (arg1 : cups_password_cb_t);  -- cups/cups.h:401
+   procedure cupsSetPasswordCB (cb : cups_password_cb_t);  -- cups/cups.h:401
    pragma Import (C, cupsSetPasswordCB, "cupsSetPasswordCB");
 
-   procedure cupsSetServer (arg1 : Interfaces.C.Strings.chars_ptr);  -- cups/cups.h:402
+   procedure cupsSetServer (server : Interfaces.C.Strings.chars_ptr);  -- cups/cups.h:402
    pragma Import (C, cupsSetServer, "cupsSetServer");
 
-   procedure cupsSetUser (arg1 : Interfaces.C.Strings.chars_ptr);  -- cups/cups.h:403
+   procedure cupsSetUser (user : Interfaces.C.Strings.chars_ptr);  -- cups/cups.h:403
    pragma Import (C, cupsSetUser, "cupsSetUser");
 
    function cupsUser return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:404
@@ -603,413 +603,413 @@ package libCUPS.cups_cups_h is
 
   --*** New in CUPS 1.1.20 *** 
    function cupsDoAuthentication
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/cups.h:407
+     (http : System.Address;
+      method : Interfaces.C.Strings.chars_ptr;
+      resource : Interfaces.C.Strings.chars_ptr) return int;  -- cups/cups.h:407
    pragma Import (C, cupsDoAuthentication, "cupsDoAuthentication");
 
    function cupsGetFile
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:410
+     (http : System.Address;
+      resource : Interfaces.C.Strings.chars_ptr;
+      filename : Interfaces.C.Strings.chars_ptr) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:410
    pragma Import (C, cupsGetFile, "cupsGetFile");
 
    function cupsGetFd
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:412
+     (http : System.Address;
+      resource : Interfaces.C.Strings.chars_ptr;
+      fd : int) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:412
    pragma Import (C, cupsGetFd, "cupsGetFd");
 
    function cupsPutFile
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:413
+     (http : System.Address;
+      resource : Interfaces.C.Strings.chars_ptr;
+      filename : Interfaces.C.Strings.chars_ptr) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:413
    pragma Import (C, cupsPutFile, "cupsPutFile");
 
    function cupsPutFd
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:415
+     (http : System.Address;
+      resource : Interfaces.C.Strings.chars_ptr;
+      fd : int) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:415
    pragma Import (C, cupsPutFd, "cupsPutFd");
 
   --*** New in CUPS 1.1.21 *** 
-   function cupsGetDefault2 (arg1 : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:419
+   function cupsGetDefault2 (http : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:419
    pragma Import (C, cupsGetDefault2, "cupsGetDefault2");
 
-   function cupsGetDests2 (arg1 : System.Address; arg2 : System.Address) return int;  -- cups/cups.h:420
+   function cupsGetDests2 (http : System.Address; dests : System.Address) return int;  -- cups/cups.h:420
    pragma Import (C, cupsGetDests2, "cupsGetDests2");
 
    function cupsGetJobs2
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : int;
-      arg5 : int) return int;  -- cups/cups.h:422
+     (http : System.Address;
+      jobs : System.Address;
+      name : Interfaces.C.Strings.chars_ptr;
+      myjobs : int;
+      whichjobs : int) return int;  -- cups/cups.h:422
    pragma Import (C, cupsGetJobs2, "cupsGetJobs2");
 
-   function cupsGetPPD2 (arg1 : System.Address; arg2 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:425
+   function cupsGetPPD2 (http : System.Address; name : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:425
    pragma Import (C, cupsGetPPD2, "cupsGetPPD2");
 
    function cupsPrintFile2
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : int;
-      arg6 : access cups_option_t) return int;  -- cups/cups.h:426
+     (http : System.Address;
+      name : Interfaces.C.Strings.chars_ptr;
+      filename : Interfaces.C.Strings.chars_ptr;
+      title : Interfaces.C.Strings.chars_ptr;
+      num_options : int;
+      options : access cups_option_t) return int;  -- cups/cups.h:426
    pragma Import (C, cupsPrintFile2, "cupsPrintFile2");
 
    function cupsPrintFiles2
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int;
-      arg4 : System.Address;
-      arg5 : Interfaces.C.Strings.chars_ptr;
-      arg6 : int;
-      arg7 : access cups_option_t) return int;  -- cups/cups.h:430
+     (http : System.Address;
+      name : Interfaces.C.Strings.chars_ptr;
+      num_files : int;
+      files : System.Address;
+      title : Interfaces.C.Strings.chars_ptr;
+      num_options : int;
+      options : access cups_option_t) return int;  -- cups/cups.h:430
    pragma Import (C, cupsPrintFiles2, "cupsPrintFiles2");
 
    function cupsSetDests2
-     (arg1 : System.Address;
-      arg2 : int;
-      arg3 : access cups_dest_t) return int;  -- cups/cups.h:435
+     (http : System.Address;
+      num_dests : int;
+      dests : access cups_dest_t) return int;  -- cups/cups.h:435
    pragma Import (C, cupsSetDests2, "cupsSetDests2");
 
   --*** New in CUPS 1.2/OS X 10.5 *** 
    function cupsBackChannelRead
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : size_t;
-      arg3 : double) return size_t;  -- cups/cups.h:439
+     (buffer : Interfaces.C.Strings.chars_ptr;
+      bytes : size_t;
+      timeout : double) return size_t;  -- cups/cups.h:439
    pragma Import (C, cupsBackChannelRead, "cupsBackChannelRead");
 
    function cupsBackChannelWrite
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : size_t;
-      arg3 : double) return size_t;  -- cups/cups.h:441
+     (buffer : Interfaces.C.Strings.chars_ptr;
+      bytes : size_t;
+      timeout : double) return size_t;  -- cups/cups.h:441
    pragma Import (C, cupsBackChannelWrite, "cupsBackChannelWrite");
 
    procedure cupsEncodeOptions2
-     (arg1 : System.Address;
-      arg2 : int;
-      arg3 : access cups_option_t;
-      arg4 : libCUPS.cups_ipp_h.ipp_tag_t);  -- cups/cups.h:443
+     (ipp : System.Address;
+      num_options : int;
+      options : access cups_option_t;
+      group_tag : libCUPS.cups_ipp_h.ipp_tag_t);  -- cups/cups.h:443
    pragma Import (C, cupsEncodeOptions2, "cupsEncodeOptions2");
 
    function cupsLastErrorString return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:446
    pragma Import (C, cupsLastErrorString, "cupsLastErrorString");
 
-   function cupsNotifySubject (arg1 : access libCUPS.cups_language_h.cups_lang_t; arg2 : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:447
+   function cupsNotifySubject (lang : access libCUPS.cups_language_h.cups_lang_t; event : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:447
    pragma Import (C, cupsNotifySubject, "cupsNotifySubject");
 
-   function cupsNotifyText (arg1 : access libCUPS.cups_language_h.cups_lang_t; arg2 : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:449
+   function cupsNotifyText (lang : access libCUPS.cups_language_h.cups_lang_t; event : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:449
    pragma Import (C, cupsNotifyText, "cupsNotifyText");
 
    function cupsRemoveOption
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : int;
-      arg3 : System.Address) return int;  -- cups/cups.h:451
+     (name : Interfaces.C.Strings.chars_ptr;
+      num_options : int;
+      options : System.Address) return int;  -- cups/cups.h:451
    pragma Import (C, cupsRemoveOption, "cupsRemoveOption");
 
-   function cupsTempFile2 (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : int) return System.Address;  -- cups/cups.h:453
+   function cupsTempFile2 (filename : Interfaces.C.Strings.chars_ptr; len : int) return System.Address;  -- cups/cups.h:453
    pragma Import (C, cupsTempFile2, "cupsTempFile2");
 
   --*** New in CUPS 1.3/OS X 10.5 *** 
    function cupsDoIORequest
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : int;
-      arg5 : int) return System.Address;  -- cups/cups.h:456
+     (http : System.Address;
+      request : System.Address;
+      resource : Interfaces.C.Strings.chars_ptr;
+      infile : int;
+      outfile : int) return System.Address;  -- cups/cups.h:456
    pragma Import (C, cupsDoIORequest, "cupsDoIORequest");
 
-   function cupsGetServerPPD (arg1 : System.Address; arg2 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:459
+   function cupsGetServerPPD (http : System.Address; name : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:459
    pragma Import (C, cupsGetServerPPD, "cupsGetServerPPD");
 
    function cupsRemoveDest
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int;
-      arg4 : System.Address) return int;  -- cups/cups.h:461
+     (name : Interfaces.C.Strings.chars_ptr;
+      instance : Interfaces.C.Strings.chars_ptr;
+      num_dests : int;
+      dests : System.Address) return int;  -- cups/cups.h:461
    pragma Import (C, cupsRemoveDest, "cupsRemoveDest");
 
    procedure cupsSetDefaultDest
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int;
-      arg4 : access cups_dest_t);  -- cups/cups.h:465
+     (name : Interfaces.C.Strings.chars_ptr;
+      instance : Interfaces.C.Strings.chars_ptr;
+      num_dests : int;
+      dests : access cups_dest_t);  -- cups/cups.h:465
    pragma Import (C, cupsSetDefaultDest, "cupsSetDefaultDest");
 
   --*** New in CUPS 1.4/OS X 10.6 *** 
    function cupsCancelJob2
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int;
-      arg4 : int) return libCUPS.cups_ipp_h.ipp_status_t;  -- cups/cups.h:471
+     (http : System.Address;
+      name : Interfaces.C.Strings.chars_ptr;
+      job_id : int;
+      purge : int) return libCUPS.cups_ipp_h.ipp_status_t;  -- cups/cups.h:471
    pragma Import (C, cupsCancelJob2, "cupsCancelJob2");
 
    function cupsCreateJob
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : int;
-      arg5 : access cups_option_t) return int;  -- cups/cups.h:473
+     (http : System.Address;
+      name : Interfaces.C.Strings.chars_ptr;
+      title : Interfaces.C.Strings.chars_ptr;
+      num_options : int;
+      options : access cups_option_t) return int;  -- cups/cups.h:473
    pragma Import (C, cupsCreateJob, "cupsCreateJob");
 
-   function cupsFinishDocument (arg1 : System.Address; arg2 : Interfaces.C.Strings.chars_ptr) return libCUPS.cups_ipp_h.ipp_status_t;  -- cups/cups.h:476
+   function cupsFinishDocument (http : System.Address; name : Interfaces.C.Strings.chars_ptr) return libCUPS.cups_ipp_h.ipp_status_t;  -- cups/cups.h:476
    pragma Import (C, cupsFinishDocument, "cupsFinishDocument");
 
    function cupsGetDevices
-     (arg1 : System.Address;
-      arg2 : int;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : cups_device_cb_t;
-      arg6 : System.Address) return libCUPS.cups_ipp_h.ipp_status_t;  -- cups/cups.h:478
+     (http : System.Address;
+      timeout : int;
+      include_schemes : Interfaces.C.Strings.chars_ptr;
+      exclude_schemes : Interfaces.C.Strings.chars_ptr;
+      callback : cups_device_cb_t;
+      user_data : System.Address) return libCUPS.cups_ipp_h.ipp_status_t;  -- cups/cups.h:478
    pragma Import (C, cupsGetDevices, "cupsGetDevices");
 
    function cupsGetNamedDest
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr) return access cups_dest_t;  -- cups/cups.h:483
+     (http : System.Address;
+      name : Interfaces.C.Strings.chars_ptr;
+      instance : Interfaces.C.Strings.chars_ptr) return access cups_dest_t;  -- cups/cups.h:483
    pragma Import (C, cupsGetNamedDest, "cupsGetNamedDest");
 
    function cupsGetPassword2
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : System.Address;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:485
+     (prompt : Interfaces.C.Strings.chars_ptr;
+      http : System.Address;
+      method : Interfaces.C.Strings.chars_ptr;
+      resource : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:485
    pragma Import (C, cupsGetPassword2, "cupsGetPassword2");
 
    function cupsGetPPD3
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : access libCUPS.time_h.time_t;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : size_t) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:488
+     (http : System.Address;
+      name : Interfaces.C.Strings.chars_ptr;
+      modtime : access libCUPS.time_h.time_t;
+      buffer : Interfaces.C.Strings.chars_ptr;
+      bufsize : size_t) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:488
    pragma Import (C, cupsGetPPD3, "cupsGetPPD3");
 
-   function cupsGetResponse (arg1 : System.Address; arg2 : Interfaces.C.Strings.chars_ptr) return System.Address;  -- cups/cups.h:491
+   function cupsGetResponse (http : System.Address; resource : Interfaces.C.Strings.chars_ptr) return System.Address;  -- cups/cups.h:491
    pragma Import (C, cupsGetResponse, "cupsGetResponse");
 
    function cupsReadResponseData
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : size_t) return size_t;  -- cups/cups.h:493
+     (http : System.Address;
+      buffer : Interfaces.C.Strings.chars_ptr;
+      length : size_t) return size_t;  -- cups/cups.h:493
    pragma Import (C, cupsReadResponseData, "cupsReadResponseData");
 
    function cupsSendRequest
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : size_t) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:495
+     (http : System.Address;
+      request : System.Address;
+      resource : Interfaces.C.Strings.chars_ptr;
+      length : size_t) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:495
    pragma Import (C, cupsSendRequest, "cupsSendRequest");
 
-   procedure cupsSetPasswordCB2 (arg1 : cups_password_cb2_t; arg2 : System.Address);  -- cups/cups.h:498
+   procedure cupsSetPasswordCB2 (cb : cups_password_cb2_t; user_data : System.Address);  -- cups/cups.h:498
    pragma Import (C, cupsSetPasswordCB2, "cupsSetPasswordCB2");
 
    function cupsStartDocument
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : Interfaces.C.Strings.chars_ptr;
-      arg6 : int) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:500
+     (http : System.Address;
+      name : Interfaces.C.Strings.chars_ptr;
+      job_id : int;
+      docname : Interfaces.C.Strings.chars_ptr;
+      format : Interfaces.C.Strings.chars_ptr;
+      last_document : int) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:500
    pragma Import (C, cupsStartDocument, "cupsStartDocument");
 
    function cupsWriteRequestData
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : size_t) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:504
+     (http : System.Address;
+      buffer : Interfaces.C.Strings.chars_ptr;
+      length : size_t) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:504
    pragma Import (C, cupsWriteRequestData, "cupsWriteRequestData");
 
   --*** New in CUPS 1.5/OS X 10.7 *** 
-   procedure cupsSetClientCertCB (arg1 : cups_client_cert_cb_t; arg2 : System.Address);  -- cups/cups.h:508
+   procedure cupsSetClientCertCB (cb : cups_client_cert_cb_t; user_data : System.Address);  -- cups/cups.h:508
    pragma Import (C, cupsSetClientCertCB, "cupsSetClientCertCB");
 
-   function cupsSetCredentials (arg1 : System.Address) return int;  -- cups/cups.h:510
+   function cupsSetCredentials (certs : System.Address) return int;  -- cups/cups.h:510
    pragma Import (C, cupsSetCredentials, "cupsSetCredentials");
 
-   procedure cupsSetServerCertCB (arg1 : cups_server_cert_cb_t; arg2 : System.Address);  -- cups/cups.h:511
+   procedure cupsSetServerCertCB (cb : cups_server_cert_cb_t; user_data : System.Address);  -- cups/cups.h:511
    pragma Import (C, cupsSetServerCertCB, "cupsSetServerCertCB");
 
   --*** New in CUPS 1.6/OS X 10.8 *** 
    function cupsCancelDestJob
-     (arg1 : System.Address;
-      arg2 : access cups_dest_t;
-      arg3 : int) return libCUPS.cups_ipp_h.ipp_status_t;  -- cups/cups.h:515
+     (http : System.Address;
+      dest : access cups_dest_t;
+      job_id : int) return libCUPS.cups_ipp_h.ipp_status_t;  -- cups/cups.h:515
    pragma Import (C, cupsCancelDestJob, "cupsCancelDestJob");
 
    function cupsCheckDestSupported
-     (arg1 : System.Address;
-      arg2 : access cups_dest_t;
-      arg3 : System.Address;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/cups.h:517
+     (http : System.Address;
+      dest : access cups_dest_t;
+      info : System.Address;
+      option : Interfaces.C.Strings.chars_ptr;
+      value : Interfaces.C.Strings.chars_ptr) return int;  -- cups/cups.h:517
    pragma Import (C, cupsCheckDestSupported, "cupsCheckDestSupported");
 
    function cupsCloseDestJob
-     (arg1 : System.Address;
-      arg2 : access cups_dest_t;
-      arg3 : System.Address;
-      arg4 : int) return libCUPS.cups_ipp_h.ipp_status_t;  -- cups/cups.h:521
+     (http : System.Address;
+      dest : access cups_dest_t;
+      info : System.Address;
+      job_id : int) return libCUPS.cups_ipp_h.ipp_status_t;  -- cups/cups.h:521
    pragma Import (C, cupsCloseDestJob, "cupsCloseDestJob");
 
    function cupsConnectDest
-     (arg1 : access cups_dest_t;
-      arg2 : unsigned;
-      arg3 : int;
-      arg4 : access int;
-      arg5 : Interfaces.C.Strings.chars_ptr;
-      arg6 : size_t;
-      arg7 : cups_dest_cb_t;
-      arg8 : System.Address) return System.Address;  -- cups/cups.h:524
+     (dest : access cups_dest_t;
+      flags : unsigned;
+      msec : int;
+      cancel : access int;
+      resource : Interfaces.C.Strings.chars_ptr;
+      resourcesize : size_t;
+      cb : cups_dest_cb_t;
+      user_data : System.Address) return System.Address;  -- cups/cups.h:524
    pragma Import (C, cupsConnectDest, "cupsConnectDest");
 
    function cupsCopyDest
-     (arg1 : access cups_dest_t;
-      arg2 : int;
-      arg3 : System.Address) return int;  -- cups/cups.h:537
+     (dest : access cups_dest_t;
+      num_dests : int;
+      dests : System.Address) return int;  -- cups/cups.h:537
    pragma Import (C, cupsCopyDest, "cupsCopyDest");
 
-   function cupsCopyDestInfo (arg1 : System.Address; arg2 : access cups_dest_t) return System.Address;  -- cups/cups.h:539
+   function cupsCopyDestInfo (http : System.Address; dest : access cups_dest_t) return System.Address;  -- cups/cups.h:539
    pragma Import (C, cupsCopyDestInfo, "cupsCopyDestInfo");
 
    function cupsCopyDestConflicts
-     (arg1 : System.Address;
-      arg2 : access cups_dest_t;
-      arg3 : System.Address;
-      arg4 : int;
-      arg5 : access cups_option_t;
-      arg6 : Interfaces.C.Strings.chars_ptr;
-      arg7 : Interfaces.C.Strings.chars_ptr;
-      arg8 : access int;
-      arg9 : System.Address;
-      arg10 : access int;
-      arg11 : System.Address) return int;  -- cups/cups.h:541
+     (http : System.Address;
+      dest : access cups_dest_t;
+      info : System.Address;
+      num_options : int;
+      options : access cups_option_t;
+      new_option : Interfaces.C.Strings.chars_ptr;
+      new_value : Interfaces.C.Strings.chars_ptr;
+      num_conflicts : access int;
+      conflicts : System.Address;
+      num_resolved : access int;
+      resolved : System.Address) return int;  -- cups/cups.h:541
    pragma Import (C, cupsCopyDestConflicts, "cupsCopyDestConflicts");
 
    function cupsCreateDestJob
-     (arg1 : System.Address;
-      arg2 : access cups_dest_t;
-      arg3 : System.Address;
-      arg4 : access int;
-      arg5 : Interfaces.C.Strings.chars_ptr;
-      arg6 : int;
-      arg7 : access cups_option_t) return libCUPS.cups_ipp_h.ipp_status_t;  -- cups/cups.h:552
+     (http : System.Address;
+      dest : access cups_dest_t;
+      info : System.Address;
+      job_id : access int;
+      title : Interfaces.C.Strings.chars_ptr;
+      num_options : int;
+      options : access cups_option_t) return libCUPS.cups_ipp_h.ipp_status_t;  -- cups/cups.h:552
    pragma Import (C, cupsCreateDestJob, "cupsCreateDestJob");
 
    function cupsEnumDests
-     (arg1 : unsigned;
-      arg2 : int;
-      arg3 : access int;
-      arg4 : cups_ptype_t;
-      arg5 : cups_ptype_t;
-      arg6 : cups_dest_cb_t;
-      arg7 : System.Address) return int;  -- cups/cups.h:556
+     (flags : unsigned;
+      msec : int;
+      cancel : access int;
+      c_type : cups_ptype_t;
+      mask : cups_ptype_t;
+      cb : cups_dest_cb_t;
+      user_data : System.Address) return int;  -- cups/cups.h:556
    pragma Import (C, cupsEnumDests, "cupsEnumDests");
 
    function cupsFinishDestDocument
-     (arg1 : System.Address;
-      arg2 : access cups_dest_t;
-      arg3 : System.Address) return libCUPS.cups_ipp_h.ipp_status_t;  -- cups/cups.h:567
+     (http : System.Address;
+      dest : access cups_dest_t;
+      info : System.Address) return libCUPS.cups_ipp_h.ipp_status_t;  -- cups/cups.h:567
    pragma Import (C, cupsFinishDestDocument, "cupsFinishDestDocument");
 
-   procedure cupsFreeDestInfo (arg1 : System.Address);  -- cups/cups.h:571
+   procedure cupsFreeDestInfo (dinfo : System.Address);  -- cups/cups.h:571
    pragma Import (C, cupsFreeDestInfo, "cupsFreeDestInfo");
 
    function cupsGetDestMediaByName
-     (arg1 : System.Address;
-      arg2 : access cups_dest_t;
-      arg3 : System.Address;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : unsigned;
-      arg6 : access cups_size_t) return int;  -- cups/cups.h:572
+     (http : System.Address;
+      dest : access cups_dest_t;
+      dinfo : System.Address;
+      media : Interfaces.C.Strings.chars_ptr;
+      flags : unsigned;
+      size : access cups_size_t) return int;  -- cups/cups.h:572
    pragma Import (C, cupsGetDestMediaByName, "cupsGetDestMediaByName");
 
    function cupsGetDestMediaBySize
-     (arg1 : System.Address;
-      arg2 : access cups_dest_t;
-      arg3 : System.Address;
-      arg4 : int;
-      arg5 : int;
-      arg6 : unsigned;
-      arg7 : access cups_size_t) return int;  -- cups/cups.h:577
+     (http : System.Address;
+      dest : access cups_dest_t;
+      dinfo : System.Address;
+      width : int;
+      length : int;
+      flags : unsigned;
+      size : access cups_size_t) return int;  -- cups/cups.h:577
    pragma Import (C, cupsGetDestMediaBySize, "cupsGetDestMediaBySize");
 
    function cupsLocalizeDestOption
-     (arg1 : System.Address;
-      arg2 : access cups_dest_t;
-      arg3 : System.Address;
-      arg4 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:582
+     (http : System.Address;
+      dest : access cups_dest_t;
+      info : System.Address;
+      option : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:582
    pragma Import (C, cupsLocalizeDestOption, "cupsLocalizeDestOption");
 
    function cupsLocalizeDestValue
-     (arg1 : System.Address;
-      arg2 : access cups_dest_t;
-      arg3 : System.Address;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:586
+     (http : System.Address;
+      dest : access cups_dest_t;
+      info : System.Address;
+      option : Interfaces.C.Strings.chars_ptr;
+      value : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:586
    pragma Import (C, cupsLocalizeDestValue, "cupsLocalizeDestValue");
 
    function cupsStartDestDocument
-     (arg1 : System.Address;
-      arg2 : access cups_dest_t;
-      arg3 : System.Address;
-      arg4 : int;
-      arg5 : Interfaces.C.Strings.chars_ptr;
-      arg6 : Interfaces.C.Strings.chars_ptr;
-      arg7 : int;
-      arg8 : access cups_option_t;
-      arg9 : int) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:591
+     (http : System.Address;
+      dest : access cups_dest_t;
+      info : System.Address;
+      job_id : int;
+      docname : Interfaces.C.Strings.chars_ptr;
+      format : Interfaces.C.Strings.chars_ptr;
+      num_options : int;
+      options : access cups_option_t;
+      last_document : int) return libCUPS.cups_http_h.http_status_t;  -- cups/cups.h:591
    pragma Import (C, cupsStartDestDocument, "cupsStartDestDocument");
 
   -- New in CUPS 1.7  
    function cupsFindDestDefault
-     (arg1 : System.Address;
-      arg2 : access cups_dest_t;
-      arg3 : System.Address;
-      arg4 : Interfaces.C.Strings.chars_ptr) return System.Address;  -- cups/cups.h:600
+     (http : System.Address;
+      dest : access cups_dest_t;
+      dinfo : System.Address;
+      option : Interfaces.C.Strings.chars_ptr) return System.Address;  -- cups/cups.h:600
    pragma Import (C, cupsFindDestDefault, "cupsFindDestDefault");
 
    function cupsFindDestReady
-     (arg1 : System.Address;
-      arg2 : access cups_dest_t;
-      arg3 : System.Address;
-      arg4 : Interfaces.C.Strings.chars_ptr) return System.Address;  -- cups/cups.h:603
+     (http : System.Address;
+      dest : access cups_dest_t;
+      dinfo : System.Address;
+      option : Interfaces.C.Strings.chars_ptr) return System.Address;  -- cups/cups.h:603
    pragma Import (C, cupsFindDestReady, "cupsFindDestReady");
 
    function cupsFindDestSupported
-     (arg1 : System.Address;
-      arg2 : access cups_dest_t;
-      arg3 : System.Address;
-      arg4 : Interfaces.C.Strings.chars_ptr) return System.Address;  -- cups/cups.h:606
+     (http : System.Address;
+      dest : access cups_dest_t;
+      dinfo : System.Address;
+      option : Interfaces.C.Strings.chars_ptr) return System.Address;  -- cups/cups.h:606
    pragma Import (C, cupsFindDestSupported, "cupsFindDestSupported");
 
    function cupsGetDestMediaByIndex
-     (arg1 : System.Address;
-      arg2 : access cups_dest_t;
-      arg3 : System.Address;
-      arg4 : int;
-      arg5 : unsigned;
-      arg6 : access cups_size_t) return int;  -- cups/cups.h:610
+     (http : System.Address;
+      dest : access cups_dest_t;
+      dinfo : System.Address;
+      n : int;
+      flags : unsigned;
+      size : access cups_size_t) return int;  -- cups/cups.h:610
    pragma Import (C, cupsGetDestMediaByIndex, "cupsGetDestMediaByIndex");
 
    function cupsGetDestMediaCount
-     (arg1 : System.Address;
-      arg2 : access cups_dest_t;
-      arg3 : System.Address;
-      arg4 : unsigned) return int;  -- cups/cups.h:615
+     (http : System.Address;
+      dest : access cups_dest_t;
+      dinfo : System.Address;
+      flags : unsigned) return int;  -- cups/cups.h:615
    pragma Import (C, cupsGetDestMediaCount, "cupsGetDestMediaCount");
 
    function cupsGetDestMediaDefault
-     (arg1 : System.Address;
-      arg2 : access cups_dest_t;
-      arg3 : System.Address;
-      arg4 : unsigned;
-      arg5 : access cups_size_t) return int;  -- cups/cups.h:618
+     (http : System.Address;
+      dest : access cups_dest_t;
+      dinfo : System.Address;
+      flags : unsigned;
+      size : access cups_size_t) return int;  -- cups/cups.h:618
    pragma Import (C, cupsGetDestMediaDefault, "cupsGetDestMediaDefault");
 
-   procedure cupsSetUserAgent (arg1 : Interfaces.C.Strings.chars_ptr);  -- cups/cups.h:623
+   procedure cupsSetUserAgent (user_agent : Interfaces.C.Strings.chars_ptr);  -- cups/cups.h:623
    pragma Import (C, cupsSetUserAgent, "cupsSetUserAgent");
 
    function cupsUserAgent return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:624
@@ -1032,29 +1032,29 @@ package libCUPS.cups_cups_h is
   -- * This file is subject to the Apple OS-Developed Software exception.
   --  
 
-   function cupsGetDestWithURI (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : Interfaces.C.Strings.chars_ptr) return access cups_dest_t;  -- cups/cups.h:627
+   function cupsGetDestWithURI (name : Interfaces.C.Strings.chars_ptr; uri : Interfaces.C.Strings.chars_ptr) return access cups_dest_t;  -- cups/cups.h:627
    pragma Import (C, cupsGetDestWithURI, "cupsGetDestWithURI");
 
    function cupsLocalizeDestMedia
-     (arg1 : System.Address;
-      arg2 : access cups_dest_t;
-      arg3 : System.Address;
-      arg4 : unsigned;
-      arg5 : access cups_size_t) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:628
+     (http : System.Address;
+      dest : access cups_dest_t;
+      info : System.Address;
+      flags : unsigned;
+      size : access cups_size_t) return Interfaces.C.Strings.chars_ptr;  -- cups/cups.h:628
    pragma Import (C, cupsLocalizeDestMedia, "cupsLocalizeDestMedia");
 
    function cupsMakeServerCredentials
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int;
-      arg4 : System.Address;
-      arg5 : libCUPS.time_h.time_t) return int;  -- cups/cups.h:629
+     (path : Interfaces.C.Strings.chars_ptr;
+      common_name : Interfaces.C.Strings.chars_ptr;
+      num_alt_names : int;
+      alt_names : System.Address;
+      expiration_date : libCUPS.time_h.time_t) return int;  -- cups/cups.h:629
    pragma Import (C, cupsMakeServerCredentials, "cupsMakeServerCredentials");
 
    function cupsSetServerCredentials
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : int) return int;  -- cups/cups.h:630
+     (path : Interfaces.C.Strings.chars_ptr;
+      common_name : Interfaces.C.Strings.chars_ptr;
+      auto_create : int) return int;  -- cups/cups.h:630
    pragma Import (C, cupsSetServerCredentials, "cupsSetServerCredentials");
 
   -- * End of "$Id: cups.h 13087 2016-02-12 18:53:24Z msweet $".

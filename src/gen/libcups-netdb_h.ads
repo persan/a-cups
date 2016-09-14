@@ -11,6 +11,8 @@ with libCUPS.stdint_h;
 with libCUPS.bits_sockaddr_h;
 with libCUPS.unistd_h;
 limited with libCUPS.bits_socket_h;
+limited with libCUPS.bits_siginfo_h;
+limited with libCUPS.time_h;
 
 package libCUPS.netdb_h is
 
@@ -27,7 +29,12 @@ package libCUPS.netdb_h is
    --  unsupported macro: NO_ADDRESS NO_DATA
 
    IPPORT_RESERVED : constant := 1024;  --  netdb.h:81
+
+   SCOPE_DELIMITER : aliased constant Character := '%';  --  netdb.h:86
    --  unsupported macro: h_addr h_addr_list[0]
+
+   GAI_WAIT : constant := 0;  --  netdb.h:593
+   GAI_NOWAIT : constant := 1;  --  netdb.h:594
 
    AI_PASSIVE : constant := 16#0001#;  --  netdb.h:598
    AI_CANONNAME : constant := 16#0002#;  --  netdb.h:599
@@ -35,6 +42,13 @@ package libCUPS.netdb_h is
    AI_V4MAPPED : constant := 16#0008#;  --  netdb.h:601
    AI_ALL : constant := 16#0010#;  --  netdb.h:602
    AI_ADDRCONFIG : constant := 16#0020#;  --  netdb.h:603
+
+   AI_IDN : constant := 16#0040#;  --  netdb.h:606
+
+   AI_CANONIDN : constant := 16#0080#;  --  netdb.h:609
+   AI_IDN_ALLOW_UNASSIGNED : constant := 16#0100#;  --  netdb.h:610
+
+   AI_IDN_USE_STD3_ASCII_RULES : constant := 16#0200#;  --  netdb.h:612
 
    AI_NUMERICSERV : constant := 16#0400#;  --  netdb.h:615
 
@@ -49,6 +63,15 @@ package libCUPS.netdb_h is
    EAI_SYSTEM : constant := -11;  --  netdb.h:626
    EAI_OVERFLOW : constant := -12;  --  netdb.h:627
 
+   EAI_NODATA : constant := -5;  --  netdb.h:629
+   EAI_ADDRFAMILY : constant := -9;  --  netdb.h:630
+   EAI_INPROGRESS : constant := -100;  --  netdb.h:631
+   EAI_CANCELED : constant := -101;  --  netdb.h:632
+   EAI_NOTCANCELED : constant := -102;  --  netdb.h:633
+   EAI_ALLDONE : constant := -103;  --  netdb.h:634
+   EAI_INTR : constant := -104;  --  netdb.h:635
+   EAI_IDN_ENCODE : constant := -105;  --  netdb.h:636
+
    NI_MAXHOST : constant := 1025;  --  netdb.h:640
    NI_MAXSERV : constant := 32;  --  netdb.h:641
 
@@ -57,6 +80,11 @@ package libCUPS.netdb_h is
    NI_NOFQDN : constant := 4;  --  netdb.h:646
    NI_NAMEREQD : constant := 8;  --  netdb.h:647
    NI_DGRAM : constant := 16;  --  netdb.h:648
+
+   NI_IDN : constant := 32;  --  netdb.h:650
+   NI_IDN_ALLOW_UNASSIGNED : constant := 64;  --  netdb.h:651
+
+   NI_IDN_USE_STD3_ASCII_RULES : constant := 128;  --  netdb.h:653
 
   -- Copyright (C) 1996-2016 Free Software Foundation, Inc.
   --   This file is part of the GNU C Library.
@@ -92,11 +120,11 @@ package libCUPS.netdb_h is
   -- Print error indicated by `h_errno' variable on standard error.  STR
   --   if non-null is printed before the error string.   
 
-   procedure herror (arg1 : Interfaces.C.Strings.chars_ptr);  -- netdb.h:92
+   procedure herror (uu_str : Interfaces.C.Strings.chars_ptr);  -- netdb.h:92
    pragma Import (C, herror, "herror");
 
   -- Return string associated with error ERR_NUM.   
-   function hstrerror (arg1 : int) return Interfaces.C.Strings.chars_ptr;  -- netdb.h:95
+   function hstrerror (uu_err_num : int) return Interfaces.C.Strings.chars_ptr;  -- netdb.h:95
    pragma Import (C, hstrerror, "hstrerror");
 
   -- Description of data base entry for a single host.   
@@ -119,7 +147,7 @@ package libCUPS.netdb_h is
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   procedure sethostent (arg1 : int);  -- netdb.h:117
+   procedure sethostent (uu_stay_open : int);  -- netdb.h:117
    pragma Import (C, sethostent, "sethostent");
 
   -- Close host data base files and clear `stay open' flag.
@@ -143,16 +171,16 @@ package libCUPS.netdb_h is
   --   marked with __THROW.   
 
    function gethostbyaddr
-     (arg1 : System.Address;
-      arg2 : libCUPS.bits_types_h.uu_socklen_t;
-      arg3 : int) return access hostent;  -- netdb.h:137
+     (uu_addr : System.Address;
+      uu_len : libCUPS.bits_types_h.uu_socklen_t;
+      uu_type : int) return access hostent;  -- netdb.h:137
    pragma Import (C, gethostbyaddr, "gethostbyaddr");
 
   -- Return entry from host data base for host with NAME.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function gethostbyname (arg1 : Interfaces.C.Strings.chars_ptr) return access hostent;  -- netdb.h:144
+   function gethostbyname (uu_name : Interfaces.C.Strings.chars_ptr) return access hostent;  -- netdb.h:144
    pragma Import (C, gethostbyname, "gethostbyname");
 
   -- Return entry from host data base for host with NAME.  AF must be
@@ -163,7 +191,7 @@ package libCUPS.netdb_h is
   --   or due to the implementation it is a cancellation point and
   --   therefore not marked with __THROW.   
 
-   function gethostbyname2 (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : int) return access hostent;  -- netdb.h:155
+   function gethostbyname2 (uu_name : Interfaces.C.Strings.chars_ptr; uu_af : int) return access hostent;  -- netdb.h:155
    pragma Import (C, gethostbyname2, "gethostbyname2");
 
   -- Reentrant versions of the functions above.  The additional
@@ -177,41 +205,41 @@ package libCUPS.netdb_h is
   --   therefore not marked with __THROW.   
 
    function gethostent_r
-     (arg1 : access hostent;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : size_t;
-      arg4 : System.Address;
-      arg5 : access int) return int;  -- netdb.h:167
+     (uu_result_buf : access hostent;
+      uu_buf : Interfaces.C.Strings.chars_ptr;
+      uu_buflen : size_t;
+      uu_result : System.Address;
+      uu_h_errnop : access int) return int;  -- netdb.h:167
    pragma Import (C, gethostent_r, "gethostent_r");
 
    function gethostbyaddr_r
-     (arg1 : System.Address;
-      arg2 : libCUPS.bits_types_h.uu_socklen_t;
-      arg3 : int;
-      arg4 : access hostent;
-      arg5 : Interfaces.C.Strings.chars_ptr;
-      arg6 : size_t;
-      arg7 : System.Address;
-      arg8 : access int) return int;  -- netdb.h:172
+     (uu_addr : System.Address;
+      uu_len : libCUPS.bits_types_h.uu_socklen_t;
+      uu_type : int;
+      uu_result_buf : access hostent;
+      uu_buf : Interfaces.C.Strings.chars_ptr;
+      uu_buflen : size_t;
+      uu_result : System.Address;
+      uu_h_errnop : access int) return int;  -- netdb.h:172
    pragma Import (C, gethostbyaddr_r, "gethostbyaddr_r");
 
    function gethostbyname_r
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : access hostent;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : size_t;
-      arg5 : System.Address;
-      arg6 : access int) return int;  -- netdb.h:179
+     (uu_name : Interfaces.C.Strings.chars_ptr;
+      uu_result_buf : access hostent;
+      uu_buf : Interfaces.C.Strings.chars_ptr;
+      uu_buflen : size_t;
+      uu_result : System.Address;
+      uu_h_errnop : access int) return int;  -- netdb.h:179
    pragma Import (C, gethostbyname_r, "gethostbyname_r");
 
    function gethostbyname2_r
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : int;
-      arg3 : access hostent;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : size_t;
-      arg6 : System.Address;
-      arg7 : access int) return int;  -- netdb.h:185
+     (uu_name : Interfaces.C.Strings.chars_ptr;
+      uu_af : int;
+      uu_result_buf : access hostent;
+      uu_buf : Interfaces.C.Strings.chars_ptr;
+      uu_buflen : size_t;
+      uu_result : System.Address;
+      uu_h_errnop : access int) return int;  -- netdb.h:185
    pragma Import (C, gethostbyname2_r, "gethostbyname2_r");
 
   -- Open network data base files and mark them as staying open even
@@ -219,7 +247,7 @@ package libCUPS.netdb_h is
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   procedure setnetent (arg1 : int);  -- netdb.h:198
+   procedure setnetent (uu_stay_open : int);  -- netdb.h:198
    pragma Import (C, setnetent, "setnetent");
 
   -- Close network data base files and clear `stay open' flag.
@@ -242,14 +270,14 @@ package libCUPS.netdb_h is
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function getnetbyaddr (arg1 : libCUPS.stdint_h.uint32_t; arg2 : int) return access libCUPS.bits_netdb_h.netent;  -- netdb.h:218
+   function getnetbyaddr (uu_net : libCUPS.stdint_h.uint32_t; uu_type : int) return access libCUPS.bits_netdb_h.netent;  -- netdb.h:218
    pragma Import (C, getnetbyaddr, "getnetbyaddr");
 
   -- Return entry from network data base for network with NAME.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function getnetbyname (arg1 : Interfaces.C.Strings.chars_ptr) return access libCUPS.bits_netdb_h.netent;  -- netdb.h:224
+   function getnetbyname (uu_name : Interfaces.C.Strings.chars_ptr) return access libCUPS.bits_netdb_h.netent;  -- netdb.h:224
    pragma Import (C, getnetbyname, "getnetbyname");
 
   -- Reentrant versions of the functions above.  The additional
@@ -263,30 +291,30 @@ package libCUPS.netdb_h is
   --   therefore not marked with __THROW.   
 
    function getnetent_r
-     (arg1 : access libCUPS.bits_netdb_h.netent;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : size_t;
-      arg4 : System.Address;
-      arg5 : access int) return int;  -- netdb.h:237
+     (uu_result_buf : access libCUPS.bits_netdb_h.netent;
+      uu_buf : Interfaces.C.Strings.chars_ptr;
+      uu_buflen : size_t;
+      uu_result : System.Address;
+      uu_h_errnop : access int) return int;  -- netdb.h:237
    pragma Import (C, getnetent_r, "getnetent_r");
 
    function getnetbyaddr_r
-     (arg1 : libCUPS.stdint_h.uint32_t;
-      arg2 : int;
-      arg3 : access libCUPS.bits_netdb_h.netent;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : size_t;
-      arg6 : System.Address;
-      arg7 : access int) return int;  -- netdb.h:242
+     (uu_net : libCUPS.stdint_h.uint32_t;
+      uu_type : int;
+      uu_result_buf : access libCUPS.bits_netdb_h.netent;
+      uu_buf : Interfaces.C.Strings.chars_ptr;
+      uu_buflen : size_t;
+      uu_result : System.Address;
+      uu_h_errnop : access int) return int;  -- netdb.h:242
    pragma Import (C, getnetbyaddr_r, "getnetbyaddr_r");
 
    function getnetbyname_r
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : access libCUPS.bits_netdb_h.netent;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : size_t;
-      arg5 : System.Address;
-      arg6 : access int) return int;  -- netdb.h:248
+     (uu_name : Interfaces.C.Strings.chars_ptr;
+      uu_result_buf : access libCUPS.bits_netdb_h.netent;
+      uu_buf : Interfaces.C.Strings.chars_ptr;
+      uu_buflen : size_t;
+      uu_result : System.Address;
+      uu_h_errnop : access int) return int;  -- netdb.h:248
    pragma Import (C, getnetbyname_r, "getnetbyname_r");
 
   -- Description of data base entry for a single service.   
@@ -307,7 +335,7 @@ package libCUPS.netdb_h is
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   procedure setservent (arg1 : int);  -- netdb.h:270
+   procedure setservent (uu_stay_open : int);  -- netdb.h:270
    pragma Import (C, setservent, "setservent");
 
   -- Close service data base files and clear `stay open' flag.
@@ -330,7 +358,7 @@ package libCUPS.netdb_h is
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function getservbyname (arg1 : Interfaces.C.Strings.chars_ptr; arg2 : Interfaces.C.Strings.chars_ptr) return access servent;  -- netdb.h:290
+   function getservbyname (uu_name : Interfaces.C.Strings.chars_ptr; uu_proto : Interfaces.C.Strings.chars_ptr) return access servent;  -- netdb.h:290
    pragma Import (C, getservbyname, "getservbyname");
 
   -- Return entry from service data base which matches port PORT and
@@ -338,7 +366,7 @@ package libCUPS.netdb_h is
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function getservbyport (arg1 : int; arg2 : Interfaces.C.Strings.chars_ptr) return access servent;  -- netdb.h:297
+   function getservbyport (uu_port : int; uu_proto : Interfaces.C.Strings.chars_ptr) return access servent;  -- netdb.h:297
    pragma Import (C, getservbyport, "getservbyport");
 
   -- Reentrant versions of the functions above.  The additional
@@ -349,28 +377,28 @@ package libCUPS.netdb_h is
   --   therefore not marked with __THROW.   
 
    function getservent_r
-     (arg1 : access servent;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : size_t;
-      arg4 : System.Address) return int;  -- netdb.h:308
+     (uu_result_buf : access servent;
+      uu_buf : Interfaces.C.Strings.chars_ptr;
+      uu_buflen : size_t;
+      uu_result : System.Address) return int;  -- netdb.h:308
    pragma Import (C, getservent_r, "getservent_r");
 
    function getservbyname_r
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : access servent;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : size_t;
-      arg6 : System.Address) return int;  -- netdb.h:312
+     (uu_name : Interfaces.C.Strings.chars_ptr;
+      uu_proto : Interfaces.C.Strings.chars_ptr;
+      uu_result_buf : access servent;
+      uu_buf : Interfaces.C.Strings.chars_ptr;
+      uu_buflen : size_t;
+      uu_result : System.Address) return int;  -- netdb.h:312
    pragma Import (C, getservbyname_r, "getservbyname_r");
 
    function getservbyport_r
-     (arg1 : int;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : access servent;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : size_t;
-      arg6 : System.Address) return int;  -- netdb.h:318
+     (uu_port : int;
+      uu_proto : Interfaces.C.Strings.chars_ptr;
+      uu_result_buf : access servent;
+      uu_buf : Interfaces.C.Strings.chars_ptr;
+      uu_buflen : size_t;
+      uu_result : System.Address) return int;  -- netdb.h:318
    pragma Import (C, getservbyport_r, "getservbyport_r");
 
   -- Description of data base entry for a single service.   
@@ -389,7 +417,7 @@ package libCUPS.netdb_h is
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   procedure setprotoent (arg1 : int);  -- netdb.h:338
+   procedure setprotoent (uu_stay_open : int);  -- netdb.h:338
    pragma Import (C, setprotoent, "setprotoent");
 
   -- Close protocol data base files and clear `stay open' flag.
@@ -411,14 +439,14 @@ package libCUPS.netdb_h is
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function getprotobyname (arg1 : Interfaces.C.Strings.chars_ptr) return access protoent;  -- netdb.h:357
+   function getprotobyname (uu_name : Interfaces.C.Strings.chars_ptr) return access protoent;  -- netdb.h:357
    pragma Import (C, getprotobyname, "getprotobyname");
 
   -- Return entry from protocol data base which number is PROTO.
   --   This function is a possible cancellation point and therefore not
   --   marked with __THROW.   
 
-   function getprotobynumber (arg1 : int) return access protoent;  -- netdb.h:363
+   function getprotobynumber (uu_proto : int) return access protoent;  -- netdb.h:363
    pragma Import (C, getprotobynumber, "getprotobynumber");
 
   -- Reentrant versions of the functions above.  The additional
@@ -429,26 +457,26 @@ package libCUPS.netdb_h is
   --   therefore not marked with __THROW.   
 
    function getprotoent_r
-     (arg1 : access protoent;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : size_t;
-      arg4 : System.Address) return int;  -- netdb.h:374
+     (uu_result_buf : access protoent;
+      uu_buf : Interfaces.C.Strings.chars_ptr;
+      uu_buflen : size_t;
+      uu_result : System.Address) return int;  -- netdb.h:374
    pragma Import (C, getprotoent_r, "getprotoent_r");
 
    function getprotobyname_r
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : access protoent;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : size_t;
-      arg5 : System.Address) return int;  -- netdb.h:378
+     (uu_name : Interfaces.C.Strings.chars_ptr;
+      uu_result_buf : access protoent;
+      uu_buf : Interfaces.C.Strings.chars_ptr;
+      uu_buflen : size_t;
+      uu_result : System.Address) return int;  -- netdb.h:378
    pragma Import (C, getprotobyname_r, "getprotobyname_r");
 
    function getprotobynumber_r
-     (arg1 : int;
-      arg2 : access protoent;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : size_t;
-      arg5 : System.Address) return int;  -- netdb.h:383
+     (uu_proto : int;
+      uu_result_buf : access protoent;
+      uu_buf : Interfaces.C.Strings.chars_ptr;
+      uu_buflen : size_t;
+      uu_result : System.Address) return int;  -- netdb.h:383
    pragma Import (C, getprotobynumber_r, "getprotobynumber_r");
 
   -- Establish network group NETGROUP for enumeration.
@@ -457,7 +485,7 @@ package libCUPS.netdb_h is
   --   or due to the implementation it is a cancellation point and
   --   therefore not marked with __THROW.   
 
-   function setnetgrent (arg1 : Interfaces.C.Strings.chars_ptr) return int;  -- netdb.h:395
+   function setnetgrent (uu_netgroup : Interfaces.C.Strings.chars_ptr) return int;  -- netdb.h:395
    pragma Import (C, setnetgrent, "setnetgrent");
 
   -- Free all space allocated by previous `setnetgrent' call.
@@ -477,9 +505,9 @@ package libCUPS.netdb_h is
   --   therefore not marked with __THROW.   
 
    function getnetgrent
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : System.Address) return int;  -- netdb.h:412
+     (uu_hostp : System.Address;
+      uu_userp : System.Address;
+      uu_domainp : System.Address) return int;  -- netdb.h:412
    pragma Import (C, getnetgrent, "getnetgrent");
 
   -- Test whether NETGROUP contains the triple (HOST,USER,DOMAIN).
@@ -489,10 +517,10 @@ package libCUPS.netdb_h is
   --   therefore not marked with __THROW.   
 
    function innetgr
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : Interfaces.C.Strings.chars_ptr) return int;  -- netdb.h:423
+     (uu_netgroup : Interfaces.C.Strings.chars_ptr;
+      uu_host : Interfaces.C.Strings.chars_ptr;
+      uu_user : Interfaces.C.Strings.chars_ptr;
+      uu_domain : Interfaces.C.Strings.chars_ptr) return int;  -- netdb.h:423
    pragma Import (C, innetgr, "innetgr");
 
   -- Reentrant version of `getnetgrent' where result is placed in BUFFER.
@@ -502,11 +530,11 @@ package libCUPS.netdb_h is
   --   therefore not marked with __THROW.   
 
    function getnetgrent_r
-     (arg1 : System.Address;
-      arg2 : System.Address;
-      arg3 : System.Address;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : size_t) return int;  -- netdb.h:432
+     (uu_hostp : System.Address;
+      uu_userp : System.Address;
+      uu_domainp : System.Address;
+      uu_buffer : Interfaces.C.Strings.chars_ptr;
+      uu_buflen : size_t) return int;  -- netdb.h:432
    pragma Import (C, getnetgrent_r, "getnetgrent_r");
 
   -- Call `rshd' at port RPORT on remote machine *AHOST to execute CMD.
@@ -521,12 +549,12 @@ package libCUPS.netdb_h is
   --   therefore not marked with __THROW.   
 
    function rcmd
-     (arg1 : System.Address;
-      arg2 : unsigned_short;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : Interfaces.C.Strings.chars_ptr;
-      arg6 : access int) return int;  -- netdb.h:451
+     (uu_ahost : System.Address;
+      uu_rport : unsigned_short;
+      uu_locuser : Interfaces.C.Strings.chars_ptr;
+      uu_remuser : Interfaces.C.Strings.chars_ptr;
+      uu_cmd : Interfaces.C.Strings.chars_ptr;
+      uu_fd2p : access int) return int;  -- netdb.h:451
    pragma Import (C, rcmd, "rcmd");
 
   -- This is the equivalent function where the protocol can be selected
@@ -537,13 +565,13 @@ package libCUPS.netdb_h is
   --   therefore not marked with __THROW.   
 
    function rcmd_af
-     (arg1 : System.Address;
-      arg2 : unsigned_short;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : Interfaces.C.Strings.chars_ptr;
-      arg6 : access int;
-      arg7 : libCUPS.bits_sockaddr_h.sa_family_t) return int;  -- netdb.h:463
+     (uu_ahost : System.Address;
+      uu_rport : unsigned_short;
+      uu_locuser : Interfaces.C.Strings.chars_ptr;
+      uu_remuser : Interfaces.C.Strings.chars_ptr;
+      uu_cmd : Interfaces.C.Strings.chars_ptr;
+      uu_fd2p : access int;
+      uu_af : libCUPS.bits_sockaddr_h.sa_family_t) return int;  -- netdb.h:463
    pragma Import (C, rcmd_af, "rcmd_af");
 
   -- Call `rexecd' at port RPORT on remote machine *AHOST to execute
@@ -557,12 +585,12 @@ package libCUPS.netdb_h is
   --   therefore not marked with __THROW.   
 
    function rexec
-     (arg1 : System.Address;
-      arg2 : int;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : Interfaces.C.Strings.chars_ptr;
-      arg6 : access int) return int;  -- netdb.h:479
+     (uu_ahost : System.Address;
+      uu_rport : int;
+      uu_name : Interfaces.C.Strings.chars_ptr;
+      uu_pass : Interfaces.C.Strings.chars_ptr;
+      uu_cmd : Interfaces.C.Strings.chars_ptr;
+      uu_fd2p : access int) return int;  -- netdb.h:479
    pragma Import (C, rexec, "rexec");
 
   -- This is the equivalent function where the protocol can be selected
@@ -573,13 +601,13 @@ package libCUPS.netdb_h is
   --   therefore not marked with __THROW.   
 
    function rexec_af
-     (arg1 : System.Address;
-      arg2 : int;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : Interfaces.C.Strings.chars_ptr;
-      arg6 : access int;
-      arg7 : libCUPS.bits_sockaddr_h.sa_family_t) return int;  -- netdb.h:491
+     (uu_ahost : System.Address;
+      uu_rport : int;
+      uu_name : Interfaces.C.Strings.chars_ptr;
+      uu_pass : Interfaces.C.Strings.chars_ptr;
+      uu_cmd : Interfaces.C.Strings.chars_ptr;
+      uu_fd2p : access int;
+      uu_af : libCUPS.bits_sockaddr_h.sa_family_t) return int;  -- netdb.h:491
    pragma Import (C, rexec_af, "rexec_af");
 
   -- Check whether user REMUSER on system RHOST is allowed to login as LOCUSER.
@@ -591,10 +619,10 @@ package libCUPS.netdb_h is
   --   therefore not marked with __THROW.   
 
    function ruserok
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : int;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : Interfaces.C.Strings.chars_ptr) return int;  -- netdb.h:505
+     (uu_rhost : Interfaces.C.Strings.chars_ptr;
+      uu_suser : int;
+      uu_remuser : Interfaces.C.Strings.chars_ptr;
+      uu_locuser : Interfaces.C.Strings.chars_ptr) return int;  -- netdb.h:505
    pragma Import (C, ruserok, "ruserok");
 
   -- This is the equivalent function where the protocol can be selected
@@ -605,11 +633,11 @@ package libCUPS.netdb_h is
   --   therefore not marked with __THROW.   
 
    function ruserok_af
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : int;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : libCUPS.bits_sockaddr_h.sa_family_t) return int;  -- netdb.h:515
+     (uu_rhost : Interfaces.C.Strings.chars_ptr;
+      uu_suser : int;
+      uu_remuser : Interfaces.C.Strings.chars_ptr;
+      uu_locuser : Interfaces.C.Strings.chars_ptr;
+      uu_af : libCUPS.bits_sockaddr_h.sa_family_t) return int;  -- netdb.h:515
    pragma Import (C, ruserok_af, "ruserok_af");
 
   -- Check whether user REMUSER on system indicated by IPv4 address
@@ -622,10 +650,10 @@ package libCUPS.netdb_h is
   --   therefore not marked with __THROW.   
 
    function iruserok
-     (arg1 : libCUPS.stdint_h.uint32_t;
-      arg2 : int;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : Interfaces.C.Strings.chars_ptr) return int;  -- netdb.h:528
+     (uu_raddr : libCUPS.stdint_h.uint32_t;
+      uu_suser : int;
+      uu_remuser : Interfaces.C.Strings.chars_ptr;
+      uu_locuser : Interfaces.C.Strings.chars_ptr) return int;  -- netdb.h:528
    pragma Import (C, iruserok, "iruserok");
 
   -- This is the equivalent function where the pfamiliy if the address
@@ -637,11 +665,11 @@ package libCUPS.netdb_h is
   --   therefore not marked with __THROW.   
 
    function iruserok_af
-     (arg1 : System.Address;
-      arg2 : int;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : libCUPS.bits_sockaddr_h.sa_family_t) return int;  -- netdb.h:539
+     (uu_raddr : System.Address;
+      uu_suser : int;
+      uu_remuser : Interfaces.C.Strings.chars_ptr;
+      uu_locuser : Interfaces.C.Strings.chars_ptr;
+      uu_af : libCUPS.bits_sockaddr_h.sa_family_t) return int;  -- netdb.h:539
    pragma Import (C, iruserok_af, "iruserok_af");
 
   -- Try to allocate reserved port, returning a descriptor for a socket opened
@@ -652,7 +680,7 @@ package libCUPS.netdb_h is
   --   or due to the implementation it is a cancellation point and
   --   therefore not marked with __THROW.   
 
-   function rresvport (arg1 : access int) return int;  -- netdb.h:551
+   function rresvport (uu_alport : access int) return int;  -- netdb.h:551
    pragma Import (C, rresvport, "rresvport");
 
   -- This is the equivalent function where the protocol can be selected
@@ -662,7 +690,7 @@ package libCUPS.netdb_h is
   --   or due to the implementation it is a cancellation point and
   --   therefore not marked with __THROW.   
 
-   function rresvport_af (arg1 : access int; arg2 : libCUPS.bits_sockaddr_h.sa_family_t) return int;  -- netdb.h:560
+   function rresvport_af (uu_alport : access int; uu_af : libCUPS.bits_sockaddr_h.sa_family_t) return int;  -- netdb.h:560
    pragma Import (C, rresvport_af, "rresvport_af");
 
   -- Extension from POSIX.1:2001.   
@@ -689,6 +717,17 @@ package libCUPS.netdb_h is
   -- Pointer to next in list.   
   -- Structure used as control block for asynchronous lookup.   
   -- Name to look up.   
+   type gaicb_uu_glibc_reserved_array is array (0 .. 4) of aliased int;
+   type gaicb is record
+      ar_name : Interfaces.C.Strings.chars_ptr;  -- netdb.h:583
+      ar_service : Interfaces.C.Strings.chars_ptr;  -- netdb.h:584
+      ar_request : access constant addrinfo;  -- netdb.h:585
+      ar_result : access addrinfo;  -- netdb.h:586
+      uu_return : aliased int;  -- netdb.h:588
+      uu_glibc_reserved : aliased gaicb_uu_glibc_reserved_array;  -- netdb.h:589
+   end record;
+   pragma Convention (C_Pass_By_Copy, gaicb);  -- netdb.h:581
+
   -- Service name.   
   -- Additional request specification.   
   -- Pointer to result.   
@@ -702,18 +741,18 @@ package libCUPS.netdb_h is
   --   marked with __THROW.   
 
    function getaddrinfo
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : System.Address;
-      arg4 : System.Address) return int;  -- netdb.h:662
+     (uu_name : Interfaces.C.Strings.chars_ptr;
+      uu_service : Interfaces.C.Strings.chars_ptr;
+      uu_req : access constant addrinfo;
+      uu_pai : System.Address) return int;  -- netdb.h:662
    pragma Import (C, getaddrinfo, "getaddrinfo");
 
   -- Free `addrinfo' structure AI including associated storage.   
-   procedure freeaddrinfo (arg1 : access addrinfo);  -- netdb.h:668
+   procedure freeaddrinfo (uu_ai : access addrinfo);  -- netdb.h:668
    pragma Import (C, freeaddrinfo, "freeaddrinfo");
 
   -- Convert error return from getaddrinfo() to a string.   
-   function gai_strerror (arg1 : int) return Interfaces.C.Strings.chars_ptr;  -- netdb.h:671
+   function gai_strerror (uu_ecode : int) return Interfaces.C.Strings.chars_ptr;  -- netdb.h:671
    pragma Import (C, gai_strerror, "gai_strerror");
 
   -- Translate a socket address to a location and service name.
@@ -721,13 +760,13 @@ package libCUPS.netdb_h is
   --   marked with __THROW.   
 
    function getnameinfo
-     (arg1 : System.Address;
-      arg2 : libCUPS.unistd_h.socklen_t;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : libCUPS.unistd_h.socklen_t;
-      arg5 : Interfaces.C.Strings.chars_ptr;
-      arg6 : libCUPS.unistd_h.socklen_t;
-      arg7 : int) return int;  -- netdb.h:677
+     (uu_sa : access constant libCUPS.bits_socket_h.sockaddr;
+      uu_salen : libCUPS.unistd_h.socklen_t;
+      uu_host : Interfaces.C.Strings.chars_ptr;
+      uu_hostlen : libCUPS.unistd_h.socklen_t;
+      uu_serv : Interfaces.C.Strings.chars_ptr;
+      uu_servlen : libCUPS.unistd_h.socklen_t;
+      uu_flags : int) return int;  -- netdb.h:677
    pragma Import (C, getnameinfo, "getnameinfo");
 
   -- Enqueue ENT requests from the LIST.  If MODE is GAI_WAIT wait until all
@@ -738,6 +777,13 @@ package libCUPS.netdb_h is
   --   or due to the implementation it is a cancellation point and
   --   therefore not marked with __THROW.   
 
+   function getaddrinfo_a
+     (uu_mode : int;
+      uu_list : System.Address;
+      uu_ent : int;
+      uu_sig : access libCUPS.bits_siginfo_h.sigevent) return int;  -- netdb.h:692
+   pragma Import (C, getaddrinfo_a, "getaddrinfo_a");
+
   -- Suspend execution of the thread until at least one of the ENT requests
   --   in LIST is handled.  If TIMEOUT is not a null pointer it specifies the
   --   longest time the function keeps waiting before returning with an error.
@@ -746,6 +792,18 @@ package libCUPS.netdb_h is
   --   or due to the implementation it is a cancellation point and
   --   therefore not marked with __THROW.   
 
+   function gai_suspend
+     (uu_list : System.Address;
+      uu_ent : int;
+      uu_timeout : access constant libCUPS.time_h.timespec) return int;  -- netdb.h:703
+   pragma Import (C, gai_suspend, "gai_suspend");
+
   -- Get the error status of the request REQ.   
+   function gai_error (uu_req : access gaicb) return int;  -- netdb.h:707
+   pragma Import (C, gai_error, "gai_error");
+
   -- Cancel the requests associated with GAICBP.   
+   function gai_cancel (uu_gaicbp : access gaicb) return int;  -- netdb.h:710
+   pragma Import (C, gai_cancel, "gai_cancel");
+
 end libCUPS.netdb_h;

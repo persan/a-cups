@@ -35,11 +35,13 @@ package libCUPS.sys_types_h is
 
    subtype u_quad_t is libCUPS.bits_types_h.uu_u_quad_t;  -- sys/types.h:38
 
-   subtype fsid_t is libCUPS.bits_types_h.uu_fsid_t;  -- sys/types.h:39
+   subtype fsid_t is libCUPS.bits_types_h.uu_fsid_t;
 
    subtype loff_t is libCUPS.bits_types_h.uu_loff_t;  -- sys/types.h:44
 
    subtype ino_t is libCUPS.bits_types_h.uu_ino_t;  -- sys/types.h:48
+
+   subtype ino64_t is libCUPS.bits_types_h.uu_ino64_t;  -- sys/types.h:55
 
    subtype dev_t is libCUPS.bits_types_h.uu_dev_t;  -- sys/types.h:60
 
@@ -60,6 +62,10 @@ package libCUPS.sys_types_h is
    subtype caddr_t is libCUPS.bits_types_h.uu_caddr_t;  -- sys/types.h:116
 
    subtype key_t is libCUPS.bits_types_h.uu_key_t;  -- sys/types.h:122
+
+   subtype useconds_t is libCUPS.bits_types_h.uu_useconds_t;  -- sys/types.h:136
+
+   subtype suseconds_t is libCUPS.bits_types_h.uu_suseconds_t;  -- sys/types.h:140
 
   -- Old compatibility names for C types.   
    subtype ulong is unsigned_long;  -- sys/types.h:150
@@ -112,7 +118,13 @@ package libCUPS.sys_types_h is
   -- Type to count file system blocks.   
   -- Type to count file system inodes.   
   -- Type to count number of disk blocks.  
+   subtype blkcnt64_t is libCUPS.bits_types_h.uu_blkcnt64_t;  -- sys/types.h:262
+
   -- Type to count file system blocks.   
+   subtype fsblkcnt64_t is libCUPS.bits_types_h.uu_fsblkcnt64_t;  -- sys/types.h:263
+
   -- Type to count file system inodes.   
+   subtype fsfilcnt64_t is libCUPS.bits_types_h.uu_fsfilcnt64_t;  -- sys/types.h:264
+
   -- Now add the thread types.   
 end libCUPS.sys_types_h;

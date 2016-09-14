@@ -5,6 +5,8 @@ with Interfaces.C; use Interfaces.C;
 with libCUPS.stdint_h;
 with libCUPS.bits_sockaddr_h;
 with libCUPS.bits_socket_h;
+with System;
+with libCUPS.unistd_h;
 
 package libCUPS.netinet_in_h is
 
@@ -213,22 +215,22 @@ package libCUPS.netinet_in_h is
   -- Defines for Multicast INADDR.
   -- IPv6 address
    type in6_addr;
-   type anon2597_uu_u6_addr8_array is array (0 .. 15) of aliased libCUPS.stdint_h.uint8_t;
-   type anon2597_uu_u6_addr16_array is array (0 .. 7) of aliased libCUPS.stdint_h.uint16_t;
-   type anon2597_uu_u6_addr32_array is array (0 .. 3) of aliased libCUPS.stdint_h.uint32_t;
-   type anon2597_uu_in6_u_union (discr : unsigned := 0) is record
+   type in6_addr_uu_u6_addr8_array is array (0 .. 15) of aliased libCUPS.stdint_h.uint8_t;
+   type in6_addr_uu_u6_addr16_array is array (0 .. 7) of aliased libCUPS.stdint_h.uint16_t;
+   type in6_addr_uu_u6_addr32_array is array (0 .. 3) of aliased libCUPS.stdint_h.uint32_t;
+   type anon_32 (discr : unsigned := 0) is record
       case discr is
          when 0 =>
-            uu_u6_addr8 : aliased anon2597_uu_u6_addr8_array;  -- netinet/in.h:215
+            uu_u6_addr8 : aliased in6_addr_uu_u6_addr8_array;  -- netinet/in.h:215
          when 1 =>
-            uu_u6_addr16 : aliased anon2597_uu_u6_addr16_array;  -- netinet/in.h:217
+            uu_u6_addr16 : aliased in6_addr_uu_u6_addr16_array;  -- netinet/in.h:217
          when others =>
-            uu_u6_addr32 : aliased anon2597_uu_u6_addr32_array;  -- netinet/in.h:218
+            uu_u6_addr32 : aliased in6_addr_uu_u6_addr32_array;  -- netinet/in.h:218
       end case;
    end record;
-   pragma Convention (C_Pass_By_Copy, anon2597_uu_in6_u_union);
-   pragma Unchecked_Union (anon2597_uu_in6_u_union);type in6_addr is record
-      uu_in6_u : aliased anon2597_uu_in6_u_union;  -- netinet/in.h:220
+   pragma Convention (C_Pass_By_Copy, anon_32);
+   pragma Unchecked_Union (anon_32);type in6_addr is record
+      uu_in6_u : aliased anon_32;  -- netinet/in.h:220
    end record;
    pragma Convention (C_Pass_By_Copy, in6_addr);  -- netinet/in.h:211
 
@@ -241,12 +243,12 @@ package libCUPS.netinet_in_h is
    pragma Import (C, in6addr_loopback, "in6addr_loopback");
 
   -- Structure describing an Internet socket address.
-   type anon2612_sin_zero_array is array (0 .. 7) of aliased unsigned_char;
+   type sockaddr_in_sin_zero_array is array (0 .. 7) of aliased unsigned_char;
    type sockaddr_in is record
       sin_family : aliased libCUPS.bits_sockaddr_h.sa_family_t;  -- netinet/in.h:241
       sin_port : aliased in_port_t;  -- netinet/in.h:242
       sin_addr : aliased in_addr;  -- netinet/in.h:243
-      sin_zero : aliased anon2612_sin_zero_array;  -- netinet/in.h:246
+      sin_zero : aliased sockaddr_in_sin_zero_array;  -- netinet/in.h:249
    end record;
    pragma Convention (C_Pass_By_Copy, sockaddr_in);  -- netinet/in.h:239
 
@@ -294,13 +296,18 @@ package libCUPS.netinet_in_h is
    end record;
    pragma Convention (C_Pass_By_Copy, ipv6_mreq);  -- netinet/in.h:290
 
-   subtype anon2625_uu_ss_padding_array is Interfaces.C.char_array (0 .. 117);
+  -- Address data.
+  -- Structure large enough to hold any socket address (with the historical
+  --   exception of AF_UNIX).
+
+  -- Address family, etc.
+   subtype sockaddr_storage_uu_ss_padding_array is Interfaces.C.char_array (0 .. 117);
    type sockaddr_storage is record
       ss_family : aliased libCUPS.bits_sockaddr_h.sa_family_t;  -- bits/socket.h:168
-      uu_ss_padding : aliased anon2625_uu_ss_padding_array;  -- bits/socket.h:169
+      uu_ss_padding : aliased sockaddr_storage_uu_ss_padding_array;  -- bits/socket.h:169
       uu_ss_align : aliased unsigned_long;  -- bits/socket.h:170
    end record;
-   pragma Convention (C_Pass_By_Copy, sockaddr_storage);
+   pragma Convention (C_Pass_By_Copy, sockaddr_storage);  -- bits/socket.h:166
 
    -- local interface
   -- Multicast group request.
@@ -324,13 +331,13 @@ package libCUPS.netinet_in_h is
   -- Source address.
   -- Full-state filter operations.
   -- IP multicast address of group.
-   type anon2621_imsf_slist_array is array (0 .. 0) of aliased in_addr;
+   type ip_msfilter_imsf_slist_array is array (0 .. 0) of aliased in_addr;
    type ip_msfilter is record
       imsf_multiaddr : aliased in_addr;  -- netinet/in.h:328
       imsf_interface : aliased in_addr;  -- netinet/in.h:331
       imsf_fmode : aliased libCUPS.stdint_h.uint32_t;  -- netinet/in.h:334
       imsf_numsrc : aliased libCUPS.stdint_h.uint32_t;  -- netinet/in.h:337
-      imsf_slist : aliased anon2621_imsf_slist_array;  -- netinet/in.h:339
+      imsf_slist : aliased ip_msfilter_imsf_slist_array;  -- netinet/in.h:339
    end record;
    pragma Convention (C_Pass_By_Copy, ip_msfilter);  -- netinet/in.h:325
 
@@ -339,14 +346,13 @@ package libCUPS.netinet_in_h is
   -- Number of source addresses.
   -- Source addresses.
   -- Interface index.
-   type group_filter;
-   type anon2625_gf_slist_array is array (0 .. 0) of aliased sockaddr_storage;
+   type group_filter_gf_slist_array is array (0 .. 0) of aliased sockaddr_storage;
    type group_filter is record
       gf_interface : aliased libCUPS.stdint_h.uint32_t;  -- netinet/in.h:349
       gf_group : aliased sockaddr_storage;  -- netinet/in.h:352
       gf_fmode : aliased libCUPS.stdint_h.uint32_t;  -- netinet/in.h:355
       gf_numsrc : aliased libCUPS.stdint_h.uint32_t;  -- netinet/in.h:358
-      gf_slist : aliased anon2625_gf_slist_array;  -- netinet/in.h:360
+      gf_slist : aliased group_filter_gf_slist_array;  -- netinet/in.h:360
    end record;
    pragma Convention (C_Pass_By_Copy, group_filter);  -- netinet/in.h:346
 
@@ -360,16 +366,16 @@ package libCUPS.netinet_in_h is
   --   this was a short-sighted decision since on different systems the types
   --   may have different representations but the values are always the same.
 
-   function ntohl (arg1 : libCUPS.stdint_h.uint32_t) return libCUPS.stdint_h.uint32_t;  -- netinet/in.h:376
+   function ntohl (uu_netlong : libCUPS.stdint_h.uint32_t) return libCUPS.stdint_h.uint32_t;  -- netinet/in.h:376
    pragma Import (C, ntohl, "ntohl");
 
-   function ntohs (arg1 : libCUPS.stdint_h.uint16_t) return libCUPS.stdint_h.uint16_t;  -- netinet/in.h:377
+   function ntohs (uu_netshort : libCUPS.stdint_h.uint16_t) return libCUPS.stdint_h.uint16_t;  -- netinet/in.h:377
    pragma Import (C, ntohs, "ntohs");
 
-   function htonl (arg1 : libCUPS.stdint_h.uint32_t) return libCUPS.stdint_h.uint32_t;  -- netinet/in.h:379
+   function htonl (uu_hostlong : libCUPS.stdint_h.uint32_t) return libCUPS.stdint_h.uint32_t;  -- netinet/in.h:379
    pragma Import (C, htonl, "htonl");
 
-   function htons (arg1 : libCUPS.stdint_h.uint16_t) return libCUPS.stdint_h.uint16_t;  -- netinet/in.h:381
+   function htons (uu_hostshort : libCUPS.stdint_h.uint16_t) return libCUPS.stdint_h.uint16_t;  -- netinet/in.h:381
    pragma Import (C, htons, "htons");
 
   -- Get machine dependent optimized versions of byte swapping functions.
@@ -381,26 +387,181 @@ package libCUPS.netinet_in_h is
   --   so these functions are all just identity.
 
   -- Bind socket to a privileged IP port.
-   function bindresvport (arg1 : int; arg2 : access sockaddr_in) return int;  -- netinet/in.h:503
+   function bindresvport (uu_sockfd : int; uu_sock_in : access sockaddr_in) return int;  -- netinet/in.h:503
    pragma Import (C, bindresvport, "bindresvport");
 
   -- The IPv6 version of this function.
-   function bindresvport6 (arg1 : int; arg2 : access sockaddr_in6) return int;  -- netinet/in.h:506
+   function bindresvport6 (uu_sockfd : int; uu_sock_in : access sockaddr_in6) return int;  -- netinet/in.h:506
    pragma Import (C, bindresvport6, "bindresvport6");
 
   -- Forward declaration.
   -- IPv6 packet information.
   -- src/dst IPv6 address
+   type in6_pktinfo is record
+      ipi6_addr : aliased in6_addr;  -- netinet/in.h:539
+      ipi6_ifindex : aliased unsigned;  -- netinet/in.h:540
+   end record;
+   pragma Convention (C_Pass_By_Copy, in6_pktinfo);  -- netinet/in.h:537
+
   -- send/recv interface index
   -- IPv6 MTU information.
   -- dst address including zone ID
+   type ip6_mtuinfo is record
+      ip6m_addr : aliased sockaddr_in6;  -- netinet/in.h:546
+      ip6m_mtu : aliased libCUPS.stdint_h.uint32_t;  -- netinet/in.h:547
+   end record;
+   pragma Convention (C_Pass_By_Copy, ip6_mtuinfo);  -- netinet/in.h:544
+
   -- path MTU in host byte order
   -- Obsolete hop-by-hop and Destination Options Processing (RFC 2292).
+   function inet6_option_space (uu_nbytes : int) return int;  -- netinet/in.h:552
+   pragma Import (C, inet6_option_space, "inet6_option_space");
+
+   function inet6_option_init
+     (uu_bp : System.Address;
+      uu_cmsgp : System.Address;
+      uu_type : int) return int;  -- netinet/in.h:554
+   pragma Import (C, inet6_option_init, "inet6_option_init");
+
+   function inet6_option_append
+     (uu_cmsg : access libCUPS.bits_socket_h.cmsghdr;
+      uu_typep : access libCUPS.stdint_h.uint8_t;
+      uu_multx : int;
+      uu_plusy : int) return int;  -- netinet/in.h:556
+   pragma Import (C, inet6_option_append, "inet6_option_append");
+
+   function inet6_option_alloc
+     (uu_cmsg : access libCUPS.bits_socket_h.cmsghdr;
+      uu_datalen : int;
+      uu_multx : int;
+      uu_plusy : int) return access libCUPS.stdint_h.uint8_t;  -- netinet/in.h:559
+   pragma Import (C, inet6_option_alloc, "inet6_option_alloc");
+
+   function inet6_option_next (uu_cmsg : access constant libCUPS.bits_socket_h.cmsghdr; uu_tptrp : System.Address) return int;  -- netinet/in.h:562
+   pragma Import (C, inet6_option_next, "inet6_option_next");
+
+   function inet6_option_find
+     (uu_cmsg : access constant libCUPS.bits_socket_h.cmsghdr;
+      uu_tptrp : System.Address;
+      uu_type : int) return int;  -- netinet/in.h:565
+   pragma Import (C, inet6_option_find, "inet6_option_find");
+
   -- Hop-by-Hop and Destination Options Processing (RFC 3542).
+   function inet6_opt_init (uu_extbuf : System.Address; uu_extlen : libCUPS.unistd_h.socklen_t) return int;  -- netinet/in.h:571
+   pragma Import (C, inet6_opt_init, "inet6_opt_init");
+
+   function inet6_opt_append
+     (uu_extbuf : System.Address;
+      uu_extlen : libCUPS.unistd_h.socklen_t;
+      uu_offset : int;
+      uu_type : libCUPS.stdint_h.uint8_t;
+      uu_len : libCUPS.unistd_h.socklen_t;
+      uu_align : libCUPS.stdint_h.uint8_t;
+      uu_databufp : System.Address) return int;  -- netinet/in.h:572
+   pragma Import (C, inet6_opt_append, "inet6_opt_append");
+
+   function inet6_opt_finish
+     (uu_extbuf : System.Address;
+      uu_extlen : libCUPS.unistd_h.socklen_t;
+      uu_offset : int) return int;  -- netinet/in.h:575
+   pragma Import (C, inet6_opt_finish, "inet6_opt_finish");
+
+   function inet6_opt_set_val
+     (uu_databuf : System.Address;
+      uu_offset : int;
+      uu_val : System.Address;
+      uu_vallen : libCUPS.unistd_h.socklen_t) return int;  -- netinet/in.h:577
+   pragma Import (C, inet6_opt_set_val, "inet6_opt_set_val");
+
+   function inet6_opt_next
+     (uu_extbuf : System.Address;
+      uu_extlen : libCUPS.unistd_h.socklen_t;
+      uu_offset : int;
+      uu_typep : access libCUPS.stdint_h.uint8_t;
+      uu_lenp : access libCUPS.unistd_h.socklen_t;
+      uu_databufp : System.Address) return int;  -- netinet/in.h:579
+   pragma Import (C, inet6_opt_next, "inet6_opt_next");
+
+   function inet6_opt_find
+     (uu_extbuf : System.Address;
+      uu_extlen : libCUPS.unistd_h.socklen_t;
+      uu_offset : int;
+      uu_type : libCUPS.stdint_h.uint8_t;
+      uu_lenp : access libCUPS.unistd_h.socklen_t;
+      uu_databufp : System.Address) return int;  -- netinet/in.h:582
+   pragma Import (C, inet6_opt_find, "inet6_opt_find");
+
+   function inet6_opt_get_val
+     (uu_databuf : System.Address;
+      uu_offset : int;
+      uu_val : System.Address;
+      uu_vallen : libCUPS.unistd_h.socklen_t) return int;  -- netinet/in.h:585
+   pragma Import (C, inet6_opt_get_val, "inet6_opt_get_val");
+
   -- Routing Header Option (RFC 3542).
+   function inet6_rth_space (uu_type : int; uu_segments : int) return libCUPS.unistd_h.socklen_t;  -- netinet/in.h:590
+   pragma Import (C, inet6_rth_space, "inet6_rth_space");
+
+   function inet6_rth_init
+     (uu_bp : System.Address;
+      uu_bp_len : libCUPS.unistd_h.socklen_t;
+      uu_type : int;
+      uu_segments : int) return System.Address;  -- netinet/in.h:591
+   pragma Import (C, inet6_rth_init, "inet6_rth_init");
+
+   function inet6_rth_add (uu_bp : System.Address; uu_addr : access constant in6_addr) return int;  -- netinet/in.h:593
+   pragma Import (C, inet6_rth_add, "inet6_rth_add");
+
+   function inet6_rth_reverse (uu_in : System.Address; uu_out : System.Address) return int;  -- netinet/in.h:594
+   pragma Import (C, inet6_rth_reverse, "inet6_rth_reverse");
+
+   function inet6_rth_segments (uu_bp : System.Address) return int;  -- netinet/in.h:595
+   pragma Import (C, inet6_rth_segments, "inet6_rth_segments");
+
+   function inet6_rth_getaddr (uu_bp : System.Address; uu_index : int) return access in6_addr;  -- netinet/in.h:596
+   pragma Import (C, inet6_rth_getaddr, "inet6_rth_getaddr");
+
   -- Multicast source filter support.
   -- Get IPv4 source filter.
+   function getipv4sourcefilter
+     (uu_s : int;
+      uu_interface_addr : in_addr;
+      uu_group : in_addr;
+      uu_fmode : access libCUPS.stdint_h.uint32_t;
+      uu_numsrc : access libCUPS.stdint_h.uint32_t;
+      uu_slist : access in_addr) return int;  -- netinet/in.h:603
+   pragma Import (C, getipv4sourcefilter, "getipv4sourcefilter");
+
   -- Set IPv4 source filter.
+   function setipv4sourcefilter
+     (uu_s : int;
+      uu_interface_addr : in_addr;
+      uu_group : in_addr;
+      uu_fmode : libCUPS.stdint_h.uint32_t;
+      uu_numsrc : libCUPS.stdint_h.uint32_t;
+      uu_slist : access constant in_addr) return int;  -- netinet/in.h:609
+   pragma Import (C, setipv4sourcefilter, "setipv4sourcefilter");
+
   -- Get source filter.
+   function getsourcefilter
+     (uu_s : int;
+      uu_interface_addr : libCUPS.stdint_h.uint32_t;
+      uu_group : access constant libCUPS.bits_socket_h.sockaddr;
+      uu_grouplen : libCUPS.unistd_h.socklen_t;
+      uu_fmode : access libCUPS.stdint_h.uint32_t;
+      uu_numsrc : access libCUPS.stdint_h.uint32_t;
+      uu_slist : access sockaddr_storage) return int;  -- netinet/in.h:617
+   pragma Import (C, getsourcefilter, "getsourcefilter");
+
   -- Set source filter.
+   function setsourcefilter
+     (uu_s : int;
+      uu_interface_addr : libCUPS.stdint_h.uint32_t;
+      uu_group : access constant libCUPS.bits_socket_h.sockaddr;
+      uu_grouplen : libCUPS.unistd_h.socklen_t;
+      uu_fmode : libCUPS.stdint_h.uint32_t;
+      uu_numsrc : libCUPS.stdint_h.uint32_t;
+      uu_slist : access constant sockaddr_storage) return int;  -- netinet/in.h:624
+   pragma Import (C, setsourcefilter, "setsourcefilter");
+
 end libCUPS.netinet_in_h;

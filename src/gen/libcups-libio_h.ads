@@ -32,24 +32,24 @@ package libCUPS.libio_h is
   --   however invalidate any other reasons why the executable file
   --   might be covered by the GNU Lesser General Public License.
   --   This exception applies to code released by its copyright holders
-  --   in files containing the exception.   
+  --   in files containing the exception.
 
-  -- ALL of these should be defined in _G_config.h  
-  -- This define avoids name pollution if we're using GNU stdarg.h  
+  -- ALL of these should be defined in _G_config.h
+  -- This define avoids name pollution if we're using GNU stdarg.h
   -- Magic numbers and bits for the _flags field.
   --   The magic numbers use the high-order bits of _flags;
   --   the remaining bits are available for variable flags.
   --   Note: The magic numbers must all be negative if stdio
-  --   emulation is desired.  
+  --   emulation is desired.
 
-  -- These are "formatting flags" matching the iostream fmtflags enum values.  
+  -- These are "formatting flags" matching the iostream fmtflags enum values.
    --  skipped empty struct u_IO_jump_t
 
-  -- Handle lock.   
-  -- _IO_lock_t defined in internal headers during the glibc build.   
+  -- Handle lock.
+  -- _IO_lock_t defined in internal headers during the glibc build.
    subtype u_IO_lock_t is System.Address;  -- libio.h:150
 
-  -- A streammarker remembers a position in a buffer.  
+  -- A streammarker remembers a position in a buffer.
    type u_IO_FILE;
    type u_IO_marker is record
       u_next : access u_IO_marker;  -- libio.h:157
@@ -59,41 +59,40 @@ package libCUPS.libio_h is
    pragma Convention (C_Pass_By_Copy, u_IO_marker);  -- libio.h:156
 
   -- If _pos >= 0
-  -- it points to _buf->Gbase()+_pos. FIXME comment  
+  -- it points to _buf->Gbase()+_pos. FIXME comment
 
-  -- if _pos < 0, it points to _buf->eBptr()+_pos. FIXME comment  
-  -- This is the structure from the libstdc++ codecvt class.   
-   type uu_codecvt_result is 
+  -- if _pos < 0, it points to _buf->eBptr()+_pos. FIXME comment
+  -- This is the structure from the libstdc++ codecvt class.
+   type uu_codecvt_result is
      (uu_codecvt_ok,
       uu_codecvt_partial,
       uu_codecvt_error,
       uu_codecvt_noconv);
    pragma Convention (C, uu_codecvt_result);  -- libio.h:176
 
-   type anon966_u_shortbuf_array is array (1..1) of char;
-   type anon966_u_unused2_array  is array (1..(15*int'size - 4 * System.Address'Size - size_t'size)/char'size)  of char;
-
-
   -- The order of the elements in the following struct must match the order
-  --   of the virtual functions in the libstdc++ codecvt class.   
+  --   of the virtual functions in the libstdc++ codecvt class.
 
-  -- Extra data for wide character streams.   
-  -- Current read pointer  
-  -- End of get area.  
-  -- Start of putback+get area.  
-  -- Start of put area.  
-  -- Current put pointer.  
-  -- End of put area.  
-  -- Start of reserve area.  
-  -- End of reserve area.  
-  -- The following fields are used to support backing up and undo.  
-  -- Pointer to start of non-current get area.  
+  -- Extra data for wide character streams.
+  -- Current read pointer
+  -- End of get area.
+  -- Start of putback+get area.
+  -- Start of put area.
+  -- Current put pointer.
+  -- End of put area.
+  -- Start of reserve area.
+  -- End of reserve area.
+  -- The following fields are used to support backing up and undo.
+  -- Pointer to start of non-current get area.
   -- Pointer to first valid character of
-  --				   backup area  
+  --				   backup area
 
-  -- Pointer to end of non-current get area.  
-  -- High-order word is _IO_MAGIC; rest is flags.  
-   type u_IO_FILE is record
+  -- Pointer to end of non-current get area.
+  -- High-order word is _IO_MAGIC; rest is flags.
+   type u_IO_FILE_u_shortbuf_array is array (1..1) of char;
+   type u_IO_FILE_u_unused2_array  is array (1..(15*int'size - 4 * System.Address'Size - size_t'size)/char'size)  of char;
+
+   type U_IO_FILE is record
       u_flags : aliased int;  -- libio.h:242
       u_IO_read_ptr : Interfaces.C.Strings.chars_ptr;  -- libio.h:247
       u_IO_read_end : Interfaces.C.Strings.chars_ptr;  -- libio.h:248
@@ -113,7 +112,7 @@ package libCUPS.libio_h is
       u_old_offset : aliased libCUPS.bits_types_h.uu_off_t;  -- libio.h:270
       u_cur_column : aliased unsigned_short;  -- libio.h:274
       u_vtable_offset : aliased signed_char;  -- libio.h:275
-      u_shortbuf : aliased anon966_u_shortbuf_array;  -- libio.h:276
+      u_shortbuf : aliased u_IO_FILE_u_shortbuf_array;  -- libio.h:276
       u_lock : System.Address;  -- libio.h:280
       u_offset : aliased libCUPS.bits_types_h.uu_off64_t;  -- libio.h:289
       uu_pad1 : System.Address;  -- libio.h:297
@@ -122,34 +121,34 @@ package libCUPS.libio_h is
       uu_pad4 : System.Address;  -- libio.h:300
       uu_pad5 : aliased size_t;  -- libio.h:302
       u_mode : aliased int;  -- libio.h:303
-      u_unused2 : aliased anon966_u_unused2_array;  -- libio.h:305
+      u_unused2 : aliased u_IO_FILE_u_unused2_array;  -- libio.h:305
    end record;
    pragma Convention (C_Pass_By_Copy, u_IO_FILE);  -- libio.h:241
 
-  -- The following pointers correspond to the C++ streambuf protocol.  
-  -- Note:  Tk uses the _IO_read_ptr and _IO_read_end fields directly.  
-  -- Current read pointer  
-  -- End of get area.  
-  -- Start of putback+get area.  
-  -- Start of put area.  
-  -- Current put pointer.  
-  -- End of put area.  
-  -- Start of reserve area.  
-  -- End of reserve area.  
-  -- The following fields are used to support backing up and undo.  
-  -- Pointer to start of non-current get area.  
-  -- Pointer to first valid character of backup area  
-  -- Pointer to end of non-current get area.  
-  -- This used to be _offset but it's too small.   
-  -- 1+column number of pbase(); 0 is unknown.  
-  --  char* _save_gptr;  char* _save_egptr;  
-  -- Wide character stream stuff.   
-  -- Make sure we don't get into trouble again.   
+  -- The following pointers correspond to the C++ streambuf protocol.
+  -- Note:  Tk uses the _IO_read_ptr and _IO_read_end fields directly.
+  -- Current read pointer
+  -- End of get area.
+  -- Start of putback+get area.
+  -- Start of put area.
+  -- Current put pointer.
+  -- End of put area.
+  -- Start of reserve area.
+  -- End of reserve area.
+  -- The following fields are used to support backing up and undo.
+  -- Pointer to start of non-current get area.
+  -- Pointer to first valid character of backup area
+  -- Pointer to end of non-current get area.
+  -- This used to be _offset but it's too small.
+  -- 1+column number of pbase(); 0 is unknown.
+  --  char* _save_gptr;  char* _save_egptr;
+  -- Wide character stream stuff.
+  -- Make sure we don't get into trouble again.
    --  skipped empty struct u_IO_FILE_plus
 
-  -- Functions to do I/O and file management for a stream.   
+  -- Functions to do I/O and file management for a stream.
   -- Read NBYTES bytes from COOKIE into a buffer pointed to by BUF.
-  --   Return number of bytes read.   
+  --   Return number of bytes read.
 
    --  skipped function type uu_io_read_fn
 
@@ -158,7 +157,7 @@ package libCUPS.libio_h is
   --   there is an error, return 0 and do not write anything.  If the file
   --   has been opened for append (__mode.__append set), then set the file
   --   pointer to the end of the file and then do the write; if not, just
-  --   write at the current file pointer.   
+  --   write at the current file pointer.
 
    --  skipped function type uu_io_write_fn
 
@@ -167,20 +166,53 @@ package libCUPS.libio_h is
   --   the current position (if W is SEEK_CUR),
   --   or the end of the file (if W is SEEK_END).
   --   Set *POS to the new file position.
-  --   Returns zero if successful, nonzero if not.   
+  --   Returns zero if successful, nonzero if not.
 
    --  skipped function type uu_io_seek_fn
 
-  -- Close COOKIE.   
+  -- Close COOKIE.
    --  skipped function type uu_io_close_fn
 
-  -- User-visible names for the above.   
-  -- The structure with the cookie function pointers.   
-  -- Read bytes.   
-  -- Write bytes.   
-  -- Seek/tell file position.   
-  -- Close file.   
-  -- Initialize one of those.   
+  -- User-visible names for the above.
+   --  skipped function type cookie_read_function_t
+
+   --  skipped function type cookie_write_function_t
+
+   --  skipped function type cookie_seek_function_t
+
+   --  skipped function type cookie_close_function_t
+
+  -- The structure with the cookie function pointers.
+  -- Read bytes.
+   type u_IO_cookie_io_functions_t is record
+      read : access function
+           (arg1 : System.Address;
+            arg2 : Interfaces.C.Strings.chars_ptr;
+            arg3 : size_t) return libCUPS.bits_types_h.uu_ssize_t;  -- libio.h:366
+      write : access function
+           (arg1 : System.Address;
+            arg2 : Interfaces.C.Strings.chars_ptr;
+            arg3 : size_t) return libCUPS.bits_types_h.uu_ssize_t;  -- libio.h:367
+      seek : access function
+           (arg1 : System.Address;
+            arg2 : access libCUPS.bits_types_h.uu_off64_t;
+            arg3 : int) return int;  -- libio.h:368
+      close : access function (arg1 : System.Address) return int;  -- libio.h:369
+   end record;
+   pragma Convention (C_Pass_By_Copy, u_IO_cookie_io_functions_t);  -- libio.h:370
+
+   --  skipped anonymous struct anon_5
+
+  -- Write bytes.
+  -- Seek/tell file position.
+  -- Close file.
+   subtype cookie_io_functions_t is u_IO_cookie_io_functions_t;
+
+   --  skipped empty struct u_IO_cookie_file
+
+  -- Initialize one of those.
+   --  skipped func _IO_cookie_init
+
    --  skipped func __underflow
 
    --  skipped func __uflow
@@ -197,7 +229,7 @@ package libCUPS.libio_h is
 
    --  skipped func _IO_peekc_locked
 
-  -- This one is for Emacs.  
+  -- This one is for Emacs.
    --  skipped func _IO_flockfile
 
    --  skipped func _IO_funlockfile
@@ -219,9 +251,9 @@ package libCUPS.libio_h is
    --  skipped func _IO_free_backup_area
 
   -- While compiling glibc we have to handle compatibility with very old
-  --   versions.   
+  --   versions.
 
   -- A special optimized version of the function above.  It optimizes the
-  --   case of initializing an unoriented byte stream.   
+  --   case of initializing an unoriented byte stream.
 
 end libCUPS.libio_h;

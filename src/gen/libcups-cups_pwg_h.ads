@@ -106,31 +106,31 @@ package libCUPS.cups_pwg_h is
   --  
 
    function pwgFormatSizeName
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : size_t;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : int;
-      arg6 : int;
-      arg7 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/pwg.h:75
+     (keyword : Interfaces.C.Strings.chars_ptr;
+      keysize : size_t;
+      prefix : Interfaces.C.Strings.chars_ptr;
+      name : Interfaces.C.Strings.chars_ptr;
+      width : int;
+      length : int;
+      units : Interfaces.C.Strings.chars_ptr) return int;  -- cups/pwg.h:75
    pragma Import (C, pwgFormatSizeName, "pwgFormatSizeName");
 
    function pwgInitSize
-     (arg1 : access pwg_size_t;
-      arg2 : System.Address;
-      arg3 : access int) return int;  -- cups/pwg.h:79
+     (size : access pwg_size_t;
+      job : System.Address;
+      margins_set : access int) return int;  -- cups/pwg.h:79
    pragma Import (C, pwgInitSize, "pwgInitSize");
 
-   function pwgMediaForLegacy (arg1 : Interfaces.C.Strings.chars_ptr) return access pwg_media_t;  -- cups/pwg.h:81
+   function pwgMediaForLegacy (legacy : Interfaces.C.Strings.chars_ptr) return access pwg_media_t;  -- cups/pwg.h:81
    pragma Import (C, pwgMediaForLegacy, "pwgMediaForLegacy");
 
-   function pwgMediaForPPD (arg1 : Interfaces.C.Strings.chars_ptr) return access pwg_media_t;  -- cups/pwg.h:82
+   function pwgMediaForPPD (ppd : Interfaces.C.Strings.chars_ptr) return access pwg_media_t;  -- cups/pwg.h:82
    pragma Import (C, pwgMediaForPPD, "pwgMediaForPPD");
 
-   function pwgMediaForPWG (arg1 : Interfaces.C.Strings.chars_ptr) return access pwg_media_t;  -- cups/pwg.h:83
+   function pwgMediaForPWG (pwg : Interfaces.C.Strings.chars_ptr) return access pwg_media_t;  -- cups/pwg.h:83
    pragma Import (C, pwgMediaForPWG, "pwgMediaForPWG");
 
-   function pwgMediaForSize (arg1 : int; arg2 : int) return access pwg_media_t;  -- cups/pwg.h:84
+   function pwgMediaForSize (width : int; length : int) return access pwg_media_t;  -- cups/pwg.h:84
    pragma Import (C, pwgMediaForSize, "pwgMediaForSize");
 
 end libCUPS.cups_pwg_h;

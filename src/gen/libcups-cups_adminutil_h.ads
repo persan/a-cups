@@ -47,31 +47,31 @@ package libCUPS.cups_adminutil_h is
   --  
 
    function cupsAdminExportSamba
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : Interfaces.C.Strings.chars_ptr;
-      arg6 : access Interfaces.C_Streams.FILEs) return int;  -- cups/adminutil.h:54
+     (dest : Interfaces.C.Strings.chars_ptr;
+      ppd : Interfaces.C.Strings.chars_ptr;
+      samba_server : Interfaces.C.Strings.chars_ptr;
+      samba_user : Interfaces.C.Strings.chars_ptr;
+      samba_password : Interfaces.C.Strings.chars_ptr;
+      logfile : access Interfaces.C_Streams.FILEs) return int;  -- cups/adminutil.h:54
    pragma Import (C, cupsAdminExportSamba, "cupsAdminExportSamba");
 
    function cupsAdminCreateWindowsPPD
-     (arg1 : System.Address;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : int) return Interfaces.C.Strings.chars_ptr;  -- cups/adminutil.h:59
+     (http : System.Address;
+      dest : Interfaces.C.Strings.chars_ptr;
+      buffer : Interfaces.C.Strings.chars_ptr;
+      bufsize : int) return Interfaces.C.Strings.chars_ptr;  -- cups/adminutil.h:59
    pragma Import (C, cupsAdminCreateWindowsPPD, "cupsAdminCreateWindowsPPD");
 
    function cupsAdminGetServerSettings
-     (arg1 : System.Address;
-      arg2 : access int;
-      arg3 : System.Address) return int;  -- cups/adminutil.h:63
+     (http : System.Address;
+      num_settings : access int;
+      settings : System.Address) return int;  -- cups/adminutil.h:63
    pragma Import (C, cupsAdminGetServerSettings, "cupsAdminGetServerSettings");
 
    function cupsAdminSetServerSettings
-     (arg1 : System.Address;
-      arg2 : int;
-      arg3 : access libCUPS.cups_cups_h.cups_option_t) return int;  -- cups/adminutil.h:67
+     (http : System.Address;
+      num_settings : int;
+      settings : access libCUPS.cups_cups_h.cups_option_t) return int;  -- cups/adminutil.h:67
    pragma Import (C, cupsAdminSetServerSettings, "cupsAdminSetServerSettings");
 
   -- * End of "$Id: adminutil.h 10996 2013-05-29 11:51:34Z msweet $".

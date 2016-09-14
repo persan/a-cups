@@ -39,10 +39,9 @@ package libCUPS.wchar_h is
 
   -- Tell the caller that we provide correct C++ prototypes.   
   -- Conversion state information.   
-  -- Value so far.   
    type uu_mbstate_t;
    subtype uu_mbstate_t_uu_wchb_array is Interfaces.C.char_array (0 .. 3);
-   type uu_mbstate_t_uu_value_union (discr : unsigned := 0) is record
+   type anon_2 (discr : unsigned := 0) is record
       case discr is
          when 0 =>
             uu_wch : aliased unsigned;  -- wchar.h:88
@@ -50,13 +49,16 @@ package libCUPS.wchar_h is
             uu_wchb : aliased uu_mbstate_t_uu_wchb_array;  -- wchar.h:92
       end case;
    end record;
-   pragma Convention (C_Pass_By_Copy, uu_mbstate_t_uu_value_union);
-   pragma Unchecked_Union (uu_mbstate_t_uu_value_union);type uu_mbstate_t is record
+   pragma Convention (C_Pass_By_Copy, anon_2);
+   pragma Unchecked_Union (anon_2);type uu_mbstate_t is record
       uu_count : aliased int;  -- wchar.h:84
-      uu_value : aliased uu_mbstate_t_uu_value_union;  -- wchar.h:93
+      uu_value : aliased anon_2;  -- wchar.h:93
    end record;
    pragma Convention (C_Pass_By_Copy, uu_mbstate_t);  -- wchar.h:94
 
+   --  skipped anonymous struct anon_1
+
+  -- Value so far.   
   -- The rest of the file is only used if used if __need_mbstate_t is not
   --   defined.   
 

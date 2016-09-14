@@ -181,13 +181,13 @@ package libCUPS.cups_ppd_h is
   --*** Conformance Levels @since CUPS 1.1.19/OS X 10.3@ *** 
   --*** PPD Attribute Structure @since CUPS 1.1.19/OS X 10.3@ *** 
   -- Name of attribute (cupsXYZ)  
-   subtype anon3753_name_array is Interfaces.C.char_array (0 .. 40);
-   subtype anon3753_spec_array is Interfaces.C.char_array (0 .. 40);
-   subtype anon3753_text_array is Interfaces.C.char_array (0 .. 80);
+   subtype ppd_attr_s_name_array is Interfaces.C.char_array (0 .. 40);
+   subtype ppd_attr_s_spec_array is Interfaces.C.char_array (0 .. 40);
+   subtype ppd_attr_s_text_array is Interfaces.C.char_array (0 .. 80);
    type ppd_attr_s is record
-      name : aliased anon3753_name_array;  -- cups/ppd.h:150
-      spec : aliased anon3753_spec_array;  -- cups/ppd.h:151
-      text : aliased anon3753_text_array;  -- cups/ppd.h:152
+      name : aliased ppd_attr_s_name_array;  -- cups/ppd.h:150
+      spec : aliased ppd_attr_s_spec_array;  -- cups/ppd.h:151
+      text : aliased ppd_attr_s_text_array;  -- cups/ppd.h:152
       value : Interfaces.C.Strings.chars_ptr;  -- cups/ppd.h:153
    end record;
    pragma Convention (C_Pass_By_Copy, ppd_attr_s);  -- cups/ppd.h:148
@@ -198,20 +198,20 @@ package libCUPS.cups_ppd_h is
    subtype ppd_attr_t is ppd_attr_s;
 
    type ppd_option_s;
-   subtype anon3761_keyword_array is Interfaces.C.char_array (0 .. 40);
-   subtype anon3761_defchoice_array is Interfaces.C.char_array (0 .. 40);
-   subtype anon3761_text_array is Interfaces.C.char_array (0 .. 80);
+   subtype ppd_option_s_keyword_array is Interfaces.C.char_array (0 .. 40);
+   subtype ppd_option_s_defchoice_array is Interfaces.C.char_array (0 .. 40);
+   subtype ppd_option_s_text_array is Interfaces.C.char_array (0 .. 80);
    subtype ppd_option_t is ppd_option_s;
 
   --*** Options *** 
   --*** Option choices *** 
   -- 0 if not selected, 1 otherwise  
-   subtype anon3763_choice_array is Interfaces.C.char_array (0 .. 40);
-   subtype anon3763_text_array is Interfaces.C.char_array (0 .. 80);
+   subtype ppd_choice_s_choice_array is Interfaces.C.char_array (0 .. 40);
+   subtype ppd_choice_s_text_array is Interfaces.C.char_array (0 .. 80);
    type ppd_choice_s is record
       marked : aliased char;  -- cups/ppd.h:161
-      choice : aliased anon3763_choice_array;  -- cups/ppd.h:162
-      text : aliased anon3763_text_array;  -- cups/ppd.h:163
+      choice : aliased ppd_choice_s_choice_array;  -- cups/ppd.h:162
+      text : aliased ppd_choice_s_text_array;  -- cups/ppd.h:163
       code : Interfaces.C.Strings.chars_ptr;  -- cups/ppd.h:164
       option : access ppd_option_t;  -- cups/ppd.h:165
    end record;
@@ -227,9 +227,9 @@ package libCUPS.cups_ppd_h is
   -- 0 if no conflicts exist, 1 otherwise  
    type ppd_option_s is record
       conflicted : aliased char;  -- cups/ppd.h:170
-      keyword : aliased anon3761_keyword_array;  -- cups/ppd.h:171
-      defchoice : aliased anon3761_defchoice_array;  -- cups/ppd.h:172
-      text : aliased anon3761_text_array;  -- cups/ppd.h:173
+      keyword : aliased ppd_option_s_keyword_array;  -- cups/ppd.h:171
+      defchoice : aliased ppd_option_s_defchoice_array;  -- cups/ppd.h:172
+      text : aliased ppd_option_s_text_array;  -- cups/ppd.h:173
       ui : aliased ppd_ui_t;  -- cups/ppd.h:174
       section : aliased ppd_section_t;  -- cups/ppd.h:175
       order : aliased float;  -- cups/ppd.h:176
@@ -252,11 +252,11 @@ package libCUPS.cups_ppd_h is
   --   **** the group's keyword name.
   --   *** 
 
-   subtype anon3779_text_array is Interfaces.C.char_array (0 .. 39);
-   subtype anon3779_name_array is Interfaces.C.char_array (0 .. 40);
+   subtype ppd_group_s_text_array is Interfaces.C.char_array (0 .. 39);
+   subtype ppd_group_s_name_array is Interfaces.C.char_array (0 .. 40);
    type ppd_group_s is record
-      text : aliased anon3779_text_array;  -- cups/ppd.h:187
-      name : aliased anon3779_name_array;  -- cups/ppd.h:189
+      text : aliased ppd_group_s_text_array;  -- cups/ppd.h:187
+      name : aliased ppd_group_s_name_array;  -- cups/ppd.h:189
       num_options : aliased int;  -- cups/ppd.h:190
       options : access ppd_option_t;  -- cups/ppd.h:191
       num_subgroups : aliased int;  -- cups/ppd.h:192
@@ -274,15 +274,15 @@ package libCUPS.cups_ppd_h is
 
   --*** Constraints *** 
   -- First keyword  
-   subtype anon3786_option1_array is Interfaces.C.char_array (0 .. 40);
-   subtype anon3786_choice1_array is Interfaces.C.char_array (0 .. 40);
-   subtype anon3786_option2_array is Interfaces.C.char_array (0 .. 40);
-   subtype anon3786_choice2_array is Interfaces.C.char_array (0 .. 40);
+   subtype ppd_const_s_option1_array is Interfaces.C.char_array (0 .. 40);
+   subtype ppd_const_s_choice1_array is Interfaces.C.char_array (0 .. 40);
+   subtype ppd_const_s_option2_array is Interfaces.C.char_array (0 .. 40);
+   subtype ppd_const_s_choice2_array is Interfaces.C.char_array (0 .. 40);
    type ppd_const_s is record
-      option1 : aliased anon3786_option1_array;  -- cups/ppd.h:198
-      choice1 : aliased anon3786_choice1_array;  -- cups/ppd.h:199
-      option2 : aliased anon3786_option2_array;  -- cups/ppd.h:200
-      choice2 : aliased anon3786_choice2_array;  -- cups/ppd.h:201
+      option1 : aliased ppd_const_s_option1_array;  -- cups/ppd.h:198
+      choice1 : aliased ppd_const_s_choice1_array;  -- cups/ppd.h:199
+      option2 : aliased ppd_const_s_option2_array;  -- cups/ppd.h:200
+      choice2 : aliased ppd_const_s_choice2_array;  -- cups/ppd.h:201
    end record;
    pragma Convention (C_Pass_By_Copy, ppd_const_s);  -- cups/ppd.h:196
 
@@ -293,10 +293,10 @@ package libCUPS.cups_ppd_h is
 
   --*** Page Sizes *** 
   -- Page size selected?  
-   subtype anon3796_name_array is Interfaces.C.char_array (0 .. 40);
+   subtype ppd_size_s_name_array is Interfaces.C.char_array (0 .. 40);
    type ppd_size_s is record
       marked : aliased int;  -- cups/ppd.h:206
-      name : aliased anon3796_name_array;  -- cups/ppd.h:207
+      name : aliased ppd_size_s_name_array;  -- cups/ppd.h:207
       width : aliased float;  -- cups/ppd.h:208
       length : aliased float;  -- cups/ppd.h:209
       left : aliased float;  -- cups/ppd.h:210
@@ -317,9 +317,9 @@ package libCUPS.cups_ppd_h is
 
   --*** Emulators *** 
   -- Emulator name  
-   subtype anon3800_name_array is Interfaces.C.char_array (0 .. 40);
+   subtype ppd_emul_s_name_array is Interfaces.C.char_array (0 .. 40);
    type ppd_emul_s is record
-      name : aliased anon3800_name_array;  -- cups/ppd.h:218
+      name : aliased ppd_emul_s_name_array;  -- cups/ppd.h:218
       start : Interfaces.C.Strings.chars_ptr;  -- cups/ppd.h:219
       stop : Interfaces.C.Strings.chars_ptr;  -- cups/ppd.h:220
    end record;
@@ -330,15 +330,15 @@ package libCUPS.cups_ppd_h is
    subtype ppd_emul_t is ppd_emul_s;
 
   --*** sRGB Color Profiles *** 
-   subtype anon3804_resolution_array is Interfaces.C.char_array (0 .. 40);
-   subtype anon3804_media_type_array is Interfaces.C.char_array (0 .. 40);
-   type anon3804_matrix_array is array (0 .. 2, 0 .. 2) of aliased float;
+   subtype ppd_profile_s_resolution_array is Interfaces.C.char_array (0 .. 40);
+   subtype ppd_profile_s_media_type_array is Interfaces.C.char_array (0 .. 40);
+   type ppd_profile_s_matrix_array is array (0 .. 2, 0 .. 2) of aliased float;
    type ppd_profile_s is record
-      resolution : aliased anon3804_resolution_array;  -- cups/ppd.h:225
-      media_type : aliased anon3804_media_type_array;  -- cups/ppd.h:227
+      resolution : aliased ppd_profile_s_resolution_array;  -- cups/ppd.h:225
+      media_type : aliased ppd_profile_s_media_type_array;  -- cups/ppd.h:227
       density : aliased float;  -- cups/ppd.h:229
       gamma : aliased float;  -- cups/ppd.h:230
-      matrix : aliased anon3804_matrix_array;  -- cups/ppd.h:231
+      matrix : aliased ppd_profile_s_matrix_array;  -- cups/ppd.h:231
    end record;
    pragma Convention (C_Pass_By_Copy, ppd_profile_s);  -- cups/ppd.h:223
 
@@ -442,11 +442,11 @@ package libCUPS.cups_ppd_h is
 
   --*** Custom Parameter @since CUPS 1.2/OS X 10.5@ *** 
   -- Parameter name  
-   subtype anon3821_name_array is Interfaces.C.char_array (0 .. 40);
-   subtype anon3821_text_array is Interfaces.C.char_array (0 .. 80);
+   subtype ppd_cparam_s_name_array is Interfaces.C.char_array (0 .. 40);
+   subtype ppd_cparam_s_text_array is Interfaces.C.char_array (0 .. 80);
    type ppd_cparam_s is record
-      name : aliased anon3821_name_array;  -- cups/ppd.h:273
-      text : aliased anon3821_text_array;  -- cups/ppd.h:274
+      name : aliased ppd_cparam_s_name_array;  -- cups/ppd.h:273
+      text : aliased ppd_cparam_s_text_array;  -- cups/ppd.h:274
       order : aliased int;  -- cups/ppd.h:275
       c_type : aliased ppd_cptype_t;  -- cups/ppd.h:276
       minimum : aliased ppd_cplimit_t;  -- cups/ppd.h:277
@@ -465,9 +465,9 @@ package libCUPS.cups_ppd_h is
 
   --*** Custom Option @since CUPS 1.2/OS X 10.5@ *** 
   -- Name of option that is being extended...  
-   subtype anon3827_keyword_array is Interfaces.C.char_array (0 .. 40);
+   subtype ppd_coption_s_keyword_array is Interfaces.C.char_array (0 .. 40);
    type ppd_coption_s is record
-      keyword : aliased anon3827_keyword_array;  -- cups/ppd.h:284
+      keyword : aliased ppd_coption_s_keyword_array;  -- cups/ppd.h:284
       option : access ppd_option_t;  -- cups/ppd.h:285
       marked : aliased int;  -- cups/ppd.h:286
       params : System.Address;  -- cups/ppd.h:287
@@ -486,9 +486,9 @@ package libCUPS.cups_ppd_h is
   --*** PPD cache and mapping data @since CUPS 1.5/OS X 10.7@ @private@ *** 
   --*** PPD File *** 
   -- Language level of device  
-   type anon3833_custom_min_array is array (0 .. 1) of aliased float;
-   type anon3833_custom_max_array is array (0 .. 1) of aliased float;
-   type anon3833_custom_margins_array is array (0 .. 3) of aliased float;
+   type ppd_file_s_custom_min_array is array (0 .. 1) of aliased float;
+   type ppd_file_s_custom_max_array is array (0 .. 1) of aliased float;
+   type ppd_file_s_custom_margins_array is array (0 .. 3) of aliased float;
    type ppd_file_s is record
       language_level : aliased int;  -- cups/ppd.h:295
       color_device : aliased int;  -- cups/ppd.h:296
@@ -518,9 +518,9 @@ package libCUPS.cups_ppd_h is
       groups : access ppd_group_t;  -- cups/ppd.h:320
       num_sizes : aliased int;  -- cups/ppd.h:321
       sizes : access ppd_size_t;  -- cups/ppd.h:322
-      custom_min : aliased anon3833_custom_min_array;  -- cups/ppd.h:323
-      custom_max : aliased anon3833_custom_max_array;  -- cups/ppd.h:324
-      custom_margins : aliased anon3833_custom_margins_array;  -- cups/ppd.h:325
+      custom_min : aliased ppd_file_s_custom_min_array;  -- cups/ppd.h:323
+      custom_max : aliased ppd_file_s_custom_max_array;  -- cups/ppd.h:324
+      custom_margins : aliased ppd_file_s_custom_margins_array;  -- cups/ppd.h:325
       num_consts : aliased int;  -- cups/ppd.h:326
       consts : access ppd_const_t;  -- cups/ppd.h:327
       num_fonts : aliased int;  -- cups/ppd.h:328
@@ -606,201 +606,201 @@ package libCUPS.cups_ppd_h is
   --  
 
    function cupsMarkOptions
-     (arg1 : access ppd_file_t;
-      arg2 : int;
-      arg3 : access libCUPS.cups_cups_h.cups_option_t) return int;  -- cups/ppd.h:365
+     (ppd : access ppd_file_t;
+      num_options : int;
+      options : access libCUPS.cups_cups_h.cups_option_t) return int;  -- cups/ppd.h:365
    pragma Import (C, cupsMarkOptions, "cupsMarkOptions");
 
-   procedure ppdClose (arg1 : access ppd_file_t);  -- cups/ppd.h:367
+   procedure ppdClose (ppd : access ppd_file_t);  -- cups/ppd.h:367
    pragma Import (C, ppdClose, "ppdClose");
 
    function ppdCollect
-     (arg1 : access ppd_file_t;
-      arg2 : ppd_section_t;
-      arg3 : System.Address) return int;  -- cups/ppd.h:368
+     (ppd : access ppd_file_t;
+      section : ppd_section_t;
+      choices : System.Address) return int;  -- cups/ppd.h:368
    pragma Import (C, ppdCollect, "ppdCollect");
 
-   function ppdConflicts (arg1 : access ppd_file_t) return int;  -- cups/ppd.h:370
+   function ppdConflicts (ppd : access ppd_file_t) return int;  -- cups/ppd.h:370
    pragma Import (C, ppdConflicts, "ppdConflicts");
 
    function ppdEmit
-     (arg1 : access ppd_file_t;
-      arg2 : access Interfaces.C_Streams.FILEs;
-      arg3 : ppd_section_t) return int;  -- cups/ppd.h:371
+     (ppd : access ppd_file_t;
+      fp : access Interfaces.C_Streams.FILEs;
+      section : ppd_section_t) return int;  -- cups/ppd.h:371
    pragma Import (C, ppdEmit, "ppdEmit");
 
    function ppdEmitFd
-     (arg1 : access ppd_file_t;
-      arg2 : int;
-      arg3 : ppd_section_t) return int;  -- cups/ppd.h:373
+     (ppd : access ppd_file_t;
+      fd : int;
+      section : ppd_section_t) return int;  -- cups/ppd.h:373
    pragma Import (C, ppdEmitFd, "ppdEmitFd");
 
    function ppdEmitJCL
-     (arg1 : access ppd_file_t;
-      arg2 : access Interfaces.C_Streams.FILEs;
-      arg3 : int;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/ppd.h:375
+     (ppd : access ppd_file_t;
+      fp : access Interfaces.C_Streams.FILEs;
+      job_id : int;
+      user : Interfaces.C.Strings.chars_ptr;
+      title : Interfaces.C.Strings.chars_ptr) return int;  -- cups/ppd.h:375
    pragma Import (C, ppdEmitJCL, "ppdEmitJCL");
 
-   function ppdFindChoice (arg1 : access ppd_option_t; arg2 : Interfaces.C.Strings.chars_ptr) return access ppd_choice_t;  -- cups/ppd.h:378
+   function ppdFindChoice (o : access ppd_option_t; option : Interfaces.C.Strings.chars_ptr) return access ppd_choice_t;  -- cups/ppd.h:378
    pragma Import (C, ppdFindChoice, "ppdFindChoice");
 
-   function ppdFindMarkedChoice (arg1 : access ppd_file_t; arg2 : Interfaces.C.Strings.chars_ptr) return access ppd_choice_t;  -- cups/ppd.h:380
+   function ppdFindMarkedChoice (ppd : access ppd_file_t; keyword : Interfaces.C.Strings.chars_ptr) return access ppd_choice_t;  -- cups/ppd.h:380
    pragma Import (C, ppdFindMarkedChoice, "ppdFindMarkedChoice");
 
-   function ppdFindOption (arg1 : access ppd_file_t; arg2 : Interfaces.C.Strings.chars_ptr) return access ppd_option_t;  -- cups/ppd.h:383
+   function ppdFindOption (ppd : access ppd_file_t; keyword : Interfaces.C.Strings.chars_ptr) return access ppd_option_t;  -- cups/ppd.h:383
    pragma Import (C, ppdFindOption, "ppdFindOption");
 
    function ppdIsMarked
-     (arg1 : access ppd_file_t;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/ppd.h:385
+     (ppd : access ppd_file_t;
+      keyword : Interfaces.C.Strings.chars_ptr;
+      option : Interfaces.C.Strings.chars_ptr) return int;  -- cups/ppd.h:385
    pragma Import (C, ppdIsMarked, "ppdIsMarked");
 
-   procedure ppdMarkDefaults (arg1 : access ppd_file_t);  -- cups/ppd.h:387
+   procedure ppdMarkDefaults (ppd : access ppd_file_t);  -- cups/ppd.h:387
    pragma Import (C, ppdMarkDefaults, "ppdMarkDefaults");
 
    function ppdMarkOption
-     (arg1 : access ppd_file_t;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/ppd.h:388
+     (ppd : access ppd_file_t;
+      keyword : Interfaces.C.Strings.chars_ptr;
+      option : Interfaces.C.Strings.chars_ptr) return int;  -- cups/ppd.h:388
    pragma Import (C, ppdMarkOption, "ppdMarkOption");
 
-   function ppdOpen (arg1 : access Interfaces.C_Streams.FILEs) return access ppd_file_t;  -- cups/ppd.h:390
+   function ppdOpen (fp : access Interfaces.C_Streams.FILEs) return access ppd_file_t;  -- cups/ppd.h:390
    pragma Import (C, ppdOpen, "ppdOpen");
 
-   function ppdOpenFd (arg1 : int) return access ppd_file_t;  -- cups/ppd.h:391
+   function ppdOpenFd (fd : int) return access ppd_file_t;  -- cups/ppd.h:391
    pragma Import (C, ppdOpenFd, "ppdOpenFd");
 
-   function ppdOpenFile (arg1 : Interfaces.C.Strings.chars_ptr) return access ppd_file_t;  -- cups/ppd.h:392
+   function ppdOpenFile (filename : Interfaces.C.Strings.chars_ptr) return access ppd_file_t;  -- cups/ppd.h:392
    pragma Import (C, ppdOpenFile, "ppdOpenFile");
 
-   function ppdPageLength (arg1 : access ppd_file_t; arg2 : Interfaces.C.Strings.chars_ptr) return float;  -- cups/ppd.h:393
+   function ppdPageLength (ppd : access ppd_file_t; name : Interfaces.C.Strings.chars_ptr) return float;  -- cups/ppd.h:393
    pragma Import (C, ppdPageLength, "ppdPageLength");
 
-   function ppdPageSize (arg1 : access ppd_file_t; arg2 : Interfaces.C.Strings.chars_ptr) return access ppd_size_t;  -- cups/ppd.h:395
+   function ppdPageSize (ppd : access ppd_file_t; name : Interfaces.C.Strings.chars_ptr) return access ppd_size_t;  -- cups/ppd.h:395
    pragma Import (C, ppdPageSize, "ppdPageSize");
 
-   function ppdPageWidth (arg1 : access ppd_file_t; arg2 : Interfaces.C.Strings.chars_ptr) return float;  -- cups/ppd.h:397
+   function ppdPageWidth (ppd : access ppd_file_t; name : Interfaces.C.Strings.chars_ptr) return float;  -- cups/ppd.h:397
    pragma Import (C, ppdPageWidth, "ppdPageWidth");
 
   --*** New in CUPS 1.1.19 *** 
-   function ppdErrorString (arg1 : ppd_status_t) return Interfaces.C.Strings.chars_ptr;  -- cups/ppd.h:401
+   function ppdErrorString (status : ppd_status_t) return Interfaces.C.Strings.chars_ptr;  -- cups/ppd.h:401
    pragma Import (C, ppdErrorString, "ppdErrorString");
 
    function ppdFindAttr
-     (arg1 : access ppd_file_t;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr) return access ppd_attr_t;  -- cups/ppd.h:402
+     (ppd : access ppd_file_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      spec : Interfaces.C.Strings.chars_ptr) return access ppd_attr_t;  -- cups/ppd.h:402
    pragma Import (C, ppdFindAttr, "ppdFindAttr");
 
    function ppdFindNextAttr
-     (arg1 : access ppd_file_t;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr) return access ppd_attr_t;  -- cups/ppd.h:404
+     (ppd : access ppd_file_t;
+      name : Interfaces.C.Strings.chars_ptr;
+      spec : Interfaces.C.Strings.chars_ptr) return access ppd_attr_t;  -- cups/ppd.h:404
    pragma Import (C, ppdFindNextAttr, "ppdFindNextAttr");
 
-   function ppdLastError (arg1 : access int) return ppd_status_t;  -- cups/ppd.h:406
+   function ppdLastError (line : access int) return ppd_status_t;  -- cups/ppd.h:406
    pragma Import (C, ppdLastError, "ppdLastError");
 
   --*** New in CUPS 1.1.20 *** 
-   procedure ppdSetConformance (arg1 : ppd_conform_t);  -- cups/ppd.h:409
+   procedure ppdSetConformance (c : ppd_conform_t);  -- cups/ppd.h:409
    pragma Import (C, ppdSetConformance, "ppdSetConformance");
 
   --*** New in CUPS 1.2 *** 
    function ppdCollect2
-     (arg1 : access ppd_file_t;
-      arg2 : ppd_section_t;
-      arg3 : float;
-      arg4 : System.Address) return int;  -- cups/ppd.h:412
+     (ppd : access ppd_file_t;
+      section : ppd_section_t;
+      min_order : float;
+      choices : System.Address) return int;  -- cups/ppd.h:412
    pragma Import (C, ppdCollect2, "ppdCollect2");
 
    function ppdEmitAfterOrder
-     (arg1 : access ppd_file_t;
-      arg2 : access Interfaces.C_Streams.FILEs;
-      arg3 : ppd_section_t;
-      arg4 : int;
-      arg5 : float) return int;  -- cups/ppd.h:415
+     (ppd : access ppd_file_t;
+      fp : access Interfaces.C_Streams.FILEs;
+      section : ppd_section_t;
+      limit : int;
+      min_order : float) return int;  -- cups/ppd.h:415
    pragma Import (C, ppdEmitAfterOrder, "ppdEmitAfterOrder");
 
-   function ppdEmitJCLEnd (arg1 : access ppd_file_t; arg2 : access Interfaces.C_Streams.FILEs) return int;  -- cups/ppd.h:418
+   function ppdEmitJCLEnd (ppd : access ppd_file_t; fp : access Interfaces.C_Streams.FILEs) return int;  -- cups/ppd.h:418
    pragma Import (C, ppdEmitJCLEnd, "ppdEmitJCLEnd");
 
    function ppdEmitString
-     (arg1 : access ppd_file_t;
-      arg2 : ppd_section_t;
-      arg3 : float) return Interfaces.C.Strings.chars_ptr;  -- cups/ppd.h:420
+     (ppd : access ppd_file_t;
+      section : ppd_section_t;
+      min_order : float) return Interfaces.C.Strings.chars_ptr;  -- cups/ppd.h:420
    pragma Import (C, ppdEmitString, "ppdEmitString");
 
-   function ppdFindCustomOption (arg1 : access ppd_file_t; arg2 : Interfaces.C.Strings.chars_ptr) return access ppd_coption_t;  -- cups/ppd.h:422
+   function ppdFindCustomOption (ppd : access ppd_file_t; keyword : Interfaces.C.Strings.chars_ptr) return access ppd_coption_t;  -- cups/ppd.h:422
    pragma Import (C, ppdFindCustomOption, "ppdFindCustomOption");
 
-   function ppdFindCustomParam (arg1 : access ppd_coption_t; arg2 : Interfaces.C.Strings.chars_ptr) return access ppd_cparam_t;  -- cups/ppd.h:425
+   function ppdFindCustomParam (opt : access ppd_coption_t; name : Interfaces.C.Strings.chars_ptr) return access ppd_cparam_t;  -- cups/ppd.h:425
    pragma Import (C, ppdFindCustomParam, "ppdFindCustomParam");
 
-   function ppdFirstCustomParam (arg1 : access ppd_coption_t) return access ppd_cparam_t;  -- cups/ppd.h:427
+   function ppdFirstCustomParam (opt : access ppd_coption_t) return access ppd_cparam_t;  -- cups/ppd.h:427
    pragma Import (C, ppdFirstCustomParam, "ppdFirstCustomParam");
 
-   function ppdFirstOption (arg1 : access ppd_file_t) return access ppd_option_t;  -- cups/ppd.h:429
+   function ppdFirstOption (ppd : access ppd_file_t) return access ppd_option_t;  -- cups/ppd.h:429
    pragma Import (C, ppdFirstOption, "ppdFirstOption");
 
-   function ppdNextCustomParam (arg1 : access ppd_coption_t) return access ppd_cparam_t;  -- cups/ppd.h:430
+   function ppdNextCustomParam (opt : access ppd_coption_t) return access ppd_cparam_t;  -- cups/ppd.h:430
    pragma Import (C, ppdNextCustomParam, "ppdNextCustomParam");
 
-   function ppdNextOption (arg1 : access ppd_file_t) return access ppd_option_t;  -- cups/ppd.h:431
+   function ppdNextOption (ppd : access ppd_file_t) return access ppd_option_t;  -- cups/ppd.h:431
    pragma Import (C, ppdNextOption, "ppdNextOption");
 
-   function ppdLocalize (arg1 : access ppd_file_t) return int;  -- cups/ppd.h:432
+   function ppdLocalize (ppd : access ppd_file_t) return int;  -- cups/ppd.h:432
    pragma Import (C, ppdLocalize, "ppdLocalize");
 
-   function ppdOpen2 (arg1 : System.Address) return access ppd_file_t;  -- cups/ppd.h:433
+   function ppdOpen2 (fp : System.Address) return access ppd_file_t;  -- cups/ppd.h:433
    pragma Import (C, ppdOpen2, "ppdOpen2");
 
   --*** New in CUPS 1.3/OS X 10.5 *** 
    function ppdLocalizeIPPReason
-     (arg1 : access ppd_file_t;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : size_t) return Interfaces.C.Strings.chars_ptr;  -- cups/ppd.h:436
+     (ppd : access ppd_file_t;
+      reason : Interfaces.C.Strings.chars_ptr;
+      scheme : Interfaces.C.Strings.chars_ptr;
+      buffer : Interfaces.C.Strings.chars_ptr;
+      bufsize : size_t) return Interfaces.C.Strings.chars_ptr;  -- cups/ppd.h:436
    pragma Import (C, ppdLocalizeIPPReason, "ppdLocalizeIPPReason");
 
   --*** New in CUPS 1.4/OS X 10.6 *** 
    function cupsGetConflicts
-     (arg1 : access ppd_file_t;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : System.Address) return int;  -- cups/ppd.h:443
+     (ppd : access ppd_file_t;
+      option : Interfaces.C.Strings.chars_ptr;
+      choice : Interfaces.C.Strings.chars_ptr;
+      options : System.Address) return int;  -- cups/ppd.h:443
    pragma Import (C, cupsGetConflicts, "cupsGetConflicts");
 
    function cupsResolveConflicts
-     (arg1 : access ppd_file_t;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : access int;
-      arg5 : System.Address) return int;  -- cups/ppd.h:447
+     (ppd : access ppd_file_t;
+      option : Interfaces.C.Strings.chars_ptr;
+      choice : Interfaces.C.Strings.chars_ptr;
+      num_options : access int;
+      options : System.Address) return int;  -- cups/ppd.h:447
    pragma Import (C, cupsResolveConflicts, "cupsResolveConflicts");
 
    function ppdInstallableConflict
-     (arg1 : access ppd_file_t;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr) return int;  -- cups/ppd.h:453
+     (ppd : access ppd_file_t;
+      option : Interfaces.C.Strings.chars_ptr;
+      choice : Interfaces.C.Strings.chars_ptr) return int;  -- cups/ppd.h:453
    pragma Import (C, ppdInstallableConflict, "ppdInstallableConflict");
 
    function ppdLocalizeAttr
-     (arg1 : access ppd_file_t;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr) return access ppd_attr_t;  -- cups/ppd.h:457
+     (ppd : access ppd_file_t;
+      keyword : Interfaces.C.Strings.chars_ptr;
+      spec : Interfaces.C.Strings.chars_ptr) return access ppd_attr_t;  -- cups/ppd.h:457
    pragma Import (C, ppdLocalizeAttr, "ppdLocalizeAttr");
 
-   function ppdLocalizeMarkerName (arg1 : access ppd_file_t; arg2 : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/ppd.h:459
+   function ppdLocalizeMarkerName (ppd : access ppd_file_t; name : Interfaces.C.Strings.chars_ptr) return Interfaces.C.Strings.chars_ptr;  -- cups/ppd.h:459
    pragma Import (C, ppdLocalizeMarkerName, "ppdLocalizeMarkerName");
 
    function ppdPageSizeLimits
-     (arg1 : access ppd_file_t;
-      arg2 : access ppd_size_t;
-      arg3 : access ppd_size_t) return int;  -- cups/ppd.h:462
+     (ppd : access ppd_file_t;
+      minimum : access ppd_size_t;
+      maximum : access ppd_size_t) return int;  -- cups/ppd.h:462
    pragma Import (C, ppdPageSizeLimits, "ppdPageSizeLimits");
 
   -- * C++ magic...

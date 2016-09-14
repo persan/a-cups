@@ -143,41 +143,41 @@ package libCUPS.cups_sidechannel_h is
   --  
 
    function cupsSideChannelDoRequest
-     (arg1 : cups_sc_command_t;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : access int;
-      arg4 : double) return cups_sc_status_t;  -- cups/sidechannel.h:118
+     (command : cups_sc_command_t;
+      data : Interfaces.C.Strings.chars_ptr;
+      datalen : access int;
+      timeout : double) return cups_sc_status_t;  -- cups/sidechannel.h:118
    pragma Import (C, cupsSideChannelDoRequest, "cupsSideChannelDoRequest");
 
    function cupsSideChannelRead
-     (arg1 : access cups_sc_command_t;
-      arg2 : access cups_sc_status_t;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : access int;
-      arg5 : double) return int;  -- cups/sidechannel.h:121
+     (command : access cups_sc_command_t;
+      status : access cups_sc_status_t;
+      data : Interfaces.C.Strings.chars_ptr;
+      datalen : access int;
+      timeout : double) return int;  -- cups/sidechannel.h:121
    pragma Import (C, cupsSideChannelRead, "cupsSideChannelRead");
 
    function cupsSideChannelWrite
-     (arg1 : cups_sc_command_t;
-      arg2 : cups_sc_status_t;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : int;
-      arg5 : double) return int;  -- cups/sidechannel.h:125
+     (command : cups_sc_command_t;
+      status : cups_sc_status_t;
+      data : Interfaces.C.Strings.chars_ptr;
+      datalen : int;
+      timeout : double) return int;  -- cups/sidechannel.h:125
    pragma Import (C, cupsSideChannelWrite, "cupsSideChannelWrite");
 
   --*** New in CUPS 1.4 *** 
    function cupsSideChannelSNMPGet
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : access int;
-      arg4 : double) return cups_sc_status_t;  -- cups/sidechannel.h:131
+     (oid : Interfaces.C.Strings.chars_ptr;
+      data : Interfaces.C.Strings.chars_ptr;
+      datalen : access int;
+      timeout : double) return cups_sc_status_t;  -- cups/sidechannel.h:131
    pragma Import (C, cupsSideChannelSNMPGet, "cupsSideChannelSNMPGet");
 
    function cupsSideChannelSNMPWalk
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : double;
-      arg3 : cups_sc_walk_func_t;
-      arg4 : System.Address) return cups_sc_status_t;  -- cups/sidechannel.h:134
+     (oid : Interfaces.C.Strings.chars_ptr;
+      timeout : double;
+      cb : cups_sc_walk_func_t;
+      context : System.Address) return cups_sc_status_t;  -- cups/sidechannel.h:134
    pragma Import (C, cupsSideChannelSNMPWalk, "cupsSideChannelSNMPWalk");
 
   -- * End of "$Id: sidechannel.h 10996 2013-05-29 11:51:34Z msweet $".

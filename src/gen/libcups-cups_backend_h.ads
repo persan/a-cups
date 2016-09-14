@@ -58,16 +58,16 @@ package libCUPS.cups_backend_h is
   -- * Prototypes...
   --  
 
-   function cupsBackendDeviceURI (arg1 : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/backend.h:60
+   function cupsBackendDeviceURI (argv : System.Address) return Interfaces.C.Strings.chars_ptr;  -- cups/backend.h:60
    pragma Import (C, cupsBackendDeviceURI, "cupsBackendDeviceURI");
 
    procedure cupsBackendReport
-     (arg1 : Interfaces.C.Strings.chars_ptr;
-      arg2 : Interfaces.C.Strings.chars_ptr;
-      arg3 : Interfaces.C.Strings.chars_ptr;
-      arg4 : Interfaces.C.Strings.chars_ptr;
-      arg5 : Interfaces.C.Strings.chars_ptr;
-      arg6 : Interfaces.C.Strings.chars_ptr);  -- cups/backend.h:61
+     (device_scheme : Interfaces.C.Strings.chars_ptr;
+      device_uri : Interfaces.C.Strings.chars_ptr;
+      device_make_and_model : Interfaces.C.Strings.chars_ptr;
+      device_info : Interfaces.C.Strings.chars_ptr;
+      device_id : Interfaces.C.Strings.chars_ptr;
+      device_location : Interfaces.C.Strings.chars_ptr);  -- cups/backend.h:61
    pragma Import (C, cupsBackendReport, "cupsBackendReport");
 
   -- * End of "$Id: backend.h 10996 2013-05-29 11:51:34Z msweet $".
