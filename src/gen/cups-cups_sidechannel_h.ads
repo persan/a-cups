@@ -5,7 +5,7 @@ with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings;
 with System;
 
-package CUPS.cups_sidechannel_h is
+private package CUPS.cups_sidechannel_h is
 
    CUPS_SC_FD : constant := 4;  --  cups/sidechannel.h:41
 

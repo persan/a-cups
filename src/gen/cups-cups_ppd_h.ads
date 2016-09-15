@@ -9,7 +9,7 @@ limited with CUPS.stdio_h;
 with Interfaces.C_Streams;
 
 
-package CUPS.cups_ppd_h is
+private package CUPS.cups_ppd_h is
 
    PPD_VERSION : constant := 4.3;  --  cups/ppd.h:67
 

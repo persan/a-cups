@@ -5,7 +5,7 @@ with Interfaces.C; use Interfaces.C;
 with System;
 with Interfaces.C.Strings;
 
-package CUPS.xlocale_h is
+private package CUPS.xlocale_h is
 
   -- Definition of locale datatype.
   --   Copyright (C) 1997-2016 Free Software Foundation, Inc.

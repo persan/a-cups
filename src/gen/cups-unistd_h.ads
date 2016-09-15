@@ -9,7 +9,7 @@ with System;
 with CUPS.stdio_h;
 with Interfaces.C_Streams;
 
-package CUPS.unistd_h is
+private package CUPS.unistd_h is
 
    STDIN_FILENO : constant := 0;  --  unistd.h:213
    STDOUT_FILENO : constant := 1;  --  unistd.h:214

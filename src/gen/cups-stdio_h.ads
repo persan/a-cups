@@ -10,7 +10,7 @@ with Interfaces.C.Strings;
 with System;
 
 
-package CUPS.stdio_h is
+private package CUPS.stdio_h is
 
    --  unsupported macro: BUFSIZ _IO_BUFSIZ
    SEEK_SET : constant := 0;  --  stdio.h:140

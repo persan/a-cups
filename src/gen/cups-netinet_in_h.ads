@@ -8,7 +8,7 @@ with CUPS.bits_socket_h;
 with System;
 with CUPS.unistd_h;
 
-package CUPS.netinet_in_h is
+private package CUPS.netinet_in_h is
 
    --  unsupported macro: IPPROTO_IP IPPROTO_IP
    --  unsupported macro: IPPROTO_ICMP IPPROTO_ICMP

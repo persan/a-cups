@@ -5,7 +5,7 @@ with Interfaces.C; use Interfaces.C;
 with CUPS.bits_types_h;
 with CUPS.wchar_h;
 
-package CUPS.uG_config_h is
+private package CUPS.uG_config_h is
 
   -- This file is needed by libio to define various configuration parameters.
   --   These are always the same in the GNU C library.   

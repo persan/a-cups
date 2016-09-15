@@ -4,7 +4,7 @@ pragma Style_Checks (Off);
 with Interfaces.C; use Interfaces.C;
 with System;
 
-package CUPS.stdarg_h is
+private package CUPS.stdarg_h is
 
    --  arg-macro: procedure va_start __builtin_va_start(v,l)
    --    __builtin_va_start(v,l)

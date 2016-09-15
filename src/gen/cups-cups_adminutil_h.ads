@@ -8,7 +8,7 @@ with Interfaces.C_Streams;
 with System;
 with CUPS.cups_cups_h;
 
-package CUPS.cups_adminutil_h is
+private package CUPS.cups_adminutil_h is
 
    CUPS_SERVER_DEBUG_LOGGING : aliased constant String := "_debug_logging" & ASCII.NUL;  --  cups/adminutil.h:42
    CUPS_SERVER_REMOTE_ADMIN : aliased constant String := "_remote_admin" & ASCII.NUL;  --  cups/adminutil.h:43

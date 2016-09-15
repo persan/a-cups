@@ -5,7 +5,7 @@ with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings;
 with CUPS.cups_language_h;
 
-package CUPS.cups_transcode_h is
+private package CUPS.cups_transcode_h is
 
    CUPS_MAX_USTRING : constant := 8192;  --  cups/transcode.h:36
 

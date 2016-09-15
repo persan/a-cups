@@ -14,7 +14,7 @@ limited with CUPS.bits_socket_h;
 limited with CUPS.bits_siginfo_h;
 limited with CUPS.time_h;
 
-package CUPS.netdb_h is
+private package CUPS.netdb_h is
 
    --  unsupported macro: h_errno (*__h_errno_location ())
    HOST_NOT_FOUND : constant := 1;  --  netdb.h:65

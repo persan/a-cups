@@ -5,7 +5,7 @@ with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Extensions;
 with System;
 
-package CUPS.bits_pthreadtypes_h is
+private package CUPS.bits_pthreadtypes_h is
 
   -- Copyright (C) 2002-2016 Free Software Foundation, Inc.
   --   This file is part of the GNU C Library.

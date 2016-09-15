@@ -12,7 +12,7 @@ with CUPS.stdio_h;
 with Interfaces.C_Streams;
 with CUPS.cups_language_h;
 
-package CUPS.cups_cups_h is
+private package CUPS.cups_cups_h is
 
    CUPS_VERSION : constant := 2.0104;  --  cups/cups.h:61
    CUPS_VERSION_MAJOR : constant := 2;  --  cups/cups.h:62

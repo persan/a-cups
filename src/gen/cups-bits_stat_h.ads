@@ -5,7 +5,7 @@ with Interfaces.C; use Interfaces.C;
 with CUPS.bits_types_h;
 with CUPS.time_h;
 
-package CUPS.bits_stat_h is
+private package CUPS.bits_stat_h is
 
    --  unsupported macro: st_atime st_atim.tv_sec
    --  unsupported macro: st_mtime st_mtim.tv_sec

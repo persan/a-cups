@@ -4,7 +4,7 @@ pragma Style_Checks (Off);
 with Interfaces.C; use Interfaces.C;
 with System;
 
-package CUPS.cups_array_h is
+private package CUPS.cups_array_h is
 
   -- * "$Id: array.h 10996 2013-05-29 11:51:34Z msweet $"
   -- *

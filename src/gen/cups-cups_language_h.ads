@@ -5,7 +5,7 @@ with Interfaces.C; use Interfaces.C;
 with System;
 with Interfaces.C.Strings;
 
-package CUPS.cups_language_h is
+private package CUPS.cups_language_h is
 
   -- * "$Id: language.h 10996 2013-05-29 11:51:34Z msweet $"
   -- *

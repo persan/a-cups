@@ -8,7 +8,7 @@ with Interfaces.C.Strings;
 with CUPS.stdio_h;
 with Interfaces.C_Streams;
 
-package CUPS.cups_file_h is
+private package CUPS.cups_file_h is
 
    CUPS_FILE_NONE : constant := 0;  --  cups/file.h:54
    CUPS_FILE_GZIP : constant := 1;  --  cups/file.h:55

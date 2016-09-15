@@ -3,7 +3,7 @@ pragma Style_Checks (Off);
 
 with Interfaces.C; use Interfaces.C;
 
-package CUPS.wchar_h is
+private package CUPS.wchar_h is
 
   -- Copyright (C) 1995-2016 Free Software Foundation, Inc.
   --   This file is part of the GNU C Library.

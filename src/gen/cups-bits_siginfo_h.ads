@@ -6,7 +6,7 @@ with System;
 limited with CUPS.bits_pthreadtypes_h;
 with CUPS.bits_types_h;
 
-package CUPS.bits_siginfo_h is
+private package CUPS.bits_siginfo_h is
 
    --  unsupported macro: sigev_notify_function _sigev_un._sigev_thread._function
    --  unsupported macro: sigev_notify_attributes _sigev_un._sigev_thread._attribute

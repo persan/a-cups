@@ -8,7 +8,7 @@ with CUPS.sys_types_h;
 with CUPS.stdio_h;
 with Interfaces.C_Streams;
 
-package CUPS.bits_uio_h is
+private package CUPS.bits_uio_h is
 
    UIO_MAXIOV : constant := 1024;  --  bits/uio.h:39
 

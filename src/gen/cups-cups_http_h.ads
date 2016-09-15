@@ -13,7 +13,7 @@ limited with CUPS.netdb_h;
 with CUPS.stdio_h;
 with Interfaces.C_Streams;
 
-package CUPS.cups_http_h is
+private package CUPS.cups_http_h is
 
    HTTP_MAX_URI : constant := 1024;  --  cups/http.h:104
    HTTP_MAX_HOST : constant := 256;  --  cups/http.h:105

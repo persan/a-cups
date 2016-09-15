@@ -6,7 +6,7 @@ with Interfaces.C.Strings;
 with System;
 with CUPS.stdint_h;
 
-package CUPS.bits_netdb_h is
+private package CUPS.bits_netdb_h is
 
   -- Copyright (C) 1996-2016 Free Software Foundation, Inc.
   --   This file is part of the GNU C Library.

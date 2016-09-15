@@ -10,7 +10,7 @@ with CUPS.cups_ppd_h;
 with CUPS.cups_cups_h;
 with Interfaces.C.Strings;
 
-package CUPS.cups_raster_h is
+private package CUPS.cups_raster_h is
 
    CUPS_RASTER_SYNC : constant := 16#52615333#;  --  cups/raster.h:49
    CUPS_RASTER_REVSYNC : constant := 16#33536152#;  --  cups/raster.h:50

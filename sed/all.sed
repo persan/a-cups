@@ -3,6 +3,8 @@
 #
 
 s-/usr/include/--
+s-package -private package -
+
 
 s-with CUPS.stddef_h;--
 s-CUPS.stddef_h.size_t-size_t-g

@@ -4,7 +4,7 @@ pragma Style_Checks (Off);
 with Interfaces.C; use Interfaces.C;
 with CUPS.bits_sockaddr_h;
 
-package CUPS.sys_un_h is
+private package CUPS.sys_un_h is
 
    --  arg-macro: function SUN_LEN ((size_t) (((struct sockaddr_un *) 0).sun_path) + strlen ((ptr).sun_path)
    --    return (size_t) (((struct sockaddr_un *) 0).sun_path) + strlen ((ptr).sun_path);

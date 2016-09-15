@@ -9,7 +9,7 @@ limited with CUPS.bits_uio_h;
 
 with CUPS.sys_types_h;
 
-package CUPS.bits_socket_h is
+private package CUPS.bits_socket_h is
 
    PF_UNSPEC : constant := 0;  --  bits/socket.h:41
    PF_LOCAL : constant := 1;  --  bits/socket.h:42

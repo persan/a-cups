@@ -4,7 +4,7 @@ pragma Style_Checks (Off);
 with Interfaces.C; use Interfaces.C;
 with CUPS.bits_types_h;
 
-package CUPS.sys_types_h is
+private package CUPS.sys_types_h is
 
   -- Copyright (C) 1991-2016 Free Software Foundation, Inc.
   --   This file is part of the GNU C Library.

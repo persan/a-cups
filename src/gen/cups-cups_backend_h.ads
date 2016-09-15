@@ -5,7 +5,7 @@ with Interfaces.C; use Interfaces.C;
 with System;
 with Interfaces.C.Strings;
 
-package CUPS.cups_backend_h is
+private package CUPS.cups_backend_h is
 
   -- * "$Id: backend.h 10996 2013-05-29 11:51:34Z msweet $"
   -- *

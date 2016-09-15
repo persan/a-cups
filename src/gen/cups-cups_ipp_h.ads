@@ -9,7 +9,7 @@ with Interfaces.C_Streams;
 with Interfaces.C.Strings;
 with CUPS.time_h;
 
-package CUPS.cups_ipp_h is
+private package CUPS.cups_ipp_h is
 
    --  unsupported macro: IPP_VERSION "\002\001"
    IPP_PORT : constant := 631;  --  cups/ipp.h:52

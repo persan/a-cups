@@ -3,7 +3,7 @@ pragma Style_Checks (Off);
 
 with Interfaces.C; use Interfaces.C;
 
-package CUPS.bits_sockaddr_h is
+private package CUPS.bits_sockaddr_h is
 
   -- Definition of struct sockaddr_* common members and sizes, generic version.
   --   Copyright (C) 1995-2016 Free Software Foundation, Inc.

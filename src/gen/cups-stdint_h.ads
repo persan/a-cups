@@ -3,7 +3,7 @@ pragma Style_Checks (Off);
 
 with Interfaces.C; use Interfaces.C;
 
-package CUPS.stdint_h is
+private package CUPS.stdint_h is
 
    INT8_MIN : constant := (-128);  --  stdint.h:155
    INT16_MIN : constant := (-32767-1);  --  stdint.h:156

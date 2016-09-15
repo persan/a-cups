@@ -6,7 +6,7 @@ with Interfaces.C.Strings;
 
 with System;
 
-package CUPS.cups_pwg_h is
+private package CUPS.cups_pwg_h is
 
    --  arg-macro: function PWG_FROM_POINTS (int)(((n) * 2540 + 36) / 72
    --    return int)(((n) * 2540 + 36) / 72;

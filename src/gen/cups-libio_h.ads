@@ -7,7 +7,7 @@ with Interfaces.C.Strings;
 with CUPS.bits_types_h;
 
 
-package CUPS.libio_h is
+private package CUPS.libio_h is
 
    EOF : constant := (-1);  --  libio.h:62
 

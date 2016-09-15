@@ -6,7 +6,7 @@ with CUPS.bits_stat_h;
 with System;
 with Interfaces.C.Strings;
 
-package CUPS.cups_dir_h is
+private package CUPS.cups_dir_h is
 
   -- * "$Id: dir.h 10996 2013-05-29 11:51:34Z msweet $"
   -- *

@@ -10,7 +10,7 @@ with CUPS.sys_types_h;
 limited with CUPS.bits_siginfo_h;
 with System;
 
-package CUPS.time_h is
+private package CUPS.time_h is
 
    TIME_UTC : constant := 1;  --  time.h:182
 

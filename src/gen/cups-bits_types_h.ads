@@ -5,7 +5,7 @@ with Interfaces.C; use Interfaces.C;
 with System;
 with Interfaces.C.Strings;
 
-package CUPS.bits_types_h is
+private package CUPS.bits_types_h is
 
   -- bits/types.h -- definitions of __*_t types underlying *_t types.
   --   Copyright (C) 2002-2016 Free Software Foundation, Inc.
