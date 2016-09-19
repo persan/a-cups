@@ -1,18 +1,8 @@
-with Interfaces.C;
-with CUPS.Cups_Cups_H;
-with Interfaces.C.Strings;
-with Ada.Containers;
 package body CUPS.CUPS is
-   use Interfaces.C.Strings;
-   use Interfaces.C;
-   use Cups_Cups_H;
-   use Ada.Containers;
 
-   type Options_Array is array (Natural Range <> ) of aliased Cups_Option_T;
    ----------------
    -- GetDefault --
    ----------------
-
    function GetDefault return String is
       V : chars_ptr := Cups_Cups_H.CupsGetDefault;
    begin
@@ -26,33 +16,98 @@ package body CUPS.CUPS is
    ---------------
    -- PrintFile --
    ---------------
-
    function PrintFile
      (Name        : String;
       Filename    : String;
       Title       : String;
-      Options     : String_Maps.Map := String_Maps.Empty_Map) return Job_Id
+      Num_Options : Job_Id;
+      Options     : Cups_Option) return Job_Id
    is
       L_Name        : chars_ptr := New_String (Name);
       L_Filename    : chars_ptr := New_String (Filename);
-      L_Title       : chars_ptr := New_String (Title);
+      L_Title       : Chars_Ptr := New_String (Title);
+      L_Num_Options : Int := Int(Num_Options);
       Ret           : Int;
-      L_Options     : Options_Array (1 .. Natural (Options.Length));
    begin
 
       Ret := Cups_Cups_H.CupsPrintFile
-        (Name        => L_Name ,
+        (Name        => L_Name,
          Filename    => L_Filename,
          Title       => L_Title,
-         Num_Options => Int (Options.Length),
-         Options     => (if Options.Length = 0 then
-                              null
-                         else
-                            L_Options (L_Options'First)'Access));
+         Num_Options => L_Num_Options,
+         Options     => Options);
       Free (L_Name);
       Free (L_Filename);
       Free (L_Title);
       return Job_Id (Ret);
    end PrintFile;
+
+   -----------------
+   -- CancelJob --
+   -----------------
+   function CancelJob
+     (Name        : String;
+      JobId       : Integer := -1 ) return Job_Id
+   is
+      L_Name        : chars_ptr := New_String (Name);
+      L_Id          : Int :=  Int(JobId);
+      Ret           : Int;
+   begin
+      Ret := Cups_Cups_H.CupsCancelJob
+        (Name => L_Name,
+         Job_Id => L_Id);
+      Free (L_Name);
+      return Job_Id (Ret);
+   end CancelJob;
+
+   ---------------
+   -- AddOption --
+   ---------------
+   function AddOption
+     (Name   : String;
+      Value  : String;
+      Num_Options : Job_Id;
+      Options     : System.Address) return Job_Id
+   is
+      L_Name        : Chars_Ptr := New_String (Name);
+      L_Value       : Chars_Ptr := New_String (Value);
+      L_Num_Options : Int := Int(Num_Options);
+      Ret           : Int;
+   begin
+      Ret := Cups_Cups_H.CupsAddOption
+        (Name        => L_Name ,
+         Value       => L_Value,
+         Num_Options => L_Num_Options,
+         Options     => Options);
+      Free (L_Name);
+      Free (L_Value);
+      return Job_Id(Ret);
+
+   end AddOption;
+
+   ---------------------
+   -- GetOption --
+   ---------------------
+   function GetOption
+     (Name : String;
+      Num_Options : Job_Id;
+      Options     : Cups_Option) return String
+   is
+      L_Name : Chars_Ptr := New_String (Name);
+      L_Num_Options : Int := Int(Num_Options);
+      Ret       : Chars_Ptr;
+   begin
+      Ret := Cups_Cups_H.CupsGetOption
+        (Name => L_Name,
+         Num_Options => L_Num_Options,
+         Options     => Options);
+      Free (L_Name);
+      if Ret = Interfaces.C.Strings.Null_Ptr then
+         return "";
+      else
+         return Value(Ret);
+      end if;
+   end GetOption;
+
 
 end CUPS.CUPS;
