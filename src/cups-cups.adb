@@ -67,18 +67,18 @@ package body CUPS.CUPS is
      (Name   : String;
       Value  : String;
       Num_Options : Job_Id;
-      Options     : System.Address) return Job_Id
+      Options     : aliased Cups_Option) return Job_Id
    is
       L_Name        : Chars_Ptr := New_String (Name);
       L_Value       : Chars_Ptr := New_String (Value);
-      L_Num_Options : Int := Int(Num_Options);
+      L_Num_Options : Int       := Int (Num_Options);
       Ret           : Int;
    begin
       Ret := Cups_Cups_H.CupsAddOption
         (Name        => L_Name ,
          Value       => L_Value,
          Num_Options => L_Num_Options,
-         Options     => Options);
+         Options     => Options'Address);
       Free (L_Name);
       Free (L_Value);
       return Job_Id(Ret);
