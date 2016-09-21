@@ -45,7 +45,7 @@ private package CUPS.CUPS is
      (Name   : String;
       Value  : String;
       Num_Options : Job_Id;
-      Options     : System.Address) return Job_Id;
+      Options     : aliased Cups_Option) return Job_Id;
    --
    -- Add an option to an option array
 
