@@ -192,8 +192,11 @@ package body CUPS.CUPS is
                Ada.Text_IO.Put_Line ("Printing failed!");
             end if;
 
-
+            --
             --Cancel all Jobs otherwise
+            --
+            -- TODO: See if there is another status to look for than 4
+            -- (if Multiple Jobs Are Stacked all jobs will be cancelled)
          else
             Cancel_Job := Cups.CancelJob (Cups.GetDefault);
             Ada.Text_IO.Put_Line ("Printer not active!");
