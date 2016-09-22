@@ -5,7 +5,7 @@ with Interfaces.C;
 with Cups.Cups;
 with Cups.String_Maps;
 with CUPS.Cups_Cups_H;
-
+with Ada.Strings.Bounded;
 
 with Interfaces.C.Strings;
 with Ada.Containers;
@@ -15,8 +15,10 @@ procedure CUPS.Pinprint.Main is -- Main, but no special name is needed.
    use Interfaces.C;
    use Cups_Cups_H;
 
+   package BS is new Ada.Strings.Bounded.Generic_Bounded_Length(Max =>  20);
+
    Num_Options    : Job_Id          := 0;
-   Printer_State  : Standard.String := "";
+   Printer_State  : BS.Bounded_String;
    Id             : Job_Id          := 0;
    Cancel_Job     : Job_Id          := 0;
 
@@ -25,11 +27,11 @@ procedure CUPS.Pinprint.Main is -- Main, but no special name is needed.
    Temp_File_Name : Standard.String := "TempFile.txt";
 
 begin
-   --Printer_State := Cups.GetOption ("printer-state", Options'Address);
+   Printer_State := BS.To_Bounded_String(Cups.GetOption ("printer-state", Num_Options, Options));
 
 
    -- If printer is active, print jobs
-   --if Printer_State /= "" then
+   if BS.To_String(Printer_State) /= "null" then
    --if Integer'Value(Printer_State) < 3 then
    --Put_Line (Printer_State);
    Num_Options := Cups.AddOption ("raw", "true", Num_Options, Options);
@@ -62,6 +64,6 @@ begin
    --end if;
    --else
    --Put_Line ("No printer found!");
-   --end if;
+   end if;
 
 end Cups.Pinprint.Main;

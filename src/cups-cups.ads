@@ -4,6 +4,7 @@ with Ada.Containers;
 with Cups.String_Maps;
 with CUPS.Cups_Cups_H;
 with System;
+with Ada.Strings.Bounded;
 
 private package CUPS.CUPS is
    use Cups_Cups_H;

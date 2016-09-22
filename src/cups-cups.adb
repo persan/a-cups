@@ -103,7 +103,7 @@ package body CUPS.CUPS is
          Options     => Options);
       Free (L_Name);
       if Ret = Interfaces.C.Strings.Null_Ptr then
-         return "";
+         return "null";
       else
          return Value(Ret);
       end if;
