@@ -5,6 +5,9 @@ with Cups.String_Maps;
 with CUPS.Cups_Cups_H;
 with System;
 with Ada.Strings.Bounded;
+with Ada.Sequential_IO; use Ada;
+
+with Ada.Text_IO;
 
 private package CUPS.CUPS is
    use Cups_Cups_H;
@@ -12,7 +15,8 @@ private package CUPS.CUPS is
    use Interfaces.C;
    use Ada.Containers;
 
-   type Cups_Option is access Cups_Option_T;
+   type Option_T is access Cups_Option_T;
+   type Destination_T is access all Cups_Dest_T;
 
    function GetDefault return String;
    --
@@ -30,7 +34,7 @@ private package CUPS.CUPS is
       Filename    : String;
       Title       : String;
       Num_Options : Job_Id;
-      Options     : Cups_Option) return Job_Id;
+      Options     : Option_T) return Job_Id;
    --
    -- Print a file to a printer or class on the default server.
 
@@ -43,20 +47,32 @@ private package CUPS.CUPS is
    -- JobId -1 yields a termination of all jobs
 
    function AddOption
-     (Name   : String;
-      Value  : String;
+     (Name        : String;
+      Value       : String;
       Num_Options : Job_Id;
-      Options     : aliased Cups_Option) return Job_Id;
+      Options     : aliased Option_T) return Job_Id;
    --
    -- Add an option to an option array
 
    function GetOption
-     (Name : String;
+     (Name        : String;
       Num_Options : Job_Id;
-      Options     : Cups_Option) return String;
+      Options     : Option_T) return String;
    --
    -- Get an Option Value or Null
    -- For instance, "printer-state" tells if the printer is idle, processing etc..
+
+
+   function GetDefaultPrinterState return String;
+   --
+   -- Get the state of the default printer
+
+   procedure PrintString ( Str : String; Raw : Boolean);
+   --
+   -- Print a string on the default printer
+   -- Set RAW True if raw printing is wanted
+
+
 
 
 end CUPS.CUPS;
