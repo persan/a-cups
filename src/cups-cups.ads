@@ -2,21 +2,18 @@ with Interfaces.C;
 with Interfaces.C.Strings;
 with Ada.Containers;
 with Cups.String_Maps;
-with CUPS.Cups_Cups_H;
+private with CUPS.Cups_Cups_H;
 with System;
 with Ada.Strings.Bounded;
 with Ada.Sequential_IO; use Ada;
 
 with Ada.Text_IO;
 
-private package CUPS.CUPS is
-   use Cups_Cups_H;
+package CUPS.CUPS is
+
    use Interfaces.C.Strings;
    use Interfaces.C;
    use Ada.Containers;
-
-   type Option_T is access Cups_Option_T;
-   type Destination_T is access all Cups_Dest_T;
 
    function GetDefault return String;
    --
@@ -29,22 +26,34 @@ private package CUPS.CUPS is
    --  get the user-defined default printer,
    --  as this function does not support the lpoptions-defined default printer.
 
-   function PrintFile
-     (Name        : String;
-      Filename    : String;
-      Title       : String;
-      Num_Options : Job_Id;
-      Options     : Option_T) return Job_Id;
-   --
-   -- Print a file to a printer or class on the default server.
-
-
-   function CancelJob
-     (Name        : String;
-      JobId       : Integer := -1 ) return Job_Id;
+   procedure CancelJob
+     (Name        : String := Cups.GetDefault;
+      JobId       : Integer := -1 );
    --
    -- Cancel a job in the queue
    -- JobId -1 yields a termination of all jobs
+
+   function GetDefaultPrinterState return String;
+   --
+   -- Get the state of the default printer
+
+   procedure PrintString ( Str : String; Raw : Boolean);
+   --
+   -- Print a string on the default printer
+   -- Set RAW True if raw printing is wanted
+
+-------------------------------------------------------------------------------
+private
+
+   use Cups_Cups_H;
+
+   type Option_T is access Cups_Option_T;
+   type Destination_T is access all Cups_Dest_T;
+
+   procedure SetRawPrinting (Num_Options : in out Job_ID;
+                             Options     : aliased Option_T);
+   --
+   -- Initialises RAW printing and USB-no-reattach-default
 
    function AddOption
      (Name        : String;
@@ -62,15 +71,14 @@ private package CUPS.CUPS is
    -- Get an Option Value or Null
    -- For instance, "printer-state" tells if the printer is idle, processing etc..
 
-
-   function GetDefaultPrinterState return String;
+   function PrintFile
+     (Name        : String;
+      Filename    : String;
+      Title       : String;
+      Num_Options : Job_Id;
+      Options     : Option_T) return Job_Id;
    --
-   -- Get the state of the default printer
-
-   procedure PrintString ( Str : String; Raw : Boolean);
-   --
-   -- Print a string on the default printer
-   -- Set RAW True if raw printing is wanted
+   -- Print a file to a printer or class on the default server.
 
 
 
